@@ -10,13 +10,18 @@ from tqdm.auto import tqdm
 from einops import rearrange, reduce
 from einops.layers.torch import Rearrange
 
+from pathlib import Path
+from torch.utils.data import Dataset
 import torch
 from torch import nn, einsum
 import torch.nn.functional as F
 
-
-torch.cuda.is_available()
-
+from torch.utils.data import DataLoader
+from torch.autograd import Variable
+import numpy as np
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 def exists(x):
     return x is not None
@@ -368,9 +373,7 @@ def sigmoid_beta_schedule(timesteps):
     return torch.sigmoid(betas) * (beta_end - beta_start) + beta_start
 
 
-
-timesteps = 300
-
+timesteps = 1000
 # define beta schedule
 betas = linear_beta_schedule(timesteps=timesteps)
 
@@ -392,12 +395,10 @@ def extract(a, t, x_shape):
     out = a.gather(-1, t.cpu())
     return out.reshape(batch_size, *((1,) * (len(x_shape) - 1))).to(t.device)
 
-
-
 # forward diffusion (using the nice property)
 def q_sample(x_start, t, noise=None):
     if noise is None:
-        noise = torch.randn_like(x_start) * 0.01
+        noise = torch.randn_like(x_start)
 
     sqrt_alphas_cumprod_t = extract(sqrt_alphas_cumprod, t, x_start.shape)
     sqrt_one_minus_alphas_cumprod_t = extract(
@@ -405,8 +406,6 @@ def q_sample(x_start, t, noise=None):
     )
 
     return sqrt_alphas_cumprod_t * x_start + sqrt_one_minus_alphas_cumprod_t * noise
-
-
 
 def get_noisy_image(x_start, t):
   # add noise
@@ -417,26 +416,12 @@ def get_noisy_image(x_start, t):
 
   return noisy_image
 
-
-
 # take time step
-from torch.utils.data import DataLoader
-from torch.autograd import Variable
-import numpy as np
-import os
-os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 dataroot = 'data/airfoil_interp.npy'
 data = np.load(dataroot)
-fig, axs = plt.subplots(1, 1)
-axs.plot(data[0,:,0], data[0,:,1])
-axs.set_aspect('equal', 'box')
-fig.tight_layout()
-plt.show()
 
-
-t = torch.tensor([299]).to(device)
+t = torch.tensor([1]).to(device)
 noisy = torch.from_numpy(data[0,:,:]).to(device)
 noisy = noisy.unsqueeze(dim=-1).unsqueeze(dim=0).permute(0,3,1,2)
 noisy = get_noisy_image(noisy, t)
@@ -447,7 +432,7 @@ axs.plot(noisy[:,0], noisy[:,1])
 axs.set_aspect('equal', 'box')
 fig.tight_layout()
 plt.show()
-
+plt.close()
 
 def p_losses(denoise_model, x_start, t, noise=None, loss_type="l1"):
     if noise is None:
@@ -467,9 +452,6 @@ def p_losses(denoise_model, x_start, t, noise=None, loss_type="l1"):
 
     return loss
 
-
-
-from torch.utils.data import Dataset
 class GetDataset(Dataset):
     def __init__(self, data, arg=True):
         self.data = data
@@ -526,9 +508,6 @@ def p_sample_loop(model, shape):
 def sample(model, batch_size=16, channels=1):
     return p_sample_loop(model, shape=(batch_size, channels, 256, 2))
 
-
-from pathlib import Path
-
 def num_to_groups(num, divisor):
     groups = num // divisor
     remainder = num % divisor
@@ -541,6 +520,10 @@ results_folder = Path("./results")
 results_folder.mkdir(exist_ok = True)
 save_and_sample_every = 1000
 
+def Normalize(airfoil):
+    r = np.maximum(airfoil[0,0], airfoil[-1,0])
+    r = float(1.0/r)
+    return airfoil * r
 
 from torch.optim import Adam
 
@@ -552,7 +535,7 @@ model = Unet(
     out_dim=1,
     channels=1,
     self_condition=False,
-    dim_mults=(1, 2,)
+    dim_mults=(2, 4)
 )
 model.to(device)
 
@@ -612,9 +595,11 @@ while epoch < epochs:
 # sample 64 images
 samples = sample(model, batch_size=64, channels=1)
 fig, axs = plt.subplots(1, 1)
-axs.plot(samples[0,0,:,0].cpu().numpy(), samples[0,0,:,1].cpu().numpy())
+airfoil = samples[0,0,:,:].cpu().numpy()
+airfoil = Normalize(airfoil)
+axs.plot(airfoil[:,0], airfoil[:,1])
 axs.set_aspect('equal', 'box')
 fig.tight_layout()
 plt.show()
-
-
+plt.savefig('sample.svg')
+plt.close()
