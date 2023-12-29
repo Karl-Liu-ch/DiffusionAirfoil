@@ -483,10 +483,9 @@ class GetDataset(Dataset):
         return self.length
 
 dataset = GetDataset(data)
-train_loader = DataLoader(dataset=dataset, batch_size=128, shuffle=True)
+train_loader = DataLoader(dataset=dataset, batch_size=256, shuffle=True)
 batch = next(iter(train_loader))
 print(batch.shape)
-
 
 @torch.no_grad()
 def p_sample(model, x, t, t_index):
@@ -557,39 +556,61 @@ model = Unet(
 )
 model.to(device)
 
-optimizer = Adam(model.parameters(), lr=1e-3)
+def save_checkpoint(epoch, model, optim, path, best = False):
+    state = {
+            'epoch': epoch,
+            'model': model.state_dict(),
+            'optim': optim.state_dict(),
+        }
+    if best: 
+        name = 'net_epoch_best.pth'
+        torch.save(state, os.path.join(path, name))
+    name = 'net.pth'
+    torch.save(state, os.path.join(path, name))
+    
+def load_checkpoint(path, model, optim, epoch):
+    checkpoint = torch.load(os.path.join(path, 'net.pth'))
+    model.load_state_dict(checkpoint['model'])
+    optim.load_state_dict(checkpoint['optim'])
+    epoch = checkpoint['epoch']
+    print("pretrained model loaded, iteration: ", epoch)
+    return model, optim, epoch
+
 channels = 1
-
-
 epochs = 1000
+epoch = 0
+optimizer = Adam(model.parameters(), lr=1e-3)
+scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, epochs, eta_min=1e-6)
+path = 'checkpoint/'
+try:
+    model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
+except:
+    pass 
 
-for epoch in range(epochs):
+while epoch < epochs:
     for step, labels in enumerate(train_loader):
-      labels = labels.to(device)
-      labels = Variable(labels)
-      optimizer.zero_grad()
+        labels = labels.to(device)
+        labels = Variable(labels)
+        optimizer.zero_grad()
 
-      batch_size = labels.shape[0]
+        batch_size = labels.shape[0]
 
-      # Algorithm 1 line 3: sample t uniformally for every example in the batch
-      t = torch.randint(0, timesteps, (batch_size,), device=device).long()
+        # Algorithm 1 line 3: sample t uniformally for every example in the batch
+        t = torch.randint(0, timesteps, (batch_size,), device=device).long()
 
-      loss = p_losses(model, labels, t, loss_type="huber")
+        loss = p_losses(model, labels, t, loss_type="huber")
 
-      if step % 100 == 0:
-        print("Loss:", loss.item())
+        if step % 100 == 0:
+            print("Loss:", loss.item())
 
-      loss.backward()
-      optimizer.step()
-
+        loss.backward()
+        optimizer.step()
+    save_checkpoint(epoch, model, optimizer, path, best = False)
+    epoch += 1
+    scheduler.step()
 
 # sample 64 images
 samples = sample(model, batch_size=64, channels=1)
-print(samples)
-
-
-print(samples[0][0].shape)
-
 fig, axs = plt.subplots(1, 1)
 axs.plot(samples[0,0,:,0].cpu().numpy(), samples[0,0,:,1].cpu().numpy())
 axs.set_aspect('equal', 'box')
