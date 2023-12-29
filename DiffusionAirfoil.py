@@ -373,7 +373,7 @@ def sigmoid_beta_schedule(timesteps):
     return torch.sigmoid(betas) * (beta_end - beta_start) + beta_start
 
 
-timesteps = 1000
+timesteps = 300
 # define beta schedule
 betas = cosine_beta_schedule(timesteps=timesteps)
 
