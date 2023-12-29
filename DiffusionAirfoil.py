@@ -564,7 +564,16 @@ epochs = 1000
 epoch = 0
 optimizer = Adam(model.parameters(), lr=1e-3)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, epochs, eta_min=1e-6)
-path = 'checkpoint/'
+path = '/work3/s212645/DiffusionAirfoil/checkpoint/'
+try:
+    os.mkdir('/work3/s212645/DiffusionAirfoil/')
+except:
+    pass
+try:
+    os.mkdir('/work3/s212645/DiffusionAirfoil/checkpoint/')
+except:
+    pass 
+
 try:
     model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
 except:
