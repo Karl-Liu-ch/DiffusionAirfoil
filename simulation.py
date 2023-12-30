@@ -23,7 +23,7 @@ def detect_intersect(airfoil):
     else:
         return False
 
-def evaluate(airfoil, return_CL_CD=False):
+def evaluate(airfoil, cl, return_CL_CD=False):
         
     if detect_intersect(airfoil):
         print('Unsuccessful: Self-intersecting!')
@@ -31,7 +31,7 @@ def evaluate(airfoil, return_CL_CD=False):
         CL = np.nan
         CD = np.nan
         
-    elif abs(airfoil[:128,1] - np.flip(airfoil[128:,1])).max() < 0.06:
+    elif abs(airfoil[:128,1] - np.flip(airfoil[128:,1])).max() < 0.055:
         print('Unsuccessful: Too thin!')
         perf = np.nan
         CL = np.nan
@@ -48,12 +48,16 @@ def evaluate(airfoil, return_CL_CD=False):
         xf.airfoil = Airfoil(airfoil[:,0], airfoil[:,1])
         xf.Re = 4.5e4
         xf.max_iter = 200
-        a, cl, cd, cm, cp = xf.aseq(2, 5, 0.5)
-        # cl, cd, cm, cp = xf.a(2)
-        perf = (cl/cd).max()
+        # a, cl, cd, cm, cp = xf.aseq(2, 5, 0.5)
+        # perf = (cl/cd).max()
+        a, cd, cm, cp = xf.cl(cl)
+        perf = cl/cd
         
-        if perf < -100 or perf > 300 or cd.min() < 1e-3:
-            print('Unsuccessful:', cl.max(), cd.min(), perf)
+        # if perf < -100 or perf > 300 or cd.min() < 1e-3:
+        #     print('Unsuccessful:', cl.max(), cd.min(), perf)
+        #     perf = np.nan
+        if perf < -100 or perf > 300 or cd < 1e-3:
+            print('Unsuccessful:', cl, cd, perf)
             perf = np.nan
         elif not np.isnan(perf):
             print('Successful: CL/CD={:.4f}'.format(perf))
@@ -71,7 +75,7 @@ if __name__ == "__main__":
     xhat, yhat = savgol_filter((airfoil[:,0], airfoil[:,1]), 10, 3)
     airfoil[:,0] = xhat
     airfoil[:,1] = yhat
-    perf = evaluate(airfoil)
+    perf = evaluate(airfoil, 0.65)
     print(perf)
     print(yhat.max()-yhat.min())
     np.savetxt('results/airfoil.dat', airfoil)
