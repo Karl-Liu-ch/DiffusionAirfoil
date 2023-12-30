@@ -146,7 +146,7 @@ def p_losses(denoise_model, x_start, t, noise=None, loss_type="l1"):
     elif loss_type == "huber":
         loss = F.smooth_l1_loss(noise, predicted_noise)
     else:
-        loss = F.l1_loss(noise, predicted_noise) + F.mse_loss(noise, predicted_noise)
+        loss = F.smooth_l1_loss(noise, predicted_noise) + F.mse_loss(noise, predicted_noise)
 
     return loss
 
@@ -223,9 +223,10 @@ from torch.optim import Adam
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
+
 model = Unet1D(
-    dim=16,
-    init_dim=16,
+    dim=64,
+    init_dim=64,
     out_dim=1,
     channels=1,
     self_condition=False,
