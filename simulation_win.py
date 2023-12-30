@@ -141,7 +141,7 @@ def evaluate(airfoil, config_fname='op_conditions.ini', return_CL_CD=False):
     
 if __name__ == "__main__":
     
-    airfoils = np.load('sample.npy')
+    airfoils = np.load('data/airfoil_interp.npy')
     airfoil = airfoils[np.random.choice(airfoils.shape[0])]
     
     # Read airfoil operating conditions from a config file
@@ -150,3 +150,13 @@ if __name__ == "__main__":
     
     perf = evaluate(airfoil)
     print(perf)
+    
+    best_perf = 0
+    for i in range(airfoils.shape[0]):
+        airfoil = airfoils[i,:,:]
+        perf = evaluate(airfoil)
+        if perf == np.nan:
+            pass
+        elif perf > best_perf:
+            best_perf = perf
+    print(best_perf)
