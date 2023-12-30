@@ -31,7 +31,7 @@ def evaluate(airfoil, return_CL_CD=False):
         CL = np.nan
         CD = np.nan
         
-    elif airfoil[:,1].max() - airfoil[:,1].min() < 0.05:
+    elif abs(airfoil[:128,1] - airfoil[128:,1]).max() < 0.06:
         print('Unsuccessful: Too thin!')
         perf = np.nan
         CL = np.nan
@@ -48,7 +48,7 @@ def evaluate(airfoil, return_CL_CD=False):
         xf.airfoil = Airfoil(airfoil[:,0], airfoil[:,1])
         xf.Re = 4.5e4
         xf.max_iter = 200
-        a, cl, cd, cm, cp = xf.aseq(0, 6, 0.5)
+        a, cl, cd, cm, cp = xf.aseq(2, 5, 0.5)
         # cl, cd, cm, cp = xf.a(2)
         perf = (cl/cd).max()
         
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     airfoil = np.load('sample.npy')
     airfoil = np.squeeze(airfoil, axis=1)
     airfoil = airfoil[10]
-    xhat, yhat = savgol_filter((airfoil[:,0], airfoil[:,1]), 5, 3)
+    xhat, yhat = savgol_filter((airfoil[:,0], airfoil[:,1]), 10, 3)
     airfoil[:,0] = xhat
     airfoil[:,1] = yhat
     perf = evaluate(airfoil)
