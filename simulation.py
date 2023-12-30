@@ -3,6 +3,7 @@ from xfoil import XFoil
 from xfoil.model import Airfoil
 import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
+from scipy.signal import savgol_filter
 
 def detect_intersect(airfoil):
     # Get leading head
@@ -63,9 +64,14 @@ def evaluate(airfoil, return_CL_CD=False):
         return perf
 
 if __name__ == "__main__":
-    airfoil = np.load('data/airfoil_interp.npy')
-    # airfoil = np.load('sample.npy')
-    # airfoil = np.squeeze(airfoil, axis=1)
-    airfoil = airfoil[2]
+    # airfoil = np.load('data/airfoil_interp.npy')
+    airfoil = np.load('sample.npy')
+    airfoil = np.squeeze(airfoil, axis=1)
+    airfoil = airfoil[10]
+    xhat, yhat = savgol_filter((airfoil[:,0], airfoil[:,1]), 5, 3)
+    airfoil[:,0] = xhat
+    airfoil[:,1] = yhat
     perf = evaluate(airfoil)
     print(perf)
+    print(yhat.max()-yhat.min())
+    np.savetxt('results/airfoil.dat', airfoil)
