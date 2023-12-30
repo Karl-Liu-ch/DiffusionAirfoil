@@ -31,7 +31,7 @@ def evaluate(airfoil, return_CL_CD=False):
         CL = np.nan
         CD = np.nan
         
-    elif abs(airfoil[:128,1] - airfoil[128:,1]).max() < 0.06:
+    elif abs(airfoil[:128,1] - np.flip(airfoil[128:,1])).max() < 0.06:
         print('Unsuccessful: Too thin!')
         perf = np.nan
         CL = np.nan
