@@ -24,7 +24,7 @@ from networks import Unet
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-BATCHSIZE = 64
+BATCHSIZE = 256
 
 def exists(x):
     return x is not None
@@ -233,24 +233,22 @@ model = Unet(
 )
 model.to(device)
 
-def save_checkpoint(epoch, model, optim, path, best = False):
+def save_checkpoint(epoch, model, optim, path):
     state = {
             'epoch': epoch,
             'model': model.state_dict(),
             'optim': optim.state_dict(),
         }
-    if best: 
-        name = 'net_epoch_best.pth'
-        torch.save(state, os.path.join(path, name))
     name = 'net.pth'
     torch.save(state, os.path.join(path, name))
     
 def load_checkpoint(path, model, optim, epoch):
     checkpoint = torch.load(os.path.join(path, 'net.pth'))
     model.load_state_dict(checkpoint['model'])
-    optim.load_state_dict(checkpoint['optim'])
-    epoch = 0
+    # optim.load_state_dict(checkpoint['optim'])
     # epoch = checkpoint['epoch']
+    optim = optim
+    epoch = 0
     print("pretrained model loaded, iteration: ", epoch)
     return model, optim, epoch
 
@@ -260,20 +258,12 @@ epoch = 0
 optimizer = Adam(model.parameters(), lr=1e-3)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, epochs, eta_min=1e-6)
 path = '/work3/s212645/DiffusionAirfoil/checkpoint/'
+
 # try:
-#     os.mkdir('/work3/s212645/DiffusionAirfoil/')
-# except:
-#     pass
-# try:
-#     os.mkdir('/work3/s212645/DiffusionAirfoil/checkpoint/')
+#     model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
 # except:
 #     pass 
-
-try:
-    model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
-except:
-    pass 
-
+model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
 losses = []
 
 while epoch < epochs:
@@ -292,12 +282,13 @@ while epoch < epochs:
         loss.backward()
         optimizer.step()
     print("Epoch: ", epoch, "Loss:", np.array(losses).mean(), 'lr: ', optimizer.param_groups[0]['lr'])
-    save_checkpoint(epoch, model, optimizer, path, best = False)
+    save_checkpoint(epoch, model, optimizer, path)
     epoch += 1
     scheduler.step()
 
 # sample 64 images
 samples = sample(model, batch_size=64, channels=1)
+np.save('sample.npy', samples.cpu().numpy())
 fig, axs = plt.subplots(1, 1)
 airfoil = samples[0,0,:,:].cpu().numpy()
 airfoil = Normalize(airfoil)
