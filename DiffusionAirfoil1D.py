@@ -204,7 +204,7 @@ def p_sample_loop(model, shape):
 
 @torch.no_grad()
 def sample(model, batch_size=16, channels=1):
-    return p_sample_loop(model, shape=(batch_size, channels, 256, 2))
+    return p_sample_loop(model, shape=(batch_size, channels, 512))
 
 def num_to_groups(num, divisor):
     groups = num // divisor
@@ -223,10 +223,9 @@ from torch.optim import Adam
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-
 model = Unet1D(
-    dim=64,
-    init_dim=64,
+    dim=16,
+    init_dim=16,
     out_dim=1,
     channels=1,
     self_condition=False,
@@ -254,44 +253,44 @@ def load_checkpoint(path, model, optim, epoch):
     return model, optim, epoch
 
 channels = 1
-epochs = 10000
+epochs = 100
 epoch = 0
-optimizer = Adam(model.parameters(), lr=1e-3)
+optimizer = Adam(model.parameters(), lr=1e-4)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, epochs, eta_min=1e-6)
 path = '/work3/s212645/DiffusionAirfoil/checkpoint/'
 # try:
 #     model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
 # except:
 #     pass 
-# model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
+model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
 
-while epoch < epochs:
-    losses = []
-    for step, labels in enumerate(train_loader):
-        labels = labels.to(device)
-        labels = Variable(labels)
-        batch_size = labels.shape[0]
-        labels = labels.reshape(batch_size, 1, 512)
-        optimizer.zero_grad()
+# while epoch < epochs:
+#     losses = []
+#     for step, labels in enumerate(train_loader):
+#         labels = labels.to(device)
+#         labels = Variable(labels)
+#         batch_size = labels.shape[0]
+#         labels = labels.reshape(batch_size, 1, 512)
+#         optimizer.zero_grad()
 
-        # Algorithm 1 line 3: sample t uniformally for every example in the batch
-        t = torch.randint(0, timesteps, (batch_size,), device=device).long()
+#         # Algorithm 1 line 3: sample t uniformally for every example in the batch
+#         t = torch.randint(0, timesteps, (batch_size,), device=device).long()
 
-        loss = p_losses(model, labels, t, loss_type="l1+l2")
-        losses.append(loss.item())
-        loss.backward()
-        optimizer.step()
-    print("Epoch: ", epoch, "Loss:", np.array(losses).mean(), 'lr: ', optimizer.param_groups[0]['lr'])
-    save_checkpoint(epoch, model, optimizer, path)
-    epoch += 1
-    scheduler.step()
+#         loss = p_losses(model, labels, t, loss_type="l1+l2")
+#         losses.append(loss.item())
+#         loss.backward()
+#         optimizer.step()
+#     print("Epoch: ", epoch, "Loss:", np.array(losses).mean(), 'lr: ', optimizer.param_groups[0]['lr'])
+#     save_checkpoint(epoch, model, optimizer, path)
+#     epoch += 1
+#     scheduler.step()
 
 # sample 64 images
 samples = sample(model, batch_size=BATCHSIZE, channels=1)
 samples = samples.reshape(BATCHSIZE, 256, 2)
 np.save('sample.npy', samples.cpu().numpy())
 fig, axs = plt.subplots(1, 1)
-airfoil = samples[0,0,:,:].cpu().numpy()
+airfoil = samples[0,:,:].cpu().numpy()
 airfoil = Normalize(airfoil)
 axs.plot(airfoil[:,0], airfoil[:,1])
 axs.set_aspect('equal', 'box')

@@ -264,27 +264,27 @@ path = '/work3/s212645/DiffusionAirfoil/checkpoint/'
 # except:
 #     pass 
 model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
-losses = []
 
-while epoch < epochs:
-    for step, labels in enumerate(train_loader):
-        labels = labels.to(device)
-        labels = Variable(labels)
-        optimizer.zero_grad()
+# while epoch < epochs:
+#     losses = []
+#     for step, labels in enumerate(train_loader):
+#         labels = labels.to(device)
+#         labels = Variable(labels)
+#         optimizer.zero_grad()
 
-        batch_size = labels.shape[0]
+#         batch_size = labels.shape[0]
 
-        # Algorithm 1 line 3: sample t uniformally for every example in the batch
-        t = torch.randint(0, timesteps, (batch_size,), device=device).long()
+#         # Algorithm 1 line 3: sample t uniformally for every example in the batch
+#         t = torch.randint(0, timesteps, (batch_size,), device=device).long()
 
-        loss = p_losses(model, labels, t, loss_type="l1+l2")
-        losses.append(loss.item())
-        loss.backward()
-        optimizer.step()
-    print("Epoch: ", epoch, "Loss:", np.array(losses).mean(), 'lr: ', optimizer.param_groups[0]['lr'])
-    save_checkpoint(epoch, model, optimizer, path)
-    epoch += 1
-    scheduler.step()
+#         loss = p_losses(model, labels, t, loss_type="l1+l2")
+#         losses.append(loss.item())
+#         loss.backward()
+#         optimizer.step()
+#     print("Epoch: ", epoch, "Loss:", np.array(losses).mean(), 'lr: ', optimizer.param_groups[0]['lr'])
+#     save_checkpoint(epoch, model, optimizer, path)
+#     epoch += 1
+#     scheduler.step()
 
 # sample 64 images
 samples = sample(model, batch_size=64, channels=1)
