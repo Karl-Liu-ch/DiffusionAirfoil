@@ -24,7 +24,7 @@ from Unet1D import Unet1D
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-BATCHSIZE = 256
+BATCHSIZE = 64
 
 def exists(x):
     return x is not None
@@ -224,8 +224,8 @@ from torch.optim import Adam
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 model = Unet1D(
-    dim=64,
-    init_dim=64,
+    dim=16,
+    init_dim=16,
     out_dim=1,
     channels=1,
     self_condition=False,
@@ -239,11 +239,11 @@ def save_checkpoint(epoch, model, optim, path):
             'model': model.state_dict(),
             'optim': optim.state_dict(),
         }
-    name = 'net.pth'
+    name = 'net1D.pth'
     torch.save(state, os.path.join(path, name))
     
 def load_checkpoint(path, model, optim, epoch):
-    checkpoint = torch.load(os.path.join(path, 'net.pth'))
+    checkpoint = torch.load(os.path.join(path, 'net1D.pth'))
     model.load_state_dict(checkpoint['model'])
     # optim.load_state_dict(checkpoint['optim'])
     # epoch = checkpoint['epoch']
@@ -258,15 +258,14 @@ epoch = 0
 optimizer = Adam(model.parameters(), lr=1e-3)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, epochs, eta_min=1e-6)
 path = '/work3/s212645/DiffusionAirfoil/checkpoint/'
-
 # try:
 #     model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
 # except:
 #     pass 
-model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
-losses = []
+# model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
 
 while epoch < epochs:
+    losses = []
     for step, labels in enumerate(train_loader):
         labels = labels.to(device)
         labels = Variable(labels)
