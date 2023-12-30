@@ -287,7 +287,7 @@ model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
 #     scheduler.step()
 
 # sample 64 images
-samples = sample(model, batch_size=64, channels=1)
+samples = sample(model, batch_size=256, channels=1)
 np.save('sample.npy', samples.cpu().numpy())
 fig, axs = plt.subplots(1, 1)
 airfoil = samples[0,0,:,:].cpu().numpy()
