@@ -74,6 +74,6 @@ def optimization1D(model, cl, best_perf = 0):
                 
 if __name__ == '__main__':
     if opt.method == '2d':
-        optimization(model, cl=0.65, best_perf=33)
+        optimization(model, cl=0.65, best_perf=34.78824390025072)
     elif opt.method == '1d':
-        optimization1D(model1D, cl=0.65, best_perf=33)
+        optimization1D(model1D, cl=0.65, best_perf=34.78824390025072)
