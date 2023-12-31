@@ -31,6 +31,21 @@ model.to(device)
 path = '/work3/s212645/DiffusionAirfoil/checkpoint/'
 model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
 
+def derotate(airfoil):
+    ptail = 0.5 * (airfoil[0,:]+airfoil[-1,:])
+    ptails = np.expand_dims(ptail, axis=0)
+    ptails = np.repeat(ptails, 256, axis=0)
+    i = np.linalg.norm(airfoil - ptails, axis=1).argmax()
+    phead = airfoil[i,:]
+    theta = np.arctan2(-(airfoil[i,1] - ptail[1]), -(airfoil[i,0] - ptail[0]))
+    c = np.cos(theta)
+    s = np.sin(theta)
+    R = np.array([[c, -s], [s, c]])
+    airfoil_R = airfoil
+    airfoil_R -= np.repeat(np.expand_dims(phead, axis=0), 256, axis=0)
+    airfoil_R = np.matmul(airfoil_R, R)
+    return airfoil_R
+
 def optimization(model, cl, best_perf = 0):
     best_airfoil = None
     while best_perf < 50:
@@ -38,6 +53,7 @@ def optimization(model, cl, best_perf = 0):
         airfoils = np.squeeze(samples.cpu().numpy(), axis=1)
         for i in range(BATCHSIZE):
             airfoil = airfoils[i]
+            airfoil = derotate(airfoil)
             airfoil = Normalize(airfoil)
             xhat, yhat = savgol_filter((airfoil[:,0], airfoil[:,1]), 10, 3)
             airfoil[:,0] = xhat
@@ -59,6 +75,7 @@ def optimization1D(model, cl, best_perf = 0):
         airfoils = samples.cpu().numpy()
         for i in range(BATCHSIZE):
             airfoil = airfoils[i]
+            airfoil = derotate(airfoil)
             airfoil = Normalize(airfoil)
             xhat, yhat = savgol_filter((airfoil[:,0], airfoil[:,1]), 10, 3)
             airfoil[:,0] = xhat

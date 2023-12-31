@@ -24,7 +24,7 @@ from networks import Unet
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-BATCHSIZE = 256
+BATCHSIZE = 2**12
 
 def exists(x):
     return x is not None
@@ -164,8 +164,8 @@ class GetDataset(Dataset):
 
 dataset = GetDataset(data)
 train_loader = DataLoader(dataset=dataset, batch_size=BATCHSIZE, shuffle=True)
-batch = next(iter(train_loader))
-print(batch.shape)
+# batch = next(iter(train_loader))
+# print(batch.shape)
 
 @torch.no_grad()
 def p_sample(model, x, t, t_index):
@@ -287,7 +287,16 @@ model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
 #     scheduler.step()
 
 # sample 64 images
-
+if __name__ == '__main__':
+    airfoilpath = '/work3/s212645/DiffusionAirfoil/Airfoils/'
+    # os.mkdir(airfoilpath)
+    for i in range(20):
+        num = str(i).zfill(3)
+        samples = sample(model, batch_size=BATCHSIZE, channels=1)
+        samples = samples.reshape(BATCHSIZE, 256, 2)
+        airfoils = samples.cpu().numpy()
+        np.save(airfoilpath+num+'.npy', airfoils)
+        print(num + '.npy saved. ')
 # samples = sample(model, batch_size=256, channels=1)
 # np.save('sample.npy', samples.cpu().numpy())
 # fig, axs = plt.subplots(1, 1)
