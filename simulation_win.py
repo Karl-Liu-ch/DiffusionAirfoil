@@ -10,6 +10,34 @@ import logging
 from scipy.signal import savgol_filter
 from utils import safe_remove, create_dir
 
+from utils import interpolate, derotate, Normalize
+
+def delete_intersect(samples):
+    indexs = []
+    for i in range(samples.shape[0]):
+        xhat, yhat = savgol_filter((samples[i,:,0], samples[i,:,1]), 10, 3)
+        samples[i,:,0] = xhat
+        samples[i,:,1] = yhat
+        af = samples[i,:,:]
+        if detect_intersect(af):
+            indexs.append(i)
+    for i in indexs:
+        xhat, yhat = savgol_filter((samples[i,:,0], samples[i,:,1]), 10, 3)
+        samples[i,:,0] = xhat
+        samples[i,:,1] = yhat
+        af = samples[i,:,:]
+        point = 1.0
+        while detect_intersect(af):
+            indexs = []
+            for index in range(af.shape[0]):
+                if af[index,0] > point:
+                    indexs.append(index)
+            af = np.delete(af, indexs, axis=0)
+            point -= 0.01
+        af = interpolate(af, 256, 3)
+        af = Normalize(af)
+        samples[i,:,:] = af
+    return samples
 
 def compute_coeff(airfoil, reynolds=500000, mach=0, alpha=3, n_iter=200, tmp_dir='tmp'):
     
@@ -166,6 +194,7 @@ if __name__ == "__main__":
     for i in range(100):
         num = str(i).zfill(3)
         airfoils = np.load(airfoilpath+num+'.npy')
+        airfoils = delete_intersect(airfoils)
         for k in range(airfoils.shape[0]):
             airfoil = airfoils[k,:,:]
             airfoil = derotate(airfoil)

@@ -21,6 +21,7 @@ from torch.autograd import Variable
 import numpy as np
 import os
 from Unet1D import Unet1D
+import platform
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -261,36 +262,44 @@ epoch = 0
 optimizer = Adam(model.parameters(), lr=3e-4)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, epochs, eta_min=1e-6)
 
-# try:
-#     model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
-# except:
-#     pass 
-# while epoch < epochs:
-#     losses = []
-#     for step, labels in enumerate(train_loader):
-#         labels = labels.to(device)
-#         labels = Variable(labels)
-#         batch_size = labels.shape[0]
-#         labels = labels.reshape(batch_size, 1, 512)
-#         optimizer.zero_grad()
-
-#         # Algorithm 1 line 3: sample t uniformally for every example in the batch
-#         t = torch.randint(0, timesteps, (batch_size,), device=device).long()
-
-#         loss = p_losses(model, labels, t, loss_type="l1+l2")
-#         losses.append(loss.item())
-#         loss.backward()
-#         optimizer.step()
-#     print("Epoch: ", epoch, "Loss:", np.array(losses).mean(), 'lr: ', optimizer.param_groups[0]['lr'])
-#     save_checkpoint(epoch, model, optimizer, path)
-#     epoch += 1
-#     scheduler.step()
+def train(path, epoch = 0, epochs = 10000):
+    try:
+        model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
+    except:
+        pass
+    while epoch < epochs:
+        losses = []
+        for step, labels in enumerate(train_loader):
+            labels = labels.to(device)
+            labels = Variable(labels)
+            batch_size = labels.shape[0]
+            labels = labels.reshape(batch_size, 1, 512)
+            optimizer.zero_grad()
+            # Algorithm 1 line 3: sample t uniformally for every example in the batch
+            t = torch.randint(0, timesteps, (batch_size,), device=device).long()
+            loss = p_losses(model, labels, t, loss_type="l1+l2")
+            losses.append(loss.item())
+            loss.backward()
+            optimizer.step()
+        print("Epoch: ", epoch, "Loss:", np.array(losses).mean(), 'lr: ', optimizer.param_groups[0]['lr'])
+        save_checkpoint(epoch, model, optimizer, path)
+        epoch += 1
+        scheduler.step()
 
 # # sample 64 images
 if __name__ == '__main__':
-    path = '/work3/s212645/DiffusionAirfoil/checkpoint/'
+    if platform.system().lower() == 'linux':
+        path = '/work3/s212645/DiffusionAirfoil/checkpoint/'
+    elif platform.system().lower() == 'windows':
+        path = 'H:/深度学习/checkpoint/'
+    
+    # train(path)
     model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
-    airfoilpath = '/work3/s212645/DiffusionAirfoil/Airfoils1D/'
+    if platform.system().lower() == 'linux':
+        airfoilpath = '/work3/s212645/DiffusionAirfoil/Airfoils1D/'
+    elif platform.system().lower() == 'windows':
+        airfoilpath = 'H:/深度学习/Airfoils1D/'
+        
     # os.mkdir(airfoilpath)
     for i in range(100):
         num = str(i).zfill(3)
