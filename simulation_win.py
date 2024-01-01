@@ -10,34 +10,7 @@ import logging
 from scipy.signal import savgol_filter
 from utils import safe_remove, create_dir
 
-from utils import interpolate, derotate, Normalize
-
-def delete_intersect(samples):
-    indexs = []
-    for i in range(samples.shape[0]):
-        xhat, yhat = savgol_filter((samples[i,:,0], samples[i,:,1]), 10, 3)
-        samples[i,:,0] = xhat
-        samples[i,:,1] = yhat
-        af = samples[i,:,:]
-        if detect_intersect(af):
-            indexs.append(i)
-    for i in indexs:
-        xhat, yhat = savgol_filter((samples[i,:,0], samples[i,:,1]), 10, 3)
-        samples[i,:,0] = xhat
-        samples[i,:,1] = yhat
-        af = samples[i,:,:]
-        point = 1.0
-        while detect_intersect(af):
-            indexs = []
-            for index in range(af.shape[0]):
-                if af[index,0] > point:
-                    indexs.append(index)
-            af = np.delete(af, indexs, axis=0)
-            point -= 0.01
-        af = interpolate(af, 256, 3)
-        af = Normalize(af)
-        samples[i,:,:] = af
-    return samples
+from utils import interpolate, derotate, Normalize, delete_intersect, detect_intersect
 
 def compute_coeff(airfoil, reynolds=500000, mach=0, alpha=3, n_iter=200, tmp_dir='tmp'):
     
@@ -108,29 +81,14 @@ def read_config(config_fname):
     
     return reynolds, mach, alpha, n_iter
 
-def detect_intersect(airfoil):
-    # Get leading head
-    lh_idx = np.argmin(airfoil[:,0])
-    lh_x = airfoil[lh_idx, 0]
-    # Get trailing head
-    th_x = np.minimum(airfoil[0,0], airfoil[-1,0])
-    # Interpolate
-    f_up = interp1d(airfoil[:lh_idx+1,0], airfoil[:lh_idx+1,1])
-    f_low = interp1d(airfoil[lh_idx:,0], airfoil[lh_idx:,1])
-    xx = np.linspace(lh_x, th_x, num=1000)
-    yy_up = f_up(xx)
-    yy_low = f_low(xx)
-    # Check if intersect or not
-    if np.any(yy_up < yy_low):
-        return True
-    else:
-        return False
 
-def evaluate(airfoil, config_fname='op_conditions.ini', return_CL_CD=False):
+def evaluate(airfoil, cl, return_CL_CD=False):
     
     # Read airfoil operating conditions from a config file
-    reynolds, mach, cl, n_iter = read_config(config_fname)
-    
+    reynolds = 4.5e4
+    mach = 0.01
+    n_iter = 2000
+            
     if detect_intersect(airfoil):
         print('Unsuccessful: Self-intersecting!')
         perf = np.nan
@@ -189,7 +147,7 @@ def Normalize(airfoil):
 if __name__ == "__main__":
     cl = 0.65
     best_perf=34.78824390025072
-    airfoilpath = 'H:/深度学习/Airfoils1D/'
+    airfoilpath = 'H:/深度学习/Airfoils/'
     best_airfoil = None
     for i in range(100):
         num = str(i).zfill(3)

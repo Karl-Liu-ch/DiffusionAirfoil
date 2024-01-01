@@ -1,10 +1,20 @@
 import torch
 import numpy as np
-from simulation import evaluate
+import platform
+if platform.system().lower() == 'windows':
+    from simulation_win import evaluate
+elif platform.system().lower() == 'linux':
+    from simulation import evaluate
 from main import derotate, Normalize
 from scipy.signal import savgol_filter
-from DiffusionAirfoil1D import sample, model
+from DiffusionAirfoil1D import sample, model, load_checkpoint, optimizer, epoch
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+if platform.system().lower() == 'linux':
+    path = '/work3/s212645/DiffusionAirfoil/checkpoint/'
+elif platform.system().lower() == 'windows':
+    path = 'H:/深度学习/checkpoint/'
+model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
 
 class OptimEnv():
     def __init__(self):

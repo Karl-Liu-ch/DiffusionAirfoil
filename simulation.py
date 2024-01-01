@@ -5,52 +5,7 @@ import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
 from scipy.signal import savgol_filter
 import logging
-from utils import interpolate, derotate, Normalize
-
-def delete_intersect(samples):
-    indexs = []
-    for i in range(samples.shape[0]):
-        xhat, yhat = savgol_filter((samples[i,:,0], samples[i,:,1]), 10, 3)
-        samples[i,:,0] = xhat
-        samples[i,:,1] = yhat
-        af = samples[i,:,:]
-        if detect_intersect(af):
-            indexs.append(i)
-    for i in indexs:
-        xhat, yhat = savgol_filter((samples[i,:,0], samples[i,:,1]), 10, 3)
-        samples[i,:,0] = xhat
-        samples[i,:,1] = yhat
-        af = samples[i,:,:]
-        point = 1.0
-        while detect_intersect(af):
-            indexs = []
-            for index in range(af.shape[0]):
-                if af[index,0] > point:
-                    indexs.append(index)
-            af = np.delete(af, indexs, axis=0)
-            point -= 0.01
-        af = interpolate(af, 256, 3)
-        af = Normalize(af)
-        samples[i,:,:] = af
-    return samples
-
-def detect_intersect(airfoil):
-    # Get leading head
-    lh_idx = np.argmin(airfoil[:,0])
-    lh_x = airfoil[lh_idx, 0]
-    # Get trailing head
-    th_x = np.minimum(airfoil[0,0], airfoil[-1,0])
-    # Interpolate
-    f_up = interp1d(airfoil[:lh_idx+1,0], airfoil[:lh_idx+1,1])
-    f_low = interp1d(airfoil[lh_idx:,0], airfoil[lh_idx:,1])
-    xx = np.linspace(lh_x, th_x, num=1000)
-    yy_up = f_up(xx)
-    yy_low = f_low(xx)
-    # Check if intersect or not
-    if np.any(yy_up < yy_low):
-        return True
-    else:
-        return False
+from utils import interpolate, derotate, Normalize, delete_intersect, detect_intersect
 
 def evaluate(airfoil, cl, return_CL_CD=False):
         
