@@ -6,6 +6,7 @@ import gc
 import numpy as np
 from scipy.interpolate import interp1d
 import logging
+logging.basicConfig(filename='results/perf.log', encoding='utf-8', level=logging.DEBUG)
 
 from scipy.signal import savgol_filter
 from utils import safe_remove, create_dir
