@@ -257,14 +257,11 @@ epochs = 10000
 epoch = 0
 optimizer = Adam(model.parameters(), lr=1e-3)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, epochs, eta_min=1e-6)
-path = '/work3/s212645/DiffusionAirfoil/checkpoint/'
 
 # try:
 #     model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
 # except:
 #     pass 
-model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
-
 # while epoch < epochs:
 #     losses = []
 #     for step, labels in enumerate(train_loader):
@@ -288,6 +285,8 @@ model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
 
 # sample 64 images
 if __name__ == '__main__':
+    path = '/work3/s212645/DiffusionAirfoil/checkpoint/'
+    model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
     airfoilpath = '/work3/s212645/DiffusionAirfoil/Airfoils/'
     # os.mkdir(airfoilpath)
     for i in range(20):

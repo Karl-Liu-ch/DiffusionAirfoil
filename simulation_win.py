@@ -2,12 +2,12 @@
 from __future__ import division
 import configparser
 import wexpect
-#import subprocess as sp
 import gc
-
 import numpy as np
 from scipy.interpolate import interp1d
+import logging
 
+from scipy.signal import savgol_filter
 from utils import safe_remove, create_dir
 
 
@@ -138,25 +138,46 @@ def evaluate(airfoil, config_fname='op_conditions.ini', return_CL_CD=False):
     else:
         return perf
     
-    
+def derotate(airfoil):
+    ptail = 0.5 * (airfoil[0,:]+airfoil[-1,:])
+    ptails = np.expand_dims(ptail, axis=0)
+    ptails = np.repeat(ptails, 256, axis=0)
+    i = np.linalg.norm(airfoil - ptails, axis=1).argmax()
+    phead = airfoil[i,:]
+    theta = np.arctan2(-(airfoil[i,1] - ptail[1]), -(airfoil[i,0] - ptail[0]))
+    c = np.cos(theta)
+    s = np.sin(theta)
+    R = np.array([[c, -s], [s, c]])
+    airfoil_R = airfoil
+    airfoil_R -= np.repeat(np.expand_dims(phead, axis=0), 256, axis=0)
+    airfoil_R = np.matmul(airfoil_R, R)
+    return airfoil_R
+
+def Normalize(airfoil):
+    r = np.maximum(airfoil[0,0], airfoil[-1,0])
+    r = float(1.0/r)
+    return airfoil * r
+
 if __name__ == "__main__":
-    
-    airfoils = np.load('data/airfoil_interp.npy')
-    airfoil = airfoils[np.random.choice(airfoils.shape[0])]
-    
-    # Read airfoil operating conditions from a config file
-    config_fname = 'op_conditions.ini'
-    reynolds, mach, alpha, n_iter = read_config(config_fname)
-    
-    perf = evaluate(airfoil)
-    print(perf)
-    
-    best_perf = 0
-    for i in range(airfoils.shape[0]):
-        airfoil = airfoils[i,:,:]
-        perf = evaluate(airfoil)
-        if perf == np.nan:
-            pass
-        elif perf > best_perf:
-            best_perf = perf
-    print(best_perf)
+    cl = 0.65
+    best_perf=34.78824390025072
+    airfoilpath = 'H:/深度学习/Airfoils1D/'
+    best_airfoil = None
+    for i in range(100):
+        num = str(i).zfill(3)
+        airfoils = np.load(airfoilpath+num+'.npy')
+        for k in range(airfoils.shape[0]):
+            airfoil = airfoils[k,:,:]
+            airfoil = derotate(airfoil)
+            airfoil = Normalize(airfoil)
+            xhat, yhat = savgol_filter((airfoil[:,0], airfoil[:,1]), 10, 3)
+            airfoil[:,0] = xhat
+            airfoil[:,1] = yhat
+            perf = evaluate(airfoil, cl)
+            if perf == np.nan:
+                pass
+            elif perf > best_perf:
+                best_perf = perf
+                best_airfoil = airfoil
+                np.savetxt('results/airfoil1D.dat', best_airfoil)
+                logging.info(f'perf: {perf}, thickness: {yhat.max()-yhat.min()}')

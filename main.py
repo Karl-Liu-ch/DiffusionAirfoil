@@ -6,7 +6,11 @@ from DiffusionAirfoil import sample, load_checkpoint, epoch, optimizer, Normaliz
 from DiffusionAirfoil1D import sample as sample1D
 from DiffusionAirfoil1D import model as model1D
 from scipy.signal import savgol_filter
-from simulation import evaluate
+import platform
+if platform.system().lower() == 'windows':
+    from simulation_win import evaluate
+elif platform.system().lower() == 'linux':
+    from simulation import evaluate
 import os
 import torch
 import logging
@@ -28,7 +32,10 @@ model = Unet(
     dim_mults=(2, 4)
 )
 model.to(device)
-path = '/work3/s212645/DiffusionAirfoil/checkpoint/'
+if platform.system().lower() == 'linux':
+    path = '/work3/s212645/DiffusionAirfoil/checkpoint/'
+elif platform.system().lower() == 'windows':
+    path = 'H:/深度学习/checkpoint/'
 model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
 
 def derotate(airfoil):

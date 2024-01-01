@@ -191,20 +191,23 @@ def p_sample(model, x, t, t_index):
 
 # Algorithm 2 (including returning all images)
 @torch.no_grad()
-def p_sample_loop(model, shape):
+def p_sample_loop(model, shape, noise=None):
     device = next(model.parameters()).device
 
     b = shape[0]
     # start from pure noise (for each example in the batch)
-    img = torch.randn(shape, device=device)
+    if noise is None:
+        img = torch.randn(shape, device=device)
+    else:
+        img = noise
 
     for i in tqdm(reversed(range(0, timesteps)), desc='sampling loop time step', total=timesteps):
         img = p_sample(model, img, torch.full((b,), i, device=device, dtype=torch.long), i)
     return img
 
 @torch.no_grad()
-def sample(model, batch_size=16, channels=1):
-    return p_sample_loop(model, shape=(batch_size, channels, 512))
+def sample(model, batch_size=16, channels=1, noise=None):
+    return p_sample_loop(model, shape=(batch_size, channels, 512), noise = noise)
 
 def num_to_groups(num, divisor):
     groups = num // divisor
@@ -257,13 +260,11 @@ epochs = 10000
 epoch = 0
 optimizer = Adam(model.parameters(), lr=3e-4)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, epochs, eta_min=1e-6)
-path = '/work3/s212645/DiffusionAirfoil/checkpoint/'
+
 # try:
 #     model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
 # except:
 #     pass 
-model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
-
 # while epoch < epochs:
 #     losses = []
 #     for step, labels in enumerate(train_loader):
@@ -287,9 +288,11 @@ model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
 
 # # sample 64 images
 if __name__ == '__main__':
+    path = '/work3/s212645/DiffusionAirfoil/checkpoint/'
+    model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
     airfoilpath = '/work3/s212645/DiffusionAirfoil/Airfoils1D/'
     # os.mkdir(airfoilpath)
-    for i in range(20):
+    for i in range(100):
         num = str(i).zfill(3)
         samples = sample(model, batch_size=BATCHSIZE, channels=1)
         samples = samples.reshape(BATCHSIZE, 256, 2)
