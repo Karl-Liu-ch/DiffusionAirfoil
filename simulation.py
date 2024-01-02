@@ -8,7 +8,7 @@ import logging
 logging.basicConfig(filename='results/perf.log', encoding='utf-8', level=logging.DEBUG)
 from utils import interpolate, derotate, Normalize, delete_intersect, detect_intersect
 
-def evaluate(airfoil, cl, return_CL_CD=False):
+def evaluate(airfoil, cl, Re = 5e4, return_CL_CD=False):
         
     if detect_intersect(airfoil):
         print('Unsuccessful: Self-intersecting!')
@@ -31,7 +31,7 @@ def evaluate(airfoil, cl, return_CL_CD=False):
     else:
         xf = XFoil()
         xf.airfoil = Airfoil(airfoil[:,0], airfoil[:,1])
-        xf.Re = 4.5e4
+        xf.Re = Re
         xf.max_iter = 2000
         # a, cl, cd, cm, cp = xf.aseq(2, 5, 0.5)
         # perf = (cl/cd).max()
@@ -55,9 +55,10 @@ def evaluate(airfoil, cl, return_CL_CD=False):
 if __name__ == "__main__":
     cl = 0.65
     best_perf=34.78824390025072
-    airfoilpath = '/work3/s212645/DiffusionAirfoil/Airfoils/'
+    airfoilpath = '/work3/s212645/DiffusionAirfoil/Airfoils1D/'
     best_airfoil = None
     for i in range(100):
+        logging.info(f'files: {i}')
         num = str(i).zfill(3)
         airfoils = np.load(airfoilpath+num+'.npy')
         airfoils = delete_intersect(airfoils)
@@ -74,5 +75,5 @@ if __name__ == "__main__":
             elif perf > best_perf:
                 best_perf = perf
                 best_airfoil = airfoil
-                np.savetxt('results/airfoil.dat', best_airfoil)
+                np.savetxt('results/airfoil1D.dat', best_airfoil)
                 logging.info(f'perf: {perf}, thickness: {yhat.max()-yhat.min()}')

@@ -1,10 +1,10 @@
 import sys
 sys.path.append('./')
 import numpy as np
-from networks import Unet
-from DiffusionAirfoil import sample, load_checkpoint, epoch, optimizer, Normalize
-from DiffusionAirfoil1D import sample as sample1D
-from DiffusionAirfoil1D import model as model1D
+import torch
+from DiffusionAirfoil import Diff
+from DiffusionAirfoil1D import Diff as Diff1D
+from utils import *
 from scipy.signal import savgol_filter
 import platform
 if platform.system().lower() == 'windows':
@@ -23,40 +23,16 @@ logging.basicConfig(filename='results/perf.log', encoding='utf-8', level=logging
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 BATCHSIZE = 1024
-model = Unet(
-    dim=16,
-    init_dim=16,
-    out_dim=1,
-    channels=1,
-    self_condition=False,
-    dim_mults=(2, 4)
-)
-model.to(device)
+
 if platform.system().lower() == 'linux':
     path = '/work3/s212645/DiffusionAirfoil/checkpoint/'
 elif platform.system().lower() == 'windows':
     path = 'H:/深度学习/checkpoint/'
-model, optimizer, epoch = load_checkpoint(path, model, optimizer, epoch)
-
-def derotate(airfoil):
-    ptail = 0.5 * (airfoil[0,:]+airfoil[-1,:])
-    ptails = np.expand_dims(ptail, axis=0)
-    ptails = np.repeat(ptails, 256, axis=0)
-    i = np.linalg.norm(airfoil - ptails, axis=1).argmax()
-    phead = airfoil[i,:]
-    theta = np.arctan2(-(airfoil[i,1] - ptail[1]), -(airfoil[i,0] - ptail[0]))
-    c = np.cos(theta)
-    s = np.sin(theta)
-    R = np.array([[c, -s], [s, c]])
-    airfoil_R = airfoil
-    airfoil_R -= np.repeat(np.expand_dims(phead, axis=0), 256, axis=0)
-    airfoil_R = np.matmul(airfoil_R, R)
-    return airfoil_R
-
+    
 def optimization(model, cl, best_perf = 0):
     best_airfoil = None
     while best_perf < 50:
-        samples = sample(model, batch_size=BATCHSIZE, channels=1)
+        samples = model.sample(batch_size=BATCHSIZE, channels=1)
         airfoils = np.squeeze(samples.cpu().numpy(), axis=1)
         for i in range(BATCHSIZE):
             airfoil = airfoils[i]
@@ -77,7 +53,7 @@ def optimization(model, cl, best_perf = 0):
 def optimization1D(model, cl, best_perf = 0):
     best_airfoil = None
     while best_perf < 50:
-        samples = sample1D(model, batch_size=BATCHSIZE, channels=1)
+        samples = model.sample(batch_size=BATCHSIZE, channels=1)
         samples = samples.reshape(BATCHSIZE, 256, 2)
         airfoils = samples.cpu().numpy()
         for i in range(BATCHSIZE):
@@ -98,6 +74,6 @@ def optimization1D(model, cl, best_perf = 0):
                 
 if __name__ == '__main__':
     if opt.method == '2d':
-        optimization(model, cl=0.65, best_perf=34.78824390025072)
+        optimization(Diff, cl=0.67, best_perf=34.78824390025072)
     elif opt.method == '1d':
-        optimization1D(model1D, cl=0.65, best_perf=34.78824390025072)
+        optimization1D(Diff1D, cl=0.67, best_perf=34.78824390025072)

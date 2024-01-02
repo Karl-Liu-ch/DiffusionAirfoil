@@ -83,10 +83,10 @@ def read_config(config_fname):
     return reynolds, mach, alpha, n_iter
 
 
-def evaluate(airfoil, cl, return_CL_CD=False):
+def evaluate(airfoil, cl, Re = 5e4, return_CL_CD=False):
     
     # Read airfoil operating conditions from a config file
-    reynolds = 4.5e4
+    reynolds = Re
     mach = 0.01
     n_iter = 2000
             
@@ -151,6 +151,7 @@ if __name__ == "__main__":
     airfoilpath = 'H:/深度学习/Airfoils/'
     best_airfoil = None
     for i in range(100):
+        logging.info(f'files: {i}')
         num = str(i).zfill(3)
         airfoils = np.load(airfoilpath+num+'.npy')
         airfoils = delete_intersect(airfoils)
