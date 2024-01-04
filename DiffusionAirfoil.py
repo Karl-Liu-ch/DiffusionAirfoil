@@ -27,6 +27,7 @@ from utils import *
 from model import *
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 BATCHSIZE = 2**8
 
@@ -69,11 +70,12 @@ if __name__ == '__main__':
         airfoilpath = '/work3/s212645/DiffusionAirfoil/Airfoils/'
     elif platform.system().lower() == 'windows':
         airfoilpath = 'H:/深度学习/Airfoils/'
-        
-    for i in range(20):
-        num = str(i).zfill(3)
-        samples = Diff.sample(batch_size=BATCHSIZE, channels=1)
-        samples = samples.reshape(BATCHSIZE, 256, 2)
+    
+    B = 2 ** 8
+    for i in range(1000):
+        num = str(i+100).zfill(3)
+        samples = Diff.sample(batch_size=B, channels=1)
+        samples = samples.reshape(B, 256, 2)
         airfoils = samples.cpu().numpy()
         np.save(airfoilpath+num+'.npy', airfoils)
         print(num + '.npy saved. ')

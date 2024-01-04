@@ -42,6 +42,55 @@ def detect_intersect(airfoil):
     else:
         return False
 
+def setflap(airfoil, theta = -2, pose = 0.7):
+    # airfoil = np.copy(airfoil)
+    phead_i = airfoil[:,0].argmin()
+    pflap_i_down = abs(airfoil[:phead_i,0] - pose).argmin()
+    pflap_i_up = abs(airfoil[phead_i:,0] - pose).argmin() + phead_i
+    theta = theta * np.pi / 180
+    c = np.cos(theta)
+    s = np.sin(theta)
+    R = np.array([[c, -s], [s, c]])
+    if theta < 0:
+        p_mid = airfoil[pflap_i_down,:]
+    else:
+        p_mid = airfoil[pflap_i_up,:]
+    airfoil[pflap_i_up:,:] = np.matmul(airfoil[pflap_i_up:,:] - p_mid, R) + p_mid
+    airfoil[:pflap_i_down,:] = np.matmul(airfoil[:pflap_i_down,:] - p_mid, R) + p_mid
+    airfoil = interpolate(airfoil, 256, 3)
+    airfoil = derotate(airfoil)
+    airfoil = Normalize(airfoil)
+    return airfoil
+
+def setupflap(airfoil, theta = -2, pose = 0.7):
+    phead_i = airfoil[:,0].argmin()
+    pflap_i_down = abs(airfoil[:phead_i,0] - pose).argmin()
+    pflap_i_up = abs(airfoil[phead_i:,0] - pose).argmin() + phead_i
+    theta = theta * np.pi / 180
+    c = np.cos(theta)
+    s = np.sin(theta)
+    R = np.array([[c, -s], [s, c]])
+    if theta < 0:
+        p_mid = airfoil[pflap_i_down,:]
+        airfoil[:pflap_i_down,:] = np.matmul(airfoil[:pflap_i_down,:] - p_mid, R) + p_mid
+        alpha = -np.arctan2((airfoil[0,1] - airfoil[phead_i,1]), (airfoil[0,0] - airfoil[phead_i,0]))
+        c = np.cos(alpha)
+        s = np.sin(alpha)
+        R = np.array([[c, -s], [s, c]])
+        airfoil[phead_i:,:] = np.matmul(airfoil[phead_i:,:] - airfoil[phead_i,:], R) + airfoil[phead_i,:]
+    else:
+        p_mid = airfoil[pflap_i_up,:]
+        airfoil[pflap_i_up:,:] = np.matmul(airfoil[pflap_i_up:,:] - p_mid, R) + p_mid
+        alpha = -np.arctan2((airfoil[-1,1] - airfoil[phead_i,1] + 0.0005), (airfoil[-1,0] - airfoil[phead_i,0]))
+        c = np.cos(alpha)
+        s = np.sin(alpha)
+        R = np.array([[c, -s], [s, c]])
+        airfoil[:phead_i,:] = np.matmul(airfoil[:phead_i,:] - airfoil[phead_i,:], R) + airfoil[phead_i,:]
+    airfoil = interpolate(airfoil, 256, 3)
+    airfoil = derotate(airfoil)
+    airfoil = Normalize(airfoil)
+    return airfoil
+
 def delete_intersect(samples):
     indexs = []
     for i in range(samples.shape[0]):
@@ -231,3 +280,16 @@ def extract(a, t, x_shape):
     batch_size = t.shape[0]
     out = a.gather(-1, t.cpu())
     return out.reshape(batch_size, *((1,) * (len(x_shape) - 1))).to(t.device)
+
+from contextlib import contextmanager
+import sys, os
+
+@contextmanager
+def suppress_stdout():
+    with open(os.devnull, "w") as devnull:
+        old_stdout = sys.stdout
+        sys.stdout = devnull
+        try:  
+            yield
+        finally:
+            sys.stdout = old_stdout

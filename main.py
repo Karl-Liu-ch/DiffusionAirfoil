@@ -31,6 +31,7 @@ elif platform.system().lower() == 'windows':
     
 def optimization(model, cl, best_perf = 0):
     best_airfoil = None
+    n=0
     while best_perf < 50:
         samples = model.sample(batch_size=BATCHSIZE, channels=1)
         airfoils = np.squeeze(samples.cpu().numpy(), axis=1)
@@ -49,9 +50,15 @@ def optimization(model, cl, best_perf = 0):
                 best_airfoil = airfoil
                 np.savetxt('results/airfoil.dat', best_airfoil)
                 logging.info(f'perf: {perf}, thickness: {yhat.max()-yhat.min()}')
+            if perf > 35:
+                nn = str(n).zfill(3)
+                np.savetxt(f'samples/airfoil{nn}.dat', airfoil)
+                logging.info(f'perf: {perf}, n: {nn}')
+                n += 1
 
 def optimization1D(model, cl, best_perf = 0):
     best_airfoil = None
+    n=0
     while best_perf < 50:
         samples = model.sample(batch_size=BATCHSIZE, channels=1)
         samples = samples.reshape(BATCHSIZE, 256, 2)
@@ -71,6 +78,11 @@ def optimization1D(model, cl, best_perf = 0):
                 best_airfoil = airfoil
                 np.savetxt('results/airfoil1D.dat', best_airfoil)
                 logging.info(f'perf: {perf}, thickness: {yhat.max()-yhat.min()}')
+            if perf > 35:
+                nn = str(n).zfill(3)
+                np.savetxt(f'samples/airfoil1D{nn}.dat', airfoil)
+                logging.info(f'perf: {perf}, n: {nn}')
+                n += 1
                 
 if __name__ == '__main__':
     if opt.method == '2d':

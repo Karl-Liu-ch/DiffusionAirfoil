@@ -22,7 +22,7 @@
 #BSUB -B
 ### -- Specify the output and error file. %J is the job-id --
 ### -- -o and -e mean append, -oo and -eo mean overwrite --
-###BSUB -o Airfoil1D%J.out
+#BSUB -o Airfoil1D%J.out
 #BSUB -e Airfoil1D%J.err
 # -- end of LSF options --
 module load cuda/11.8

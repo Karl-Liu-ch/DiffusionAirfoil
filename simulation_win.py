@@ -1,7 +1,11 @@
 #import os
 from __future__ import division
 import configparser
-import wexpect
+import platform
+if platform.system().lower() == 'windows':
+    import wexpect
+elif platform.system().lower() == 'linux':
+    import pexpect
 import gc
 import numpy as np
 from scipy.interpolate import interp1d
@@ -27,7 +31,11 @@ def compute_coeff(airfoil, reynolds=500000, mach=0, alpha=3, n_iter=200, tmp_dir
     try:
         # Has error: Floating point exception (core dumped)
         # This is the "empty input file: 'tmp/airfoil.log'" warning in other approaches
-        child = wexpect.spawn('xfoil')
+        
+        if platform.system().lower() == 'windows':
+            child = wexpect.spawn('xfoil')
+        if platform.system().lower() == 'linux':
+            child = pexpect.spawn('xfoil')
         timeout = 10
         
         child.expect('XFOIL   c> ', timeout)
@@ -57,7 +65,7 @@ def compute_coeff(airfoil, reynolds=500000, mach=0, alpha=3, n_iter=200, tmp_dir
         
         child.close()
     
-        res = np.loadtxt('{}/airfoil.log'.format(tmp_dir), skiprows=12)
+        res = np.loadtxt('{}/airfoil.txt'.format(tmp_dir), skiprows=12)
         CD = res[2]
             
     except Exception as ex:
@@ -148,8 +156,14 @@ def Normalize(airfoil):
 if __name__ == "__main__":
     cl = 0.65
     best_perf=34.78824390025072
-    airfoilpath = 'H:/深度学习/Airfoils/'
+    
+    if platform.system().lower() == 'windows':
+        airfoilpath = 'H:/深度学习/Airfoils/'
+    elif platform.system().lower() == 'linux':
+        name = 'Airfoils'
+        airfoilpath = '/work3/s212645/DiffusionAirfoil/'+name+'/'
     best_airfoil = None
+    n=0
     for i in range(100):
         logging.info(f'files: {i}')
         num = str(i).zfill(3)
@@ -168,5 +182,10 @@ if __name__ == "__main__":
             elif perf > best_perf:
                 best_perf = perf
                 best_airfoil = airfoil
-                np.savetxt('results/airfoil1D.dat', best_airfoil)
+                np.savetxt('results/'+name+'.dat', best_airfoil)
                 logging.info(f'perf: {perf}, thickness: {yhat.max()-yhat.min()}')
+            if perf > 35:
+                nn = str(n).zfill(3)
+                np.savetxt('samples/'+name+nn+'.dat', airfoil)
+                logging.info(f'perf: {perf}, n: {nn}')
+                n += 1

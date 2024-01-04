@@ -67,11 +67,11 @@ if __name__ == '__main__':
     elif platform.system().lower() == 'windows':
         airfoilpath = 'H:/深度学习/Airfoils1D/'
         
-    # os.mkdir(airfoilpath)
-    for i in range(100):
-        num = str(i).zfill(3)
-        samples = Diff.sample(batch_size=BATCHSIZE, channels=1)
-        samples = samples.reshape(BATCHSIZE, 256, 2)
+    B = 2 ** 10
+    for i in range(1000):
+        num = str(i+100).zfill(3)
+        samples = Diff.sample(batch_size=B, channels=1)
+        samples = samples.reshape(B, 256, 2)
         airfoils = samples.cpu().numpy()
         np.save(airfoilpath+num+'.npy', airfoils)
         print(num + '.npy saved. ')
