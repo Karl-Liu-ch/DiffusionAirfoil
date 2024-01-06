@@ -58,7 +58,7 @@ def compute_coeff(airfoil, reynolds=58000, mach=0, alpha=0, n_iter=2000, tmp_dir
         
         child.close()
     
-        res = np.loadtxt('{}/airfoil.txt'.format(tmp_dir), skiprows=12)
+        res = np.loadtxt('{}/airfoil.log'.format(tmp_dir), skiprows=12)
         CL = res[1]
         CD = res[2]
             

@@ -1,0 +1,6 @@
+DEBUG:matplotlib:matplotlib data path: D:\Users\karl\anaconda3\envs\pytorch2\lib\site-packages\matplotlib\mpl-data
+DEBUG:matplotlib:CONFIGDIR=C:\Users\karl\.matplotlib
+DEBUG:matplotlib:interactive is False
+DEBUG:matplotlib:platform is win32
+DEBUG:matplotlib:CACHEDIR=C:\Users\karl\.matplotlib
+DEBUG:matplotlib.font_manager:Using fontManager instance from C:\Users\karl\.matplotlib\fontlist-v330.json
