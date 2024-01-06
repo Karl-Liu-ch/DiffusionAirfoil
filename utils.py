@@ -23,6 +23,78 @@ from scipy.interpolate import splev, splprep, interp1d
 from scipy.integrate import cumtrapz
 
 from scipy.signal import savgol_filter
+from xfoil import XFoil
+from xfoil.model import Airfoil
+
+def evalpreset(airfoil, Re = 4e5):
+    xf = XFoil()
+    xf.print = 0
+    xf.airfoil = Airfoil(airfoil[:,0], airfoil[:,1])
+    xf.Re = Re
+    xf.max_iter = 200
+    a = np.linspace(-2,2,5)
+    CD = []
+    for alfa in a:
+        _, cd, _, _ = xf.a(alfa)
+        CD.append(cd)
+    i_nan = np.argwhere(np.isnan(CD))
+    a = np.delete(a, i_nan)
+    CD = np.delete(CD, i_nan)
+    try:
+        i_min = CD.argmin()
+        CD = CD[i_min]
+        a = a[i_min]
+    except:
+        CD = np.nan
+    return CD, a
+
+def evalperf(airfoil, cl = 0.65, Re = 5.8e4):
+    xf = XFoil()
+    xf.print = 0
+    xf.airfoil = Airfoil(airfoil[:,0], airfoil[:,1])
+    xf.Re = Re
+    xf.max_iter = 200
+    a, cd, cm, cp = xf.cl(cl)
+    perf = cl/cd
+    return perf, a, cd
+
+def lowestD(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5):
+    if detect_intersect(airfoil):
+        # print('Unsuccessful: Self-intersecting!')
+        af_BL, R_BL, a_BL, b_BL, perfBL, cdbl, CD_BL = airfoil, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan
+    elif abs(airfoil[:128,1] - np.flip(airfoil[128:,1])).max() < 0.055 or abs(airfoil[:128,1] - np.flip(airfoil[128:,1])).max() > 0.08:
+        # print('Unsuccessful: Too thin!')
+        af_BL, R_BL, a_BL, b_BL, perfBL, cdbl, CD_BL = airfoil, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan
+    elif np.abs(airfoil[0,0]-airfoil[-1,0]) > 0.01 or np.abs(airfoil[0,1]-airfoil[-1,1]) > 0.01:
+        # print('Unsuccessful:', (airfoil[0,0],airfoil[-1,0]), (airfoil[0,1],airfoil[-1,1]))
+        af_BL, R_BL, a_BL, b_BL, perfBL, cdbl, CD_BL = airfoil, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan
+    else:
+        alpha = np.linspace(-3,0,num=4)
+        ail = np.linspace(0.6,0.7,num=3)
+        R_BL = 10
+        CD_BL = 10
+        a_BL = -3
+        b_BL = 0.6
+        perfBL = 0
+        cdbl = 10
+        af_BL = airfoil
+        for a in alpha:
+            for b in ail:
+                af = setupflap(airfoil, a, b)
+                CD, aa = evalpreset(af, Re = Re2)
+                afc = setflap(af, -a, b)
+                perf, aa, cd = evalperf(afc, cl=cl, Re = Re1)
+                R = cd + CD * 3
+                if R < R_BL:
+                    R_BL = R
+                    a_BL = a
+                    b_BL = b
+                    af_BL = af
+                    perfBL = perf
+                    cdbl = cd
+                    CD_BL = CD
+        print('perf: ', perfBL, 'R: ', R_BL)
+    return af_BL, R_BL, a_BL, b_BL, perfBL, cdbl, CD_BL
 
 def detect_intersect(airfoil):
     # Get leading head
@@ -43,7 +115,7 @@ def detect_intersect(airfoil):
         return False
 
 def setflap(airfoil, theta = -2, pose = 0.7):
-    # airfoil = np.copy(airfoil)
+    airfoil = np.copy(airfoil)
     phead_i = airfoil[:,0].argmin()
     pflap_i_down = abs(airfoil[:phead_i,0] - pose).argmin()
     pflap_i_up = abs(airfoil[phead_i:,0] - pose).argmin() + phead_i
@@ -63,6 +135,7 @@ def setflap(airfoil, theta = -2, pose = 0.7):
     return airfoil
 
 def setupflap(airfoil, theta = -2, pose = 0.7):
+    airfoil = np.copy(airfoil)
     phead_i = airfoil[:,0].argmin()
     pflap_i_down = abs(airfoil[:phead_i,0] - pose).argmin()
     pflap_i_up = abs(airfoil[phead_i:,0] - pose).argmin() + phead_i

@@ -2,8 +2,9 @@
 ### General options
 ### –- specify queue --
 #BSUB -q hpc
+####BSUB -R "select[model == XeonE5_2660v3]"
 ### -- set the job Name --
-#BSUB -J Airfoil1D
+#BSUB -J Airfoil
 ### -- ask for number of cores (default: 1) --
 #BSUB -n 8
 ### -- specify that the cores must be on the same host --
@@ -22,8 +23,8 @@
 #BSUB -B
 ### -- Specify the output and error file. %J is the job-id --
 ### -- -o and -e mean append, -oo and -eo mean overwrite --
-#BSUB -o Airfoil1D%J.out
-#BSUB -e Airfoil1D%J.err
+#BSUB -o Airfoil%J.out
+#BSUB -e Airfoil%J.err
 # -- end of LSF options --
 module load cuda/11.8
 module load cudnn/v8.9.1.23-prod-cuda-11.X 
@@ -31,4 +32,6 @@ cd /zhome/02/b/164706/
 source ./miniconda3/bin/activate
 conda activate pytorch
 cd /zhome/02/b/164706/Master_Courses/2023_Fall/DiffusionAirfoil/
-python simulation.py
+export PYTHONUNBUFFERED=1
+# python -u simulation.py
+python -u test.py
