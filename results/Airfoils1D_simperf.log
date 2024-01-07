@@ -10,3 +10,155 @@ files: 3
 files: 0
 files: 1
 perf: 39.060755315885025, R: 0.030958092771470547, m: 001
+files: 2
+files: 3
+perf: 35.68549057745041, R: 0.027695303549990058, m: 002
+perf: 39.41449586898207, R: 0.0308796688914299, m: 003
+perf: 39.835789005053016, R: 0.031077058985829353, m: 004
+files: 4
+perf: 39.20347567524999, R: 0.03092255163937807, m: 005
+perf: 39.46060734079321, R: 0.031071771401911974, m: 006
+files: 5
+perf: 40.89853947555477, R: 0.030378555413335562, m: 007
+files: 6
+files: 7
+perf: 40.69123670468305, R: 0.030517264269292355, m: 008
+files: 8
+files: 9
+files: 10
+files: 0
+files: 1
+perf: 39.06076406024718, R: 0.030958089046180248, m: 001
+files: 2
+files: 3
+perf: 35.6855234204656, R: 0.027695286786183715, m: 002
+perf: 39.835789005053016, R: 0.03107705758884549, m: 003
+files: 4
+perf: 39.20347567524999, R: 0.030922553036361933, m: 004
+perf: 39.46062518940679, R: 0.031071763951331377, m: 005
+perf: 40.821508310616125, R: 0.030987284146249294, m: 006
+files: 5
+files: 6
+files: 7
+perf: 45.74806971582051, R: 0.02980344695970416, m: 007
+perf: 40.69125568391973, R: 0.03051725821569562, m: 008
+files: 8
+files: 9
+files: 10
+files: 11
+perf: 38.430772273677476, R: 0.031171190086752176, m: 009
+files: 12
+files: 13
+files: 14
+files: 15
+files: 16
+files: 17
+files: 18
+files: 1
+files: 1
+perf: 39.06076406024718, R: 0.030958089046180248, m: 001
+files: 2
+files: 18
+files: 19
+files: 20
+perf: 36.98950506837257, R: 0.02729790029115975, m: 010
+files: 21
+perf: 39.09920272452686, R: 0.03070725966244936, m: 011
+files: 22
+files: 23
+files: 24
+files: 25
+perf: 38.9655998359936, R: 0.031064125709235668, m: 012
+files: 26
+files: 27
+files: 28
+files: 29
+files: 30
+files: 31
+perf: 39.34728273284749, R: 0.03112212149426341, m: 013
+files: 32
+perf: 39.53657418212519, R: 0.031088723801076412, m: 014
+files: 33
+files: 34
+files: 35
+files: 36
+files: 37
+files: 38
+files: 39
+files: 40
+files: 41
+files: 42
+files: 43
+files: 44
+files: 45
+files: 46
+files: 47
+files: 47
+files: 48
+files: 48
+files: 49
+files: 50
+files: 51
+perf: 40.102932372301694, R: 0.030943308025598526, m: 015
+files: 52
+files: 53
+files: 54
+files: 55
+files: 56
+files: 57
+files: 58
+files: 59
+files: 60
+files: 61
+files: 62
+files: 63
+perf: 33.74095133008828, R: 0.03042860864661634, m: 016
+files: 64
+files: 65
+files: 66
+files: 67
+files: 68
+files: 69
+files: 70
+files: 71
+files: 72
+files: 73
+files: 74
+files: 75
+files: 76
+files: 77
+files: 78
+files: 79
+files: 80
+files: 81
+files: 82
+files: 83
+files: 84
+files: 85
+files: 86
+files: 87
+files: 88
+files: 89
+files: 90
+files: 91
+files: 92
+files: 93
+perf: 36.575191100359916, R: 0.027383605483919382, m: 017
+files: 94
+files: 95
+files: 96
+files: 97
+files: 98
+files: 99
+files: 99
+files: 99
+files: 100
+perf: 39.472565066779026, R: 0.040732817724347115, m: 018
+files: 101
+files: 102
+files: 103
+files: 104
+perf: 40.56653742237263, R: 0.0404291651211679, m: 019
+perf: 31.720375158515026, R: 0.04082099860534072, m: 020
+files: 105
+files: 106

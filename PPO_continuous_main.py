@@ -41,9 +41,9 @@ def main(args, env, number, seed):
     torch.manual_seed(seed)
     env_name = 'Airfoil'
 
-    args.state_dim = 1024
+    args.state_dim = 512
     args.action_dim = 512
-    args.hidden_width = 1024
+    args.hidden_width = 256
     args.max_action = float(0.01)
     args.max_episode_steps = 20  # Maximum number of steps per episode
     print("state_dim={}".format(args.state_dim))
@@ -138,7 +138,7 @@ if __name__ == '__main__':
     parser.add_argument("--hidden_width", type=int, default=64, help="The number of neurons in hidden layers of the neural network")
     parser.add_argument("--lr_a", type=float, default=3e-4, help="Learning rate of actor")
     parser.add_argument("--lr_c", type=float, default=3e-4, help="Learning rate of critic")
-    parser.add_argument("--gamma", type=float, default=0.99, help="Discount factor")
+    parser.add_argument("--gamma", type=float, default=0.97, help="Discount factor")
     parser.add_argument("--lamda", type=float, default=0.95, help="GAE parameter")
     parser.add_argument("--epsilon", type=float, default=0.2, help="PPO clip parameter")
     parser.add_argument("--K_epochs", type=int, default=10, help="PPO parameter")

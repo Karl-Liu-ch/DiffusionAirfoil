@@ -13,7 +13,7 @@ opt = parser.parse_args()
 model_path=opt.version
 K_epochs = 80               # update policy for K epochs
 eps_clip = 0.2              # clip parameter for PPO
-gamma = 0.995                # discount factor
+gamma = 0.97                # discount factor
 
 lr_actor = 0.0003           # learning rate for actor
 lr_critic = 0.001           # learning rate for critic
@@ -82,8 +82,8 @@ print("save checkpoint path : " + checkpoint_path)
 ################# training procedure ################
 
 # initialize a PPO agent
-state_dim = 19
-ppo_agent = PPO(state_dim=1024, action_dim=512, lr_actor = lr_actor, lr_critic = lr_critic, gamma = gamma, K_epochs = K_epochs, eps_clip = eps_clip, has_continuous_action_space = True, action_std_init=0.01)
+state_dim = 512
+ppo_agent = PPO(state_dim=512, action_dim=512, lr_actor = lr_actor, lr_critic = lr_critic, gamma = gamma, K_epochs = K_epochs, eps_clip = eps_clip, has_continuous_action_space = True, action_std_init=0.01)
 torch.load('agent/PPO_preTrained/Dronesimscape/PPO_Dronesimscape_0_0.pth')
 try:
     ppo_agent.load('agent/PPO_preTrained/Dronesimscape/PPO_Dronesimscape_0_0.pth')

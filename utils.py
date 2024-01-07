@@ -58,11 +58,11 @@ def evalperf(airfoil, cl = 0.65, Re = 5.8e4):
     perf = cl/cd
     return perf, a, cd
 
-def lowestD(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5):
+def lowestD(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 3, check_thickness = True):
     if detect_intersect(airfoil):
         # print('Unsuccessful: Self-intersecting!')
         af_BL, R_BL, a_BL, b_BL, perfBL, cdbl, CD_BL = airfoil, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan
-    elif abs(airfoil[:128,1] - np.flip(airfoil[128:,1])).max() < 0.055 or abs(airfoil[:128,1] - np.flip(airfoil[128:,1])).max() > 0.08:
+    elif (cal_thickness(airfoil) < 0.06 or cal_thickness(airfoil) > 0.09) and check_thickness:
         # print('Unsuccessful: Too thin!')
         af_BL, R_BL, a_BL, b_BL, perfBL, cdbl, CD_BL = airfoil, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan
     elif np.abs(airfoil[0,0]-airfoil[-1,0]) > 0.01 or np.abs(airfoil[0,1]-airfoil[-1,1]) > 0.01:
@@ -70,7 +70,7 @@ def lowestD(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5):
         af_BL, R_BL, a_BL, b_BL, perfBL, cdbl, CD_BL = airfoil, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan
     else:
         alpha = np.linspace(-3,0,num=4)
-        ail = np.linspace(0.6,0.7,num=3)
+        ail = [0.6, 0.65, 0.7]
         R_BL = 10
         CD_BL = 10
         a_BL = -3
@@ -84,7 +84,7 @@ def lowestD(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5):
                 CD, aa = evalpreset(af, Re = Re2)
                 afc = setflap(af, -a, b)
                 perf, aa, cd = evalperf(afc, cl=cl, Re = Re1)
-                R = cd + CD * 3
+                R = cd + CD * lamda
                 if R < R_BL:
                     R_BL = R
                     a_BL = a
@@ -95,6 +95,43 @@ def lowestD(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5):
                     CD_BL = CD
         print('perf: ', perfBL, 'R: ', R_BL)
     return af_BL, R_BL, a_BL, b_BL, perfBL, cdbl, CD_BL
+
+def cal_baseline(lamda = 3):
+    af = np.loadtxt('BETTER/20150114-50 +2 d.dat', skiprows=1)
+    af = interpolate(af, 256, 3)
+    cl = 0.65
+    xf = XFoil()
+    xf.print = 0
+    xf.airfoil = Airfoil(af[:,0], af[:,1])
+    xf.Re = 5.8e4
+    xf.M = 0
+    xf.max_iter = 2000
+    a, cd, cm, cp = xf.cl(cl)
+    perf = cl/cd
+    cdc = cd
+    af = setflap(af, theta=-2, pose = 0.7)
+    xf.airfoil = Airfoil(af[:,0], af[:,1])
+    xf.Re = 4e5
+    xf.M = 0
+    xf.max_iter = 2000
+    a, cl, cd, cm, cp = xf.aseq(-2, 2, 0.5)
+    i = cd.argmin()
+    perf_bl = perf
+    R_bl = cdc + cd[i] * lamda
+    return perf_bl, R_bl
+
+def cal_thickness(airfoil):
+    lh_idx = np.argmin(airfoil[:,0])
+    lh_x = airfoil[lh_idx, 0]
+    # Get trailing head
+    th_x = np.minimum(airfoil[0,0], airfoil[-1,0])
+    # Interpolate
+    f_up = interp1d(airfoil[:lh_idx+1,0], airfoil[:lh_idx+1,1])
+    f_low = interp1d(airfoil[lh_idx:,0], airfoil[lh_idx:,1])
+    xx = np.linspace(lh_x, th_x, num=1000)
+    yy_up = f_up(xx)
+    yy_low = f_low(xx)
+    return (yy_up-yy_low).max()
 
 def detect_intersect(airfoil):
     # Get leading head
@@ -134,19 +171,12 @@ def setflap(airfoil, theta = -2, pose = 0.7):
     airfoil = Normalize(airfoil)
     return airfoil
 
-def setupflap(airfoil, theta = -2, pose = 0.7):
-    airfoil = np.copy(airfoil)
-    phead_i = airfoil[:,0].argmin()
-    pflap_i_down = abs(airfoil[:phead_i,0] - pose).argmin()
-    pflap_i_up = abs(airfoil[phead_i:,0] - pose).argmin() + phead_i
-    theta = theta * np.pi / 180
-    c = np.cos(theta)
-    s = np.sin(theta)
-    R = np.array([[c, -s], [s, c]])
+def rotateflap(af, theta, pflap_i_down, phead_i, pflap_i_up, R, offset = 0):
+    airfoil = np.copy(af)
     if theta < 0:
         p_mid = airfoil[pflap_i_down,:]
         airfoil[:pflap_i_down,:] = np.matmul(airfoil[:pflap_i_down,:] - p_mid, R) + p_mid
-        alpha = -np.arctan2((airfoil[0,1] - airfoil[phead_i,1]), (airfoil[0,0] - airfoil[phead_i,0]))
+        alpha = -np.arctan2((airfoil[0,1] - airfoil[phead_i,1] - offset), (airfoil[0,0] - airfoil[phead_i,0]))
         c = np.cos(alpha)
         s = np.sin(alpha)
         R = np.array([[c, -s], [s, c]])
@@ -154,15 +184,39 @@ def setupflap(airfoil, theta = -2, pose = 0.7):
     else:
         p_mid = airfoil[pflap_i_up,:]
         airfoil[pflap_i_up:,:] = np.matmul(airfoil[pflap_i_up:,:] - p_mid, R) + p_mid
-        alpha = -np.arctan2((airfoil[-1,1] - airfoil[phead_i,1] + 0.0005), (airfoil[-1,0] - airfoil[phead_i,0]))
+        alpha = -np.arctan2((airfoil[-1,1] - airfoil[phead_i,1] + offset), (airfoil[-1,0] - airfoil[phead_i,0]))
         c = np.cos(alpha)
         s = np.sin(alpha)
         R = np.array([[c, -s], [s, c]])
         airfoil[:phead_i,:] = np.matmul(airfoil[:phead_i,:] - airfoil[phead_i,:], R) + airfoil[phead_i,:]
+    return airfoil
+
+def setupflap(af, theta = -2, pose = 0.7):
+    airfoil = np.copy(af)
+    phead_i = airfoil[:,0].argmin()
+    pflap_i_down = abs(airfoil[:phead_i,0] - pose).argmin()
+    pflap_i_up = abs(airfoil[phead_i:,0] - pose).argmin() + phead_i
+    theta = theta * np.pi / 180
+    c = np.cos(theta)
+    s = np.sin(theta)
+    R = np.array([[c, -s], [s, c]])
+    offset = 0
+    af = rotateflap(airfoil, theta, pflap_i_down, phead_i, pflap_i_up, R, offset = offset)
+    while detect_intersect(af):
+        offset += 0.0002
+        af = rotateflap(airfoil, theta, pflap_i_down, phead_i, pflap_i_up, R, offset = offset)
+    airfoil = af
     airfoil = interpolate(airfoil, 256, 3)
     airfoil = derotate(airfoil)
     airfoil = Normalize(airfoil)
     return airfoil
+
+def show_airfoil(af):
+    fig, axs = plt.subplots(1, 1)
+    axs.plot(af[:,0], af[:,1])
+    axs.set_aspect('equal', 'box')
+    fig.tight_layout()
+    plt.show()
 
 def delete_intersect(samples):
     indexs = []

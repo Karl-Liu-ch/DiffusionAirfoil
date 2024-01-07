@@ -12,7 +12,7 @@ parser.add_argument('--method', type=str, default='1d')
 opt = parser.parse_args()
 from utils import *
 
-def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, return_CL_CD=False):
+def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 3, return_CL_CD=False, check_thickness = True):
         
     if detect_intersect(airfoil):
         # print('Unsuccessful: Self-intersecting!')
@@ -20,7 +20,7 @@ def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, return_CL_CD=False):
         R = np.nan
         CD = np.nan
         
-    elif abs(airfoil[:128,1] - np.flip(airfoil[128:,1])).max() < 0.055 or abs(airfoil[:128,1] - np.flip(airfoil[128:,1])).max() > 0.08:
+    elif (cal_thickness(airfoil) < 0.06 or cal_thickness(airfoil) > 0.09) and check_thickness:
         # print('Unsuccessful: Too thin!')
         perf = np.nan
         R = np.nan
@@ -54,7 +54,7 @@ def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, return_CL_CD=False):
         xf.max_iter = 200
         a, cd, cm, cp = xf.cl(cl)
         perf = cl/cd
-        R = cd + CD * 3
+        R = cd + CD * lamda
         if perf < -100 or perf > 300 or cd < 1e-3:
             perf = np.nan
         elif not np.isnan(perf):
@@ -66,8 +66,8 @@ def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, return_CL_CD=False):
         return perf, CD, airfoil, R
 
 if __name__ == "__main__":
-    R_BL = 0.031195905059576035
-    perf_BL = 39.06369801476684
+    LAMBDA = 5
+    perf_BL, R_BL = cal_baseline(lamda=LAMBDA)
     CD_BL = 0.004852138459682465
     cl = 0.65
     best_perf=perf_BL
@@ -83,7 +83,7 @@ if __name__ == "__main__":
         airfoilpath = '/work3/s212645/BezierGANPytorch/Airfoils/'
 
     try:
-        log = np.loadtxt(f'results/{name}_log.txt')
+        log = np.loadtxt(f'results/{name}_simlog.txt')
         i = int(log[0])
         k = int(log[1])
         m = int(log[2])
@@ -93,7 +93,7 @@ if __name__ == "__main__":
         k = 0
 
     print(f'i: {i}, k: {k}, m: {m}')
-    while i < 100:
+    while i < 1000:
         f = open(f'results/{name}_simperf.log', 'a')
         f.write(f'files: {i}\n')
         f.close()
@@ -107,7 +107,7 @@ if __name__ == "__main__":
             xhat, yhat = savgol_filter((airfoil[:,0], airfoil[:,1]), 10, 3)
             airfoil[:,0] = xhat
             airfoil[:,1] = yhat
-            perf, CD, af, R = evaluate(airfoil, cl)
+            perf, CD, af, R = evaluate(airfoil, cl, lamda=LAMBDA)
             if perf == np.nan:
                 pass
             elif R < R_BL:

@@ -3,10 +3,9 @@ import argparse
 parser = argparse.ArgumentParser(description="DiffusionAirfoil")
 parser.add_argument('--method', type=str, default='1d')
 opt = parser.parse_args()
-import logging
 
-R_BL = 0.031195905059576035
-perf_BL = 39.06369801476684
+LAMBDA = 5
+perf_BL, R_BL = cal_baseline(lamda=LAMBDA)
 CD_BL = 0.004852138459682465
 cl = 0.65
 best_perf=perf_BL
@@ -46,7 +45,7 @@ while i < 100:
         xhat, yhat = savgol_filter((airfoil[:,0], airfoil[:,1]), 10, 3)
         airfoil[:,0] = xhat
         airfoil[:,1] = yhat
-        af, R, a, b, perf, cd, CD_BL = lowestD(airfoil)
+        af, R, a, b, perf, cd, CD_BL = lowestD(airfoil, lamda=LAMBDA)
         if perf == np.nan:
             pass
         elif R < R_BL:

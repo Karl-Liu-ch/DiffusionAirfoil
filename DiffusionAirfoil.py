@@ -73,7 +73,7 @@ if __name__ == '__main__':
     
     B = 2 ** 8
     for i in range(1000):
-        num = str(i+100).zfill(3)
+        num = str(i+749).zfill(3)
         samples = Diff.sample(batch_size=B, channels=1)
         samples = samples.reshape(B, 256, 2)
         airfoils = samples.cpu().numpy()

@@ -33,5 +33,5 @@ source ./miniconda3/bin/activate
 conda activate pytorch
 cd /zhome/02/b/164706/Master_Courses/2023_Fall/DiffusionAirfoil/
 export PYTHONUNBUFFERED=1
-# python -u simulation.py
-python -u test.py
+python -u simulation.py
+# python -u test.py

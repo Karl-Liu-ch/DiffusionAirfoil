@@ -12,7 +12,6 @@ from torch.distributions import Categorical
 
 import numpy as np
 import math
-import gym
 from agent.network import DenseNet, ResNet
 from AgentNet import Network, AttnBlock
 
