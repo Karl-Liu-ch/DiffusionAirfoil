@@ -2,10 +2,6 @@
 from __future__ import division
 import configparser
 import platform
-if platform.system().lower() == 'windows':
-    import wexpect
-elif platform.system().lower() == 'linux':
-    import pexpect
 import gc
 import numpy as np
 from scipy.interpolate import interp1d
@@ -13,97 +9,43 @@ import logging
 logging.basicConfig(filename='results/perfwin.log', encoding='utf-8', level=logging.DEBUG)
 from scipy.signal import savgol_filter
 from utils_win import *
+import argparse
+parser = argparse.ArgumentParser(description="DiffusionAirfoil")
+parser.add_argument('--method', type=str, default='1d')
+opt = parser.parse_args()
 
-def compute_coeff(airfoil, reynolds=58000, mach=0, alpha=0, n_iter=2000, tmp_dir='tmp', cl = True):
-    create_dir(tmp_dir)
-    gc.collect()
-    safe_remove('{}/airfoil.log'.format(tmp_dir))
-    fname = '{}/airfoil.dat'.format(tmp_dir)
-    with open(fname, 'wb') as f:
-        np.savetxt(f, airfoil)
-    try:
-        if platform.system().lower() == 'windows':
-            child = wexpect.spawn('xfoil')
-        if platform.system().lower() == 'linux':
-            child = pexpect.spawn('xfoil')
-        timeout = 10
+def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 3, return_CL_CD=False, check_thickness = True):
         
-        child.expect('XFOIL   c> ', timeout)
-        child.sendline('load {}/airfoil.dat'.format(tmp_dir))
-        child.expect('Enter airfoil name   s> ', timeout)
-        child.sendline('af')
-        child.expect('XFOIL   c> ', timeout)
-        child.sendline('OPER')
-        child.expect('.OPERi   c> ', timeout)
-        child.sendline('VISC {}'.format(reynolds))
-        child.expect('.OPERv   c> ', timeout)
-        child.sendline('ITER {}'.format(n_iter))
-        child.expect('.OPERv   c> ', timeout)
-        child.sendline('MACH {}'.format(mach))
-        child.expect('.OPERv   c> ', timeout)
-        child.sendline('PACC')
-        child.expect('Enter  polar save filename  OR  <return> for no file   s> ', timeout)
-        child.sendline('{}/airfoil.log'.format(tmp_dir))
-        child.expect('Enter  polar dump filename  OR  <return> for no file   s> ', timeout)
-        child.sendline()
-        child.expect('.OPERva   c> ', timeout)
-        if cl == True:
-            child.sendline('CL {}'.format(alpha))
-        else:
-            child.sendline('ALFA {}'.format(alpha))
-        child.expect('.OPERva   c> ', timeout)
-        child.sendline()
-        child.expect('XFOIL   c> ', timeout)
-        child.sendline('quit')
-        
-        child.close()
-    
-        res = np.loadtxt('{}/airfoil.log'.format(tmp_dir), skiprows=12)
-        CL = res[1]
-        CD = res[2]
-            
-    except Exception as ex:
-        print(ex)
-        print('XFoil error!')
-        CL = np.nan
-        CD = np.nan
-        
-    safe_remove(':00.bl')
-    
-    return CL, CD
-
-def evaluate(airfoil, cl, Re = 5.8e4):
-    reynolds = Re
-    mach = 0.01
-    n_iter = 2000
-            
     if detect_intersect(airfoil):
         perf = np.nan
-        CL = np.nan
+        R = np.nan
         CD = np.nan
-    
-    elif abs(airfoil[:128,1] - np.flip(airfoil[128:,1])).max() < 0.055 or abs(airfoil[:128,1] - np.flip(airfoil[128:,1])).max() > 0.08:
+        
+    elif (cal_thickness(airfoil) < 0.06 or cal_thickness(airfoil) > 0.09) and check_thickness:
         perf = np.nan
-        CL = np.nan
+        R = np.nan
         CD = np.nan
         
     elif np.abs(airfoil[0,0]-airfoil[-1,0]) > 0.01 or np.abs(airfoil[0,1]-airfoil[-1,1]) > 0.01:
         perf = np.nan
-        CL = np.nan
+        R = np.nan
         CD = np.nan
         
     else:
-        CL, CD = compute_coeff(airfoil, reynolds, mach, cl, n_iter)
-        perf = CL/CD
+        airfoil = setupflap(airfoil, theta=-2)
+        CD = evalpreset_win(airfoil, Re2)
+        airfoil = setflap(airfoil, theta=2)
+        perf, cd = evalperf_win(airfoil, cl = cl, Re = Re1)
+        R = cd + CD * lamda
         
         if perf < -100 or perf > 300 or CD < 1e-3:
             perf = np.nan
         elif not np.isnan(perf):
-            print('Successful: CL/CD={:.4f}'.format(perf))
-    return perf, CD
+            print('Successful: CL/CD={:.4f}, R={}'.format(perf, R))
+    return perf, CD, R, airfoil
 
 def evalpreset_win(airfoil, Re = 4e5):
-    a = np.linspace(-2,2,5)
+    a = np.linspace(-1,1,5)
     CD = []
     for alfa in a:
         cl, cd = compute_coeff(airfoil, reynolds=Re, alpha=alfa, cl=False)
@@ -117,7 +59,7 @@ def evalpreset_win(airfoil, Re = 4e5):
         a = a[i_min]
     except:
         CD = np.nan
-    return CD, a
+    return CD
 
 def evalperf_win(airfoil, cl = 0.65, Re = 5.8e4):
     cl, cd = compute_coeff(airfoil, reynolds=Re, alpha=cl, cl=True)
@@ -160,6 +102,10 @@ def lowestD(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5):
     return af_BL, R_BL, a_BL, b_BL, perfBL, cdbl, CD_BL
 
 if __name__ == "__main__":
+    af = np.loadtxt('BETTER/20150114-50 +2 d.dat', skiprows=1)
+    af = interpolate(af, 256, 3)
+    cl = 0.65
+    perf_BL, cd, R_BL, af = evaluate(af)
     R_BL = 0.031195905059576035
     perf_BL = 39.06369801476684
     CD_BL = 0.004852138459682465
@@ -171,8 +117,15 @@ if __name__ == "__main__":
         name = 'Airfoils'
         airfoilpath = 'H:/深度学习/Airfoils/'
     elif platform.system().lower() == 'linux':
-        name = 'Airfoils'
-        airfoilpath = '/work3/s212645/DiffusionAirfoil/'+name+'/'
+        if opt.method == '2d':
+            name = 'Airfoils2D'
+            airfoilpath = '/work3/s212645/DiffusionAirfoil/Airfoils/'
+        elif opt.method == '1d':
+            name = 'Airfoils1D'
+            airfoilpath = '/work3/s212645/DiffusionAirfoil/'+name+'/'
+        elif opt.method == 'bezier':
+            name = 'Airfoilsbezier'
+            airfoilpath = '/work3/s212645/BezierGANPytorch/Airfoils/'
     best_airfoil = None
     try:
         log = np.loadtxt(f'results/{name}win_log.txt')
@@ -199,7 +152,9 @@ if __name__ == "__main__":
             xhat, yhat = savgol_filter((airfoil[:,0], airfoil[:,1]), 10, 3)
             airfoil[:,0] = xhat
             airfoil[:,1] = yhat
-            af, R, a, b, perf, cd, CD_BL = lowestD(airfoil)
+            perf, cd, R, af = evaluate(airfoil)
+            a = -2
+            b = 0.7
             if perf == np.nan:
                 pass
             elif R < R_BL:

@@ -19,6 +19,83 @@ from scipy.interpolate import splev, splprep, interp1d
 from scipy.integrate import cumtrapz
 
 from scipy.signal import savgol_filter
+import platform
+if platform.system().lower() == 'windows':
+    import wexpect
+elif platform.system().lower() == 'linux':
+    import pexpect
+import gc
+
+def compute_coeff(airfoil, reynolds=58000, mach=0, alpha=0, n_iter=2000, tmp_dir='tmp', hold_cl = True):
+    create_dir(tmp_dir)
+    gc.collect()
+    safe_remove('{}/airfoil.log'.format(tmp_dir))
+    fname = '{}/airfoil.dat'.format(tmp_dir)
+    with open(fname, 'wb') as f:
+        np.savetxt(f, airfoil)
+    try:
+        if platform.system().lower() == 'windows':
+            child = wexpect.spawn('xfoil')
+        if platform.system().lower() == 'linux':
+            child = pexpect.spawn('xfoil')
+        timeout = 10
+        
+        child.expect('XFOIL   c> ', timeout)
+        child.sendline('load {}/airfoil.dat'.format(tmp_dir))
+        child.expect('Enter airfoil name   s> ', timeout)
+        child.sendline('af')
+        child.expect('XFOIL   c> ', timeout)
+        child.sendline('OPER')
+        child.expect('.OPERi   c> ', timeout)
+        child.sendline('VISC {}'.format(reynolds))
+        child.expect('.OPERv   c> ', timeout)
+        child.sendline('ITER {}'.format(n_iter))
+        child.expect('.OPERv   c> ', timeout)
+        child.sendline('MACH {}'.format(mach))
+        child.expect('.OPERv   c> ', timeout)
+        child.sendline('PACC')
+        child.expect('Enter  polar save filename  OR  <return> for no file   s> ', timeout)
+        child.sendline('{}/airfoil.log'.format(tmp_dir))
+        child.expect('Enter  polar dump filename  OR  <return> for no file   s> ', timeout)
+        child.sendline()
+        child.expect('.OPERva   c> ', timeout)
+        if hold_cl == True:
+            child.sendline('CL {}'.format(alpha))
+        else:
+            child.sendline('ALFA {}'.format(alpha))
+        child.expect('.OPERva   c> ', timeout)
+        child.sendline()
+        child.expect('XFOIL   c> ', timeout)
+        child.sendline('quit')
+        
+        child.close()
+    
+        res = np.loadtxt('{}/airfoil.log'.format(tmp_dir), skiprows=12)
+        CL = res[1]
+        CD = res[2]
+            
+    except Exception as ex:
+        # print(ex)
+        print('XFoil error!')
+        CL = np.nan
+        CD = np.nan
+        
+    safe_remove(':00.bl')
+    
+    return CL, CD
+
+def cal_thickness(airfoil):
+    lh_idx = np.argmin(airfoil[:,0])
+    lh_x = airfoil[lh_idx, 0]
+    # Get trailing head
+    th_x = np.minimum(airfoil[0,0], airfoil[-1,0])
+    # Interpolate
+    f_up = interp1d(airfoil[:lh_idx+1,0], airfoil[:lh_idx+1,1])
+    f_low = interp1d(airfoil[lh_idx:,0], airfoil[lh_idx:,1])
+    xx = np.linspace(lh_x, th_x, num=1000)
+    yy_up = f_up(xx)
+    yy_low = f_low(xx)
+    return (yy_up-yy_low).max()
 
 def detect_intersect(airfoil):
     # Get leading head

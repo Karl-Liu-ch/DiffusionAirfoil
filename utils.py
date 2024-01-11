@@ -25,20 +25,23 @@ from scipy.integrate import cumtrapz
 from scipy.signal import savgol_filter
 from xfoil import XFoil
 from xfoil.model import Airfoil
+import gc
 
 def evalpreset(airfoil, Re = 4e5):
-    xf = XFoil()
-    xf.print = 0
-    xf.airfoil = Airfoil(airfoil[:,0], airfoil[:,1])
-    xf.Re = Re
-    xf.max_iter = 200
-    a = np.linspace(-2,2,5)
+    alfas = np.linspace(-1,1,5)
     CD = []
-    for alfa in a:
+    for alfa in alfas:
+        xf = XFoil()
+        xf.print = 0
+        xf.airfoil = Airfoil(airfoil[:,0], airfoil[:,1])
+        xf.Re = Re
+        xf.max_iter = 500
         _, cd, _, _ = xf.a(alfa)
         CD.append(cd)
+        del xf
+        gc.collect()
     i_nan = np.argwhere(np.isnan(CD))
-    a = np.delete(a, i_nan)
+    a = np.delete(alfas, i_nan)
     CD = np.delete(CD, i_nan)
     try:
         i_min = CD.argmin()
@@ -55,6 +58,8 @@ def evalperf(airfoil, cl = 0.65, Re = 5.8e4):
     xf.Re = Re
     xf.max_iter = 200
     a, cd, cm, cp = xf.cl(cl)
+    del xf
+    gc.collect()
     perf = cl/cd
     return perf, a, cd
 
@@ -81,7 +86,15 @@ def lowestD(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 3, check_thickne
         for a in alpha:
             for b in ail:
                 af = setupflap(airfoil, a, b)
-                CD, aa = evalpreset(af, Re = Re2)
+                af = interpolate(af, 300, 3)
+                CD, _ = evalpreset(af, Re=Re2)
+                i = 0
+                while CD < 0.004 and (not np.isnan(CD)):
+                    i += 1
+                    print(not np.isnan(CD), CD)
+                    af = interpolate(af, 300 + i * 100, 3)
+                    CD, _ = evalpreset(af, Re=Re2)
+                    print(CD)
                 afc = setflap(af, -a, b)
                 perf, aa, cd = evalperf(afc, cl=cl, Re = Re1)
                 R = cd + CD * lamda
@@ -120,6 +133,20 @@ def cal_baseline(lamda = 3):
     R_bl = cdc + cd[i] * lamda
     return perf_bl, R_bl
 
+def check_backpoint(af):
+    lh_idx = np.argmin(af[:,0])
+    lh_x = af[lh_idx, 0]
+    # Get trailing head
+    th_x = np.minimum(af[0,0], af[-1,0])
+    # Interpolate
+    f_up = interp1d(af[:lh_idx+1,0], af[:lh_idx+1,1])
+    f_low = interp1d(af[lh_idx:,0], af[lh_idx:,1])
+    xx = np.linspace(lh_x, th_x, num=1000)
+    yy_up = f_up(xx)
+    yy_low = f_low(xx)
+    back_i = 899 - (yy_up[100:] - yy_low[100:]).argmin()
+    return back_i
+
 def cal_thickness(airfoil):
     lh_idx = np.argmin(airfoil[:,0])
     lh_x = airfoil[lh_idx, 0]
@@ -132,6 +159,19 @@ def cal_thickness(airfoil):
     yy_up = f_up(xx)
     yy_low = f_low(xx)
     return (yy_up-yy_low).max()
+
+def cal_thickness_percent(airfoil):
+    lh_idx = np.argmin(airfoil[:,0])
+    lh_x = airfoil[lh_idx, 0]
+    # Get trailing head
+    th_x = np.minimum(airfoil[0,0], airfoil[-1,0])
+    # Interpolate
+    f_up = interp1d(airfoil[:lh_idx+1,0], airfoil[:lh_idx+1,1])
+    f_low = interp1d(airfoil[lh_idx:,0], airfoil[lh_idx:,1])
+    xx = np.linspace(lh_x, th_x, num=1000)
+    yy_up = f_up(xx)
+    yy_low = f_low(xx)
+    return (yy_up-yy_low).argmax() / 10.0
 
 def detect_intersect(airfoil):
     # Get leading head
@@ -169,6 +209,41 @@ def setflap(airfoil, theta = -2, pose = 0.7):
     airfoil = interpolate(airfoil, 256, 3)
     airfoil = derotate(airfoil)
     airfoil = Normalize(airfoil)
+    airfoil = interpolate(airfoil, 256, 3)
+    return airfoil
+
+def set_thickness_pose(airfoil, pose):
+    lh_idx = np.argmin(airfoil[:,0])
+    lh_x = airfoil[lh_idx, 0]
+    # Get trailing head
+    th_x = np.minimum(airfoil[0,0], airfoil[-1,0])
+    # Interpolate
+    f_up = interp1d(airfoil[:lh_idx+1,0], airfoil[:lh_idx+1,1])
+    f_low = interp1d(airfoil[lh_idx:,0], airfoil[lh_idx:,1])
+    xx = np.linspace(lh_x, th_x, num=1000)
+    yy_up = f_up(xx)
+    yy_low = f_low(xx)
+    max_thickness_index = (yy_up-yy_low).argmax()
+    p = pose*10/max_thickness_index
+    xxx = np.copy(xx)
+    xxx[:max_thickness_index] = xx[:max_thickness_index] * p
+    xxx[max_thickness_index:] = (xx[max_thickness_index:] - xx[max_thickness_index]) * (1000 - max_thickness_index * p) / (1000 - max_thickness_index) + xx[max_thickness_index] * p
+    f_up = interp1d(xxx, yy_up)
+    f_low = interp1d(xxx, yy_low)
+    xx = np.linspace(xxx[0], xxx[-1], num=128)
+    yy_up = f_up(xx)
+    yy_low = f_low(xx)
+    airfoil[:128,0] = np.flip(xx)
+    airfoil[:128,1] = np.flip(yy_up)
+    airfoil[128:,0] = xx
+    airfoil[128:,1] = yy_low
+    xhat, yhat = savgol_filter((airfoil[:,0], airfoil[:,1]), 10, 3)
+    airfoil[:,0] = xhat
+    airfoil[:,1] = yhat
+    airfoil = interpolate(airfoil, 256, 3)
+    airfoil = derotate(airfoil)
+    airfoil = Normalize(airfoil)
+    airfoil = interpolate(airfoil, 256, 3)
     return airfoil
 
 def rotateflap(af, theta, pflap_i_down, phead_i, pflap_i_up, R, offset = 0):
@@ -193,6 +268,7 @@ def rotateflap(af, theta, pflap_i_down, phead_i, pflap_i_up, R, offset = 0):
 
 def setupflap(af, theta = -2, pose = 0.7):
     airfoil = np.copy(af)
+    airfoil = interpolate(airfoil, 1000, 3)
     phead_i = airfoil[:,0].argmin()
     pflap_i_down = abs(airfoil[:phead_i,0] - pose).argmin()
     pflap_i_up = abs(airfoil[phead_i:,0] - pose).argmin() + phead_i
@@ -209,6 +285,7 @@ def setupflap(af, theta = -2, pose = 0.7):
     airfoil = interpolate(airfoil, 256, 3)
     airfoil = derotate(airfoil)
     airfoil = Normalize(airfoil)
+    airfoil = interpolate(airfoil, 256, 3)
     return airfoil
 
 def show_airfoil(af):

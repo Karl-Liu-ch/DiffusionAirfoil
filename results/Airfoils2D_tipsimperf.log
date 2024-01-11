@@ -1,0 +1,256 @@
+files: 0
+files: 0
+cd: 0.005358169786632061, m: 000, thickness: 0.04911978018837669, path: samples/tipAirfoils2D_000.dat
+cd: 0.007694948930293322, m: 001, thickness: 0.051604665421657855, path: samples/tipAirfoils2D_001.dat
+files: 0
+cd: 0.0051286001689732075, m: 002, thickness: 0.04966419583960139, path: samples/tipAirfoils2D_002.dat
+files: 0
+files: 0
+cd: 0.005225907079875469, m: 003, thickness: 0.04952798445665179, path: samples/tipAirfoils2D_003.dat
+cd: 0.007779721170663834, m: 004, thickness: 0.05007782614681672, path: samples/tipAirfoils2D_004.dat
+cd: 0.007783031556755304, m: 005, thickness: 0.04809892013508273, path: samples/tipAirfoils2D_005.dat
+files: 0
+cd: 0.0051227654330432415, m: 006, thickness: 0.04983599490775101, path: samples/tipAirfoils2D_006.dat
+cd: 0.007783162873238325, m: 007, thickness: 0.04975180695189972, path: samples/tipAirfoils2D_007.dat
+files: 0
+cd: 0.0077506173402071, m: 008, thickness: 0.04957963420720905, path: samples/tipAirfoils2D_008.dat
+cd: 0.007756149396300316, m: 009, thickness: 0.048632846739517996, path: samples/tipAirfoils2D_009.dat
+cd: 0.007681326474994421, m: 010, thickness: 0.04857211938414051, path: samples/tipAirfoils2D_010.dat
+cd: 0.005163777619600296, m: 011, thickness: 0.04779915338680969, path: samples/tipAirfoils2D_011.dat
+cd: 0.005114834289997816, m: 012, thickness: 0.04882827509644644, path: samples/tipAirfoils2D_012.dat
+cd: 0.00535518117249012, m: 013, thickness: 0.04626173539396641, path: samples/tipAirfoils2D_013.dat
+files: 0
+cd: 0.007780519314110279, m: 014, thickness: 0.04834862880768534, path: samples/tipAirfoils2D_014.dat
+cd: 0.005763303954154253, m: 015, thickness: 0.04782724818605443, path: samples/tipAirfoils2D_015.dat
+cd: 0.007789082825183868, m: 016, thickness: 0.04915724188749254, path: samples/tipAirfoils2D_016.dat
+cd: 0.005244297441095114, m: 017, thickness: 0.04920030347437861, path: samples/tipAirfoils2D_017.dat
+cd: 0.007696147076785564, m: 018, thickness: 0.050780813915327905, path: samples/tipAirfoils2D_018.dat
+cd: 0.007796524092555046, m: 019, thickness: 0.04833735480666435, path: samples/tipAirfoils2D_019.dat
+files: 0
+files: 0
+cd: 0.007759739179164171, m: 020, thickness: 0.050702708637551074, path: samples/tipAirfoils2D_020.dat
+files: 0
+cd: 0.0077757397666573524, m: 021, thickness: 0.05120465209427638, path: samples/tipAirfoils2D_021.dat
+files: 0
+files: 0
+cd: 0.0052137174643576145, m: 022, thickness: 0.05026141604791304, path: samples/tipAirfoils2D_022.dat
+cd: 0.007775457575917244, m: 023, thickness: 0.04933821772227383, path: samples/tipAirfoils2D_023.dat
+files: 0
+cd: 0.007773162331432104, m: 024, thickness: 0.05068900128970853, path: samples/tipAirfoils2D_024.dat
+cd: 0.0051648556254804134, m: 025, thickness: 0.04980499945076465, path: samples/tipAirfoils2D_025.dat
+cd: 0.007781994063407183, m: 026, thickness: 0.052085806555570185, path: samples/tipAirfoils2D_026.dat
+cd: 0.007785519119352102, m: 027, thickness: 0.05025820662541146, path: samples/tipAirfoils2D_027.dat
+files: 0
+files: 0
+files: 0
+cd: 0.0077878194861114025, m: 028, thickness: 0.04997604073366478, path: samples/tipAirfoils2D_028.dat
+cd: 0.0077904448844492435, m: 029, thickness: 0.0503017055514666, path: samples/tipAirfoils2D_029.dat
+cd: 0.007708778604865074, m: 030, thickness: 0.05022983484744664, path: samples/tipAirfoils2D_030.dat
+cd: 0.007793520577251911, m: 031, thickness: 0.04993860659227697, path: samples/tipAirfoils2D_031.dat
+cd: 0.007755725644528866, m: 032, thickness: 0.049796708780616324, path: samples/tipAirfoils2D_032.dat
+cd: 0.007774534169584513, m: 033, thickness: 0.04984054721167845, path: samples/tipAirfoils2D_033.dat
+cd: 0.007749954238533974, m: 034, thickness: 0.04961604030927383, path: samples/tipAirfoils2D_034.dat
+cd: 0.007768714800477028, m: 035, thickness: 0.04977246415461292, path: samples/tipAirfoils2D_035.dat
+cd: 0.007772671524435282, m: 036, thickness: 0.05033311944623159, path: samples/tipAirfoils2D_036.dat
+files: 0
+cd: 0.007736018858850002, m: 037, thickness: 0.049961702585474166, path: samples/tipAirfoils2D_037.dat
+cd: 0.007783025037497282, m: 038, thickness: 0.049658742941196446, path: samples/tipAirfoils2D_038.dat
+cd: 0.007730481214821339, m: 039, thickness: 0.04991101450277743, path: samples/tipAirfoils2D_039.dat
+cd: 0.007765437941998243, m: 040, thickness: 0.04998932054851647, path: samples/tipAirfoils2D_040.dat
+cd: 0.007662772201001644, m: 041, thickness: 0.050480209252663784, path: samples/tipAirfoils2D_041.dat
+files: 0
+files: 0
+cd: 0.0077984146773815155, m: 042, thickness: 0.04978280629769907, path: samples/tipAirfoils2D_042.dat
+cd: 0.007790873758494854, m: 043, thickness: 0.04996527042142719, path: samples/tipAirfoils2D_043.dat
+cd: 0.007746719755232334, m: 044, thickness: 0.04974515650061197, path: samples/tipAirfoils2D_044.dat
+cd: 0.007724557537585497, m: 045, thickness: 0.04989910001347832, path: samples/tipAirfoils2D_045.dat
+cd: 0.0077097755856812, m: 046, thickness: 0.04995747402780817, path: samples/tipAirfoils2D_046.dat
+files: 0
+cd: 0.007782610598951578, m: 047, thickness: 0.050490737977573905, path: samples/tipAirfoils2D_047.dat
+cd: 0.007748618256300688, m: 048, thickness: 0.05029571366947954, path: samples/tipAirfoils2D_048.dat
+cd: 0.007763001136481762, m: 049, thickness: 0.050367072186604356, path: samples/tipAirfoils2D_049.dat
+cd: 0.0077923075295984745, m: 050, thickness: 0.0504566095991458, path: samples/tipAirfoils2D_050.dat
+cd: 0.007710178382694721, m: 051, thickness: 0.049856991870106275, path: samples/tipAirfoils2D_051.dat
+cd: 0.007750143762677908, m: 052, thickness: 0.04996948450081545, path: samples/tipAirfoils2D_052.dat
+cd: 0.007702441420406103, m: 053, thickness: 0.04982487529150208, path: samples/tipAirfoils2D_053.dat
+cd: 0.00779174268245697, m: 054, thickness: 0.04970545757905335, path: samples/tipAirfoils2D_054.dat
+cd: 0.0077626630663871765, m: 055, thickness: 0.04982221682521459, path: samples/tipAirfoils2D_055.dat
+cd: 0.00776247913017869, m: 056, thickness: 0.049730451418861774, path: samples/tipAirfoils2D_056.dat
+cd: 0.007718192879110575, m: 057, thickness: 0.04976079514501211, path: samples/tipAirfoils2D_057.dat
+cd: 0.007794172037392855, m: 058, thickness: 0.050051744721867346, path: samples/tipAirfoils2D_058.dat
+files: 1
+cd: 0.007757452316582203, m: 059, thickness: 0.04987957475796331, path: samples/tipAirfoils2D_059.dat
+cd: 0.0077800508588552475, m: 060, thickness: 0.0500898670033611, path: samples/tipAirfoils2D_060.dat
+cd: 0.007760219741612673, m: 061, thickness: 0.04963414841031208, path: samples/tipAirfoils2D_061.dat
+cd: 0.007759120315313339, m: 062, thickness: 0.049883145842055936, path: samples/tipAirfoils2D_062.dat
+cd: 0.007784230634570122, m: 063, thickness: 0.04974339284613462, path: samples/tipAirfoils2D_063.dat
+cd: 0.007796917110681534, m: 064, thickness: 0.05022665436876643, path: samples/tipAirfoils2D_064.dat
+cd: 0.007760422769933939, m: 065, thickness: 0.04983491442453083, path: samples/tipAirfoils2D_065.dat
+cd: 0.0077875214628875256, m: 066, thickness: 0.0505376737012399, path: samples/tipAirfoils2D_066.dat
+cd: 0.007798932958394289, m: 067, thickness: 0.04979196460998012, path: samples/tipAirfoils2D_067.dat
+cd: 0.007780872285366058, m: 068, thickness: 0.049882654699809646, path: samples/tipAirfoils2D_068.dat
+cd: 0.00771517027169466, m: 069, thickness: 0.049751215235812246, path: samples/tipAirfoils2D_069.dat
+cd: 0.007765891496092081, m: 070, thickness: 0.04985039194593847, path: samples/tipAirfoils2D_070.dat
+cd: 0.00771632743999362, m: 071, thickness: 0.050214919952796505, path: samples/tipAirfoils2D_071.dat
+cd: 0.007761216256767511, m: 072, thickness: 0.050047455546495034, path: samples/tipAirfoils2D_072.dat
+cd: 0.007740570232272148, m: 073, thickness: 0.049924825849025495, path: samples/tipAirfoils2D_073.dat
+cd: 0.00778212770819664, m: 074, thickness: 0.05000861049854305, path: samples/tipAirfoils2D_074.dat
+cd: 0.007781242020428181, m: 075, thickness: 0.04997936357478104, path: samples/tipAirfoils2D_075.dat
+cd: 0.007747479248791933, m: 076, thickness: 0.04996531577398873, path: samples/tipAirfoils2D_076.dat
+cd: 0.007741423789411783, m: 077, thickness: 0.050280988078568664, path: samples/tipAirfoils2D_077.dat
+cd: 0.007770196534693241, m: 078, thickness: 0.05008087272207155, path: samples/tipAirfoils2D_078.dat
+cd: 0.007783278822898865, m: 079, thickness: 0.049864868957037164, path: samples/tipAirfoils2D_079.dat
+cd: 0.007757734972983599, m: 080, thickness: 0.04983094955029821, path: samples/tipAirfoils2D_080.dat
+cd: 0.007791279815137386, m: 081, thickness: 0.04989750791604002, path: samples/tipAirfoils2D_081.dat
+cd: 0.0077003976330161095, m: 082, thickness: 0.0499891048781389, path: samples/tipAirfoils2D_082.dat
+cd: 0.007782650180160999, m: 083, thickness: 0.04985278693994877, path: samples/tipAirfoils2D_083.dat
+cd: 0.007770970463752747, m: 084, thickness: 0.049789799443787745, path: samples/tipAirfoils2D_084.dat
+cd: 0.007796106394380331, m: 085, thickness: 0.04976768806954693, path: samples/tipAirfoils2D_085.dat
+cd: 0.007707029115408659, m: 086, thickness: 0.05010037088906284, path: samples/tipAirfoils2D_086.dat
+cd: 0.007786455098539591, m: 087, thickness: 0.05118159452614367, path: samples/tipAirfoils2D_087.dat
+cd: 0.007761871442198753, m: 088, thickness: 0.04985075123961642, path: samples/tipAirfoils2D_088.dat
+cd: 0.0077616507187485695, m: 089, thickness: 0.05021915347674613, path: samples/tipAirfoils2D_089.dat
+cd: 0.007746377028524876, m: 090, thickness: 0.04987176199904009, path: samples/tipAirfoils2D_090.dat
+cd: 0.0077052912674844265, m: 091, thickness: 0.049760582187672944, path: samples/tipAirfoils2D_091.dat
+cd: 0.007793514523655176, m: 092, thickness: 0.05025248014679937, path: samples/tipAirfoils2D_092.dat
+cd: 0.007779111620038748, m: 093, thickness: 0.049733939060586, path: samples/tipAirfoils2D_093.dat
+cd: 0.007743240799754858, m: 094, thickness: 0.0498558351148082, path: samples/tipAirfoils2D_094.dat
+cd: 0.007695143576711416, m: 095, thickness: 0.05031910616006127, path: samples/tipAirfoils2D_095.dat
+cd: 0.00776306027546525, m: 096, thickness: 0.04989225281531283, path: samples/tipAirfoils2D_096.dat
+cd: 0.007788911461830139, m: 097, thickness: 0.04961968654650849, path: samples/tipAirfoils2D_097.dat
+cd: 0.007781386841088533, m: 098, thickness: 0.05116805929171732, path: samples/tipAirfoils2D_098.dat
+cd: 0.0077578057534992695, m: 099, thickness: 0.04996036710810044, path: samples/tipAirfoils2D_099.dat
+cd: 0.007782614789903164, m: 100, thickness: 0.05011474021248216, path: samples/tipAirfoils2D_100.dat
+cd: 0.007756264414638281, m: 101, thickness: 0.04975960510893595, path: samples/tipAirfoils2D_101.dat
+cd: 0.007776462472975254, m: 102, thickness: 0.0496200743698815, path: samples/tipAirfoils2D_102.dat
+cd: 0.007766226772218943, m: 103, thickness: 0.05018067326109614, path: samples/tipAirfoils2D_103.dat
+cd: 0.007792911492288113, m: 104, thickness: 0.04969408403228633, path: samples/tipAirfoils2D_104.dat
+cd: 0.006374642252922058, m: 105, thickness: 0.05000411219089201, path: samples/tipAirfoils2D_105.dat
+cd: 0.007767887320369482, m: 106, thickness: 0.050123339926078536, path: samples/tipAirfoils2D_106.dat
+cd: 0.007773175369948149, m: 107, thickness: 0.05011260993002364, path: samples/tipAirfoils2D_107.dat
+cd: 0.0077852909453213215, m: 108, thickness: 0.04957782858298211, path: samples/tipAirfoils2D_108.dat
+cd: 0.007780726533383131, m: 109, thickness: 0.0501249046960759, path: samples/tipAirfoils2D_109.dat
+cd: 0.007738091051578522, m: 110, thickness: 0.05010705250380199, path: samples/tipAirfoils2D_110.dat
+cd: 0.007727752439677715, m: 111, thickness: 0.050102829044670574, path: samples/tipAirfoils2D_111.dat
+cd: 0.007649986073374748, m: 112, thickness: 0.05005245469721711, path: samples/tipAirfoils2D_112.dat
+cd: 0.007790741045027971, m: 113, thickness: 0.05123381761660138, path: samples/tipAirfoils2D_113.dat
+files: 2
+cd: 0.007737315725535154, m: 114, thickness: 0.04990453982651233, path: samples/tipAirfoils2D_114.dat
+cd: 0.007731804624199867, m: 115, thickness: 0.05006674801243933, path: samples/tipAirfoils2D_115.dat
+cd: 0.0061252829618752, m: 116, thickness: 0.049767690871824644, path: samples/tipAirfoils2D_116.dat
+cd: 0.00777451042085886, m: 117, thickness: 0.049660252480251715, path: samples/tipAirfoils2D_117.dat
+cd: 0.0077982135117053986, m: 118, thickness: 0.050015279920030235, path: samples/tipAirfoils2D_118.dat
+cd: 0.007761750835925341, m: 119, thickness: 0.05052484588198343, path: samples/tipAirfoils2D_119.dat
+cd: 0.007703642826527357, m: 120, thickness: 0.05027969111855355, path: samples/tipAirfoils2D_120.dat
+cd: 0.007755089085549116, m: 121, thickness: 0.05019708639332739, path: samples/tipAirfoils2D_121.dat
+cd: 0.007781238295137882, m: 122, thickness: 0.049928087885583124, path: samples/tipAirfoils2D_122.dat
+cd: 0.007751388009637594, m: 123, thickness: 0.04972218308853674, path: samples/tipAirfoils2D_123.dat
+cd: 0.007706695701926947, m: 124, thickness: 0.050441863125788744, path: samples/tipAirfoils2D_124.dat
+cd: 0.007799804210662842, m: 125, thickness: 0.049931123734157076, path: samples/tipAirfoils2D_125.dat
+cd: 0.007755426689982414, m: 126, thickness: 0.050273781922194165, path: samples/tipAirfoils2D_126.dat
+cd: 0.007787205744534731, m: 127, thickness: 0.0498186104906907, path: samples/tipAirfoils2D_127.dat
+cd: 0.007658679038286209, m: 128, thickness: 0.05023444273494922, path: samples/tipAirfoils2D_128.dat
+cd: 0.007784514222294092, m: 129, thickness: 0.050380839938338196, path: samples/tipAirfoils2D_129.dat
+cd: 0.0077130598947405815, m: 130, thickness: 0.049851484299238066, path: samples/tipAirfoils2D_130.dat
+cd: 0.007738460320979357, m: 131, thickness: 0.05004722211003729, path: samples/tipAirfoils2D_131.dat
+cd: 0.0077399746514856815, m: 132, thickness: 0.04950022441238952, path: samples/tipAirfoils2D_132.dat
+cd: 0.007768056821078062, m: 133, thickness: 0.04964322756489224, path: samples/tipAirfoils2D_133.dat
+cd: 0.007703202310949564, m: 134, thickness: 0.04999549877251708, path: samples/tipAirfoils2D_134.dat
+cd: 0.007788239046931267, m: 135, thickness: 0.05023793149881274, path: samples/tipAirfoils2D_135.dat
+cd: 0.007779950276017189, m: 136, thickness: 0.04980463467843493, path: samples/tipAirfoils2D_136.dat
+cd: 0.007776553276926279, m: 137, thickness: 0.04955154490071663, path: samples/tipAirfoils2D_137.dat
+cd: 0.007773850578814745, m: 138, thickness: 0.04965284266243762, path: samples/tipAirfoils2D_138.dat
+cd: 0.007756983395665884, m: 139, thickness: 0.05019495451944194, path: samples/tipAirfoils2D_139.dat
+cd: 0.007697048597037792, m: 140, thickness: 0.04984236123757956, path: samples/tipAirfoils2D_140.dat
+cd: 0.007795457728207111, m: 141, thickness: 0.049753772665191376, path: samples/tipAirfoils2D_141.dat
+cd: 0.007740707136690617, m: 142, thickness: 0.04986049723430874, path: samples/tipAirfoils2D_142.dat
+cd: 0.007797792088240385, m: 143, thickness: 0.04993412082642755, path: samples/tipAirfoils2D_143.dat
+cd: 0.007790431380271912, m: 144, thickness: 0.04969166550645984, path: samples/tipAirfoils2D_144.dat
+cd: 0.007729485630989075, m: 145, thickness: 0.05028463717242691, path: samples/tipAirfoils2D_145.dat
+cd: 0.007776495534926653, m: 146, thickness: 0.049774346203919295, path: samples/tipAirfoils2D_146.dat
+cd: 0.007718218956142664, m: 147, thickness: 0.050834649181080604, path: samples/tipAirfoils2D_147.dat
+cd: 0.007793286815285683, m: 148, thickness: 0.04972119755053154, path: samples/tipAirfoils2D_148.dat
+cd: 0.007755444850772619, m: 149, thickness: 0.049830712317842044, path: samples/tipAirfoils2D_149.dat
+cd: 0.007766163907945156, m: 150, thickness: 0.04983442754499666, path: samples/tipAirfoils2D_150.dat
+cd: 0.007765629794448614, m: 151, thickness: 0.04982354997224526, path: samples/tipAirfoils2D_151.dat
+cd: 0.007746017538011074, m: 152, thickness: 0.04955217868009198, path: samples/tipAirfoils2D_152.dat
+cd: 0.007748718839138746, m: 153, thickness: 0.04987994655473056, path: samples/tipAirfoils2D_153.dat
+cd: 0.006258467677980661, m: 154, thickness: 0.05001129411949052, path: samples/tipAirfoils2D_154.dat
+cd: 0.0077827926725149155, m: 155, thickness: 0.050224914578828425, path: samples/tipAirfoils2D_155.dat
+cd: 0.0077923377975821495, m: 156, thickness: 0.05000761512555453, path: samples/tipAirfoils2D_156.dat
+cd: 0.007790898438543081, m: 157, thickness: 0.04996489476488684, path: samples/tipAirfoils2D_157.dat
+cd: 0.007713782601058483, m: 158, thickness: 0.049470546553463925, path: samples/tipAirfoils2D_158.dat
+cd: 0.007726124022156, m: 159, thickness: 0.05023577939982263, path: samples/tipAirfoils2D_159.dat
+files: 3
+cd: 0.007769839838147163, m: 160, thickness: 0.049924387513831464, path: samples/tipAirfoils2D_160.dat
+cd: 0.007778883911669254, m: 161, thickness: 0.049648812295601585, path: samples/tipAirfoils2D_161.dat
+cd: 0.007789750583469868, m: 162, thickness: 0.04981616386198741, path: samples/tipAirfoils2D_162.dat
+cd: 0.007785681635141373, m: 163, thickness: 0.05030064968932592, path: samples/tipAirfoils2D_163.dat
+cd: 0.007784655783325434, m: 164, thickness: 0.05024629115339162, path: samples/tipAirfoils2D_164.dat
+cd: 0.007782035507261753, m: 165, thickness: 0.049973815783957654, path: samples/tipAirfoils2D_165.dat
+cd: 0.007775917649269104, m: 166, thickness: 0.05017999413020426, path: samples/tipAirfoils2D_166.dat
+cd: 0.007731113117188215, m: 167, thickness: 0.04974926525482659, path: samples/tipAirfoils2D_167.dat
+cd: 0.007772778160870075, m: 168, thickness: 0.049930806458631405, path: samples/tipAirfoils2D_168.dat
+cd: 0.007736047264188528, m: 169, thickness: 0.051171372138385636, path: samples/tipAirfoils2D_169.dat
+cd: 0.007694167550653219, m: 170, thickness: 0.04966372467734638, path: samples/tipAirfoils2D_170.dat
+cd: 0.007794802542775869, m: 171, thickness: 0.04968517250628547, path: samples/tipAirfoils2D_171.dat
+cd: 0.0077799297869205475, m: 172, thickness: 0.050193325111678226, path: samples/tipAirfoils2D_172.dat
+cd: 0.007757205981761217, m: 173, thickness: 0.04981124930803804, path: samples/tipAirfoils2D_173.dat
+cd: 0.007741052657365799, m: 174, thickness: 0.04970776672650856, path: samples/tipAirfoils2D_174.dat
+cd: 0.007726619020104408, m: 175, thickness: 0.05009829196760372, path: samples/tipAirfoils2D_175.dat
+cd: 0.007708468474447727, m: 176, thickness: 0.05001663339673936, path: samples/tipAirfoils2D_176.dat
+cd: 0.0077393390238285065, m: 177, thickness: 0.04976006358782352, path: samples/tipAirfoils2D_177.dat
+cd: 0.00516236899420619, m: 178, thickness: 0.04959013848744589, path: samples/tipAirfoils2D_178.dat
+cd: 0.00774906063452363, m: 179, thickness: 0.05010808329114941, path: samples/tipAirfoils2D_179.dat
+cd: 0.007788628339767456, m: 180, thickness: 0.04966604556079758, path: samples/tipAirfoils2D_180.dat
+cd: 0.0077706510201096535, m: 181, thickness: 0.05000381864578744, path: samples/tipAirfoils2D_181.dat
+cd: 0.007791121955960989, m: 182, thickness: 0.04990562277910838, path: samples/tipAirfoils2D_182.dat
+cd: 0.007790819276124239, m: 183, thickness: 0.04972789206478401, path: samples/tipAirfoils2D_183.dat
+cd: 0.007780840620398521, m: 184, thickness: 0.049820676523229634, path: samples/tipAirfoils2D_184.dat
+cd: 0.00778218125924468, m: 185, thickness: 0.05001437403716043, path: samples/tipAirfoils2D_185.dat
+cd: 0.007786931935697794, m: 186, thickness: 0.049946150760120614, path: samples/tipAirfoils2D_186.dat
+cd: 0.007764977402985096, m: 187, thickness: 0.04979456817605535, path: samples/tipAirfoils2D_187.dat
+cd: 0.007780080661177635, m: 188, thickness: 0.05046029197027882, path: samples/tipAirfoils2D_188.dat
+cd: 0.007766871713101864, m: 189, thickness: 0.05027738440520244, path: samples/tipAirfoils2D_189.dat
+cd: 0.007727556396275759, m: 190, thickness: 0.04960586054659665, path: samples/tipAirfoils2D_190.dat
+cd: 0.007775971200317144, m: 191, thickness: 0.05031637905915859, path: samples/tipAirfoils2D_191.dat
+cd: 0.007766291033476591, m: 192, thickness: 0.04987555177442558, path: samples/tipAirfoils2D_192.dat
+cd: 0.007729699835181236, m: 193, thickness: 0.04974707953067799, path: samples/tipAirfoils2D_193.dat
+cd: 0.007757351268082857, m: 194, thickness: 0.049989745380939976, path: samples/tipAirfoils2D_194.dat
+cd: 0.0051408796571195126, m: 195, thickness: 0.04975175568583176, path: samples/tipAirfoils2D_195.dat
+cd: 0.007789252791553736, m: 196, thickness: 0.04993084390752693, path: samples/tipAirfoils2D_196.dat
+cd: 0.007765377871692181, m: 197, thickness: 0.04992179643859865, path: samples/tipAirfoils2D_197.dat
+cd: 0.0077390167862176895, m: 198, thickness: 0.050122572153165304, path: samples/tipAirfoils2D_198.dat
+cd: 0.007785217370837927, m: 199, thickness: 0.05031472503853264, path: samples/tipAirfoils2D_199.dat
+cd: 0.007751174736768007, m: 200, thickness: 0.04984207845299789, path: samples/tipAirfoils2D_200.dat
+cd: 0.007764014881104231, m: 201, thickness: 0.049817610367428586, path: samples/tipAirfoils2D_201.dat
+cd: 0.007738517597317696, m: 202, thickness: 0.049985376896471034, path: samples/tipAirfoils2D_202.dat
+cd: 0.007797036785632372, m: 203, thickness: 0.04984593257966232, path: samples/tipAirfoils2D_203.dat
+cd: 0.007687627803534269, m: 204, thickness: 0.049849906291345336, path: samples/tipAirfoils2D_204.dat
+cd: 0.005104977171868086, m: 205, thickness: 0.04984092594594975, path: samples/tipAirfoils2D_205.dat
+cd: 0.007736929226666689, m: 206, thickness: 0.04966638763081348, path: samples/tipAirfoils2D_206.dat
+files: 4
+cd: 0.007755393628031015, m: 207, thickness: 0.049987661625127966, path: samples/tipAirfoils2D_207.dat
+cd: 0.0077757383696734905, m: 208, thickness: 0.05035423740936515, path: samples/tipAirfoils2D_208.dat
+cd: 0.0077975899912416935, m: 209, thickness: 0.04988814509651411, path: samples/tipAirfoils2D_209.dat
+cd: 0.00776244979351759, m: 210, thickness: 0.049922428522760534, path: samples/tipAirfoils2D_210.dat
+cd: 0.007699713110923767, m: 211, thickness: 0.05039369218692024, path: samples/tipAirfoils2D_211.dat
+cd: 0.0051455749198794365, m: 212, thickness: 0.04970589174764446, path: samples/tipAirfoils2D_212.dat
+cd: 0.007770046126097441, m: 213, thickness: 0.05047458191535359, path: samples/tipAirfoils2D_213.dat
+cd: 0.007776734884828329, m: 214, thickness: 0.04993378011785006, path: samples/tipAirfoils2D_214.dat
+cd: 0.007701572496443987, m: 215, thickness: 0.049811754120024136, path: samples/tipAirfoils2D_215.dat
+cd: 0.0077905491925776005, m: 216, thickness: 0.05015796934781838, path: samples/tipAirfoils2D_216.dat
+cd: 0.007791507989168167, m: 217, thickness: 0.05017805336373647, path: samples/tipAirfoils2D_217.dat
+cd: 0.00778221944347024, m: 218, thickness: 0.04991507794038681, path: samples/tipAirfoils2D_218.dat
+cd: 0.0051242997869849205, m: 219, thickness: 0.05002246317519314, path: samples/tipAirfoils2D_219.dat
+cd: 0.007658060174435377, m: 220, thickness: 0.04988920669759452, path: samples/tipAirfoils2D_220.dat
+cd: 0.007754705846309662, m: 221, thickness: 0.049935534348940505, path: samples/tipAirfoils2D_221.dat
+cd: 0.007747499272227287, m: 222, thickness: 0.04966568254541212, path: samples/tipAirfoils2D_222.dat
+cd: 0.007780862972140312, m: 223, thickness: 0.04994080815939801, path: samples/tipAirfoils2D_223.dat
+cd: 0.007726188283413649, m: 224, thickness: 0.049631564930094046, path: samples/tipAirfoils2D_224.dat
+cd: 0.007709626108407974, m: 225, thickness: 0.05090773535902748, path: samples/tipAirfoils2D_225.dat
+cd: 0.007781639229506254, m: 226, thickness: 0.05014192142848678, path: samples/tipAirfoils2D_226.dat
+cd: 0.007758952211588621, m: 227, thickness: 0.04987524765027872, path: samples/tipAirfoils2D_227.dat
+cd: 0.005221190862357616, m: 228, thickness: 0.05004316534896634, path: samples/tipAirfoils2D_228.dat
+cd: 0.007791563868522644, m: 229, thickness: 0.05043680174517321, path: samples/tipAirfoils2D_229.dat
+cd: 0.007708108052611351, m: 230, thickness: 0.05058926909717966, path: samples/tipAirfoils2D_230.dat

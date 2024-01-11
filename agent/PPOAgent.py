@@ -136,8 +136,8 @@ class ActorCritic(nn.Module):
 
         # actor
         if has_continuous_action_space :
-            # self.actor = DenseNet(state_dim, action_dim)
-            self.actor = Net(inchannels=state_dim, outchannels=action_dim)
+            self.actor = DenseNet(state_dim, action_dim)
+            # self.actor = Net(inchannels=state_dim, outchannels=action_dim)
             # self.actor = nn.Sequential(
             #                 nn.Linear(state_dim, 256),
             #                 nn.Tanh(),
@@ -170,8 +170,8 @@ class ActorCritic(nn.Module):
 
         
         # critic
-        # self.critic = DenseNet(state_dim, 1)
-        self.critic = Net(inchannels=state_dim, outchannels=1)
+        self.critic = DenseNet(state_dim, 1)
+        # self.critic = Net(inchannels=state_dim, outchannels=1)
         # self.critic = nn.Sequential(
         #                 nn.Linear(state_dim, 256),
         #                 nn.Tanh(),

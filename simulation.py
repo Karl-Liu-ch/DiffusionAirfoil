@@ -11,6 +11,7 @@ parser = argparse.ArgumentParser(description="DiffusionAirfoil")
 parser.add_argument('--method', type=str, default='1d')
 opt = parser.parse_args()
 from utils import *
+import gc
 
 def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 3, return_CL_CD=False, check_thickness = True):
         
@@ -33,27 +34,21 @@ def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 3, return_CL_CD
         CD = np.nan
         
     else:
-        xf = XFoil()
-        xf.print = 0
         airfoil = setupflap(airfoil, theta=-2)
-        xf.airfoil = Airfoil(airfoil[:,0], airfoil[:,1])
-        xf.Re = Re2
-        xf.M = 0.11
-        xf.max_iter = 200
-        a, CL, CD, cm, cp = xf.aseq(-2, 2, 0.5)
-        CD = CD[~np.isnan(CD)]
-        try:
-            CD = CD.min()
-        except:
+        airfoil = interpolate(airfoil, 300, 3)
+        CD, _ = evalpreset(airfoil, Re=Re2)
+        i = 0
+        while CD < 0.004 and (not np.isnan(CD)) and i < 2:
+            i += 1
+            print(not np.isnan(CD), CD)
+            airfoil = interpolate(airfoil, 200 + i * 100, 3)
+            CD, _ = evalpreset(airfoil, Re=Re2 + i * 100)
+            print(CD)
+        if i >= 2:
             CD = np.nan
             
         airfoil = setflap(airfoil, theta=2)
-        xf.airfoil = Airfoil(airfoil[:,0], airfoil[:,1])
-        xf.Re = Re1
-        xf.M = 0.015
-        xf.max_iter = 200
-        a, cd, cm, cp = xf.cl(cl)
-        perf = cl/cd
+        perf, _, cd = evalperf(airfoil, cl = cl, Re = Re1)
         R = cd + CD * lamda
         if perf < -100 or perf > 300 or cd < 1e-3:
             perf = np.nan
@@ -97,6 +92,7 @@ if __name__ == "__main__":
         f = open(f'results/{name}_simperf.log', 'a')
         f.write(f'files: {i}\n')
         f.close()
+        del f
         num = str(i).zfill(3)
         airfoils = np.load(airfoilpath+num+'.npy')
         airfoils = delete_intersect(airfoils)
@@ -115,11 +111,16 @@ if __name__ == "__main__":
                 np.savetxt(f'samples/{name}_{mm}.dat', airfoil, header=f'{name}_{mm}', comments="")
                 np.savetxt(f'samples/{name}_{mm}F.dat', af, header=f'{name}_{mm}F', comments="")
                 f = open(f'results/{name}_simperf.log', 'a')
-                f.write(f'perf: {perf}, R: {R}, m: {mm}\n')
+                f.write(f'perf: {perf}, R: {R}, m: {mm}, path: samples/{name}_{mm}.dat\n')
                 f.close()
                 m += 1
+                del f
             k += 1
             log = np.array([i, k, m])
             np.savetxt(f'results/{name}_simlog.txt', log)
+            del airfoil
+            gc.collect()
         k = 0
         i += 1
+        del airfoils
+        gc.collect()
