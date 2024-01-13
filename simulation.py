@@ -103,6 +103,8 @@ if __name__ == "__main__":
             xhat, yhat = savgol_filter((airfoil[:,0], airfoil[:,1]), 10, 3)
             airfoil[:,0] = xhat
             airfoil[:,1] = yhat
+            if cal_thickness(airfoil) > 0.07 or cal_thickness(airfoil) < 0.06:
+                airfoil[:,1] = airfoil[:,1] * 0.06 / cal_thickness(airfoil)
             perf, CD, af, R = evaluate(airfoil, cl, lamda=LAMBDA)
             if perf == np.nan:
                 pass

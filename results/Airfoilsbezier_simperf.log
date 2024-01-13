@@ -421,3 +421,101 @@ files: 521
 files: 522
 files: 523
 files: 524
+files: 524
+files: 525
+files: 526
+files: 527
+files: 528
+files: 529
+files: 530
+perf: 39.82162887428494, R: 0.04076424753293395, m: 016, path: samples/Airfoilsbezier_016.dat
+files: 531
+perf: 40.085947660125896, R: 0.04041066998615861, m: 017, path: samples/Airfoilsbezier_017.dat
+files: 532
+files: 533
+files: 534
+files: 535
+perf: 39.443859073856366, R: 0.04048807127401233, m: 018, path: samples/Airfoilsbezier_018.dat
+files: 536
+files: 537
+files: 538
+files: 539
+files: 540
+files: 541
+files: 542
+files: 543
+perf: 39.310630999185214, R: 0.04083450743928552, m: 019, path: samples/Airfoilsbezier_019.dat
+perf: 38.56249502589408, R: 0.040878704749047756, m: 020, path: samples/Airfoilsbezier_020.dat
+files: 544
+perf: 37.45623343017802, R: 0.04088312340900302, m: 021, path: samples/Airfoilsbezier_021.dat
+files: 545
+files: 546
+files: 547
+files: 548
+files: 549
+files: 550
+files: 551
+files: 552
+files: 553
+files: 554
+files: 555
+files: 556
+files: 557
+files: 558
+files: 559
+perf: 40.936023658393815, R: 0.04070203984156251, m: 022, path: samples/Airfoilsbezier_022.dat
+files: 560
+perf: 39.54551250241234, R: 0.04078572057187557, m: 023, path: samples/Airfoilsbezier_023.dat
+perf: 38.77963766742152, R: 0.04071950726211071, m: 024, path: samples/Airfoilsbezier_024.dat
+files: 561
+files: 562
+perf: 40.886612492694766, R: 0.04081323416903615, m: 025, path: samples/Airfoilsbezier_025.dat
+files: 563
+perf: 40.52153764102488, R: 0.039702487643808126, m: 026, path: samples/Airfoilsbezier_026.dat
+files: 564
+files: 565
+files: 566
+files: 567
+perf: 39.29560710123724, R: 0.040750518906861544, m: 027, path: samples/Airfoilsbezier_027.dat
+files: 568
+files: 569
+files: 570
+files: 571
+files: 572
+files: 573
+files: 574
+files: 575
+files: 576
+files: 577
+files: 578
+files: 579
+files: 580
+perf: 39.63886426459071, R: 0.04092478891834617, m: 028, path: samples/Airfoilsbezier_028.dat
+files: 581
+files: 582
+perf: 38.86014165619531, R: 0.04081192798912525, m: 029, path: samples/Airfoilsbezier_029.dat
+files: 583
+files: 584
+files: 585
+files: 586
+files: 587
+files: 588
+files: 589
+files: 590
+perf: 41.26557043310118, R: 0.04084579320624471, m: 030, path: samples/Airfoilsbezier_030.dat
+files: 591
+files: 592
+perf: 40.10200145668299, R: 0.04059420805424452, m: 031, path: samples/Airfoilsbezier_031.dat
+files: 593
+perf: 40.26402530534116, R: 0.04070838447660208, m: 032, path: samples/Airfoilsbezier_032.dat
+files: 594
+files: 595
+files: 596
+files: 597
+files: 598
+files: 599
+files: 600
+files: 601
+files: 602
+files: 603
+files: 604
