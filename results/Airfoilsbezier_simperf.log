@@ -519,3 +519,16 @@ files: 601
 files: 602
 files: 603
 files: 604
+files: 605
+files: 606
+files: 607
+perf: 40.20063712105058, R: 0.04028561944141984, m: 033, path: samples/Airfoilsbezier_033.dat
+files: 608
+files: 609
+perf: 38.894492483995705, R: 0.04051477136090398, m: 034, path: samples/Airfoilsbezier_034.dat
+files: 610
+files: 611
+files: 612
+files: 613
+files: 614
+perf: 38.579155569475375, R: 0.04091409873217344, m: 035, path: samples/Airfoilsbezier_035.dat
