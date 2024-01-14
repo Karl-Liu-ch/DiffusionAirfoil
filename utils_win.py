@@ -84,6 +84,48 @@ def compute_coeff(airfoil, reynolds=58000, mach=0, alpha=0, n_iter=2000, tmp_dir
     
     return CL, CD
 
+def cal_polar(path, reynolds=58000, mach=0, alpha_min=-1, alpha_max = 10, alpha_step = 0.5, n_iter=200, tmp_dir='polar'):
+    create_dir(tmp_dir)
+    gc.collect()
+    safe_remove('{}/{}.log'.format(tmp_dir, str(reynolds)))
+    try:
+        if platform.system().lower() == 'windows':
+            child = wexpect.spawn('xfoil')
+        if platform.system().lower() == 'linux':
+            child = pexpect.spawn('xfoil')
+        timeout = 100
+        
+        child.expect('XFOIL   c> ', timeout)
+        child.sendline('load {}'.format(path))
+        child.expect('XFOIL   c> ', timeout)
+        child.sendline('OPER')
+        child.expect('.OPERi   c> ', timeout)
+        child.sendline('VISC {}'.format(reynolds))
+        child.expect('.OPERv   c> ', timeout)
+        child.sendline('ITER {}'.format(n_iter))
+        child.expect('.OPERv   c> ', timeout)
+        child.sendline('MACH {}'.format(mach))
+        child.expect('.OPERv   c> ', timeout)
+        child.sendline('PACC')
+        child.expect('Enter  polar save filename  OR  <return> for no file   s> ', timeout)
+        child.sendline('{}/{}.log'.format(tmp_dir, str(reynolds)))
+        child.expect('Enter  polar dump filename  OR  <return> for no file   s> ', timeout)
+        child.sendline()
+        child.expect('.OPERva   c> ', timeout)
+        child.sendline('aseq {} {} {}'.format(alpha_min, alpha_max, alpha_step))
+        child.expect('.OPERva   c> ', timeout)
+        child.sendline()
+        child.expect('XFOIL   c> ', timeout)
+        child.sendline('quit')
+        
+        child.close()
+            
+    except Exception as ex:
+        # print(ex)
+        print('XFoil error!')
+        
+    safe_remove(':00.bl')
+
 def cal_thickness(airfoil):
     lh_idx = np.argmin(airfoil[:,0])
     lh_x = airfoil[lh_idx, 0]
@@ -367,3 +409,26 @@ def suppress_stdout():
             yield
         finally:
             sys.stdout = old_stdout
+
+def rewrite_polar(root):
+    for path, dir, files in os.walk(root):
+        for file in files:
+            lines=[]
+            infile = root+file
+            with open(infile, 'r') as fin:
+                for line in fin:
+                    line = line.replace('9.000  9.000', '9.000')
+                    lines.append(line)
+            fin.close()
+            with open(infile, "w") as fout:
+                for line in lines:
+                    fout.write(line)
+            fout.close()
+
+if __name__ == '__main__':
+    afs = ['F3K_airfoils/Airfoils2D_049_0.6F_100_-3.dat', 'F3K_airfoils/Airfoils1D_004F_-3.dat']
+    for af in afs:
+        root = af.split('/')[1].split('.dat')[0]
+        for re in range(400000//500):
+            cal_polar(af, reynolds=re*500, tmp_dir = root)
+        rewrite_polar(root)

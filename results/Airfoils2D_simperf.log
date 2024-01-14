@@ -781,3 +781,101 @@ files: 700
 files: 701
 perf: 38.76197687073591, R: 0.03842113818973303, m: 129, path: samples/Airfoils2D_129.dat
 files: 702
+files: 703
+files: 704
+files: 705
+files: 706
+files: 707
+perf: 39.65269644081902, R: 0.04058582056313753, m: 130, path: samples/Airfoils2D_130.dat
+files: 708
+files: 709
+files: 710
+files: 711
+files: 712
+files: 713
+files: 714
+files: 715
+files: 716
+files: 717
+perf: 38.55733522374709, R: 0.040810175240039825, m: 131, path: samples/Airfoils2D_131.dat
+files: 718
+files: 719
+files: 720
+perf: 38.95632156756715, R: 0.04029101645573974, m: 132, path: samples/Airfoils2D_132.dat
+files: 721
+files: 722
+files: 723
+perf: 38.64138449255832, R: 0.040888190269470215, m: 133, path: samples/Airfoils2D_133.dat
+files: 724
+files: 725
+perf: 40.04759043286012, R: 0.04028449999168515, m: 134, path: samples/Airfoils2D_134.dat
+perf: 39.18807587503741, R: 0.040742948185652494, m: 135, path: samples/Airfoils2D_135.dat
+files: 726
+files: 727
+files: 728
+files: 729
+perf: 41.13776818772528, R: 0.04065655916929245, m: 136, path: samples/Airfoils2D_136.dat
+files: 730
+files: 731
+perf: 35.498027511508226, R: 0.04005080461502075, m: 137, path: samples/Airfoils2D_137.dat
+files: 732
+perf: 40.39747719288741, R: 0.04026884259656072, m: 138, path: samples/Airfoils2D_138.dat
+perf: 39.997965842773695, R: 0.04070403706282377, m: 139, path: samples/Airfoils2D_139.dat
+files: 733
+files: 734
+files: 735
+files: 736
+files: 737
+files: 738
+files: 739
+files: 740
+perf: 39.67414164499062, R: 0.040147962514311075, m: 140, path: samples/Airfoils2D_140.dat
+files: 740
+files: 741
+perf: 40.31662285322007, R: 0.040616570971906185, m: 141, path: samples/Airfoils2D_141.dat
+files: 742
+files: 743
+files: 744
+files: 745
+files: 746
+files: 747
+files: 748
+files: 749
+files: 750
+files: 751
+files: 752
+perf: 40.138727030135726, R: 0.04009120166301727, m: 142, path: samples/Airfoils2D_142.dat
+files: 753
+files: 754
+files: 755
+files: 756
+files: 757
+files: 758
+files: 759
+files: 760
+files: 761
+perf: 40.475271416543656, R: 0.04045036341995001, m: 143, path: samples/Airfoils2D_143.dat
+files: 762
+files: 763
+files: 764
+files: 765
+files: 766
+files: 767
+files: 768
+perf: 39.18686571186658, R: 0.04086340544745326, m: 144, path: samples/Airfoils2D_144.dat
+files: 769
+perf: 39.47248023469518, R: 0.0406915582716465, m: 145, path: samples/Airfoils2D_145.dat
+files: 770
+perf: 37.886530952394914, R: 0.040906536392867565, m: 146, path: samples/Airfoils2D_146.dat
+perf: 38.38555700435086, R: 0.040854689199477434, m: 147, path: samples/Airfoils2D_147.dat
+files: 771
+perf: 37.61273386965609, R: 0.04083782387897372, m: 148, path: samples/Airfoils2D_148.dat
+perf: 38.826845018994184, R: 0.04080488905310631, m: 149, path: samples/Airfoils2D_149.dat
+files: 772
+files: 773
+files: 774
+files: 775
+files: 776
+files: 777
+perf: 41.02736059570462, R: 0.039923504460603, m: 150, path: samples/Airfoils2D_150.dat
+files: 778
