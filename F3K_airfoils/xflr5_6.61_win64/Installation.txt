@@ -1,0 +1,4 @@
+No specific installlation procedure required, however xflr5 requires that Visual Studio's VC++ runtime libraries are installed. An error message will show up if they are not.
+Should this occur, run the executable vc_redist.x64.exe included in the package. This will install the missing libraries.
+ 
+ 
