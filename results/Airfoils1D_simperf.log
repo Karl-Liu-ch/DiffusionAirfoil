@@ -656,3 +656,99 @@ perf: 39.301656889101125, R: 0.04082360304892063, m: 262, path: samples/Airfoils
 files: 327
 perf: 39.22021873971283, R: 0.040837257634848356, m: 263, path: samples/Airfoils1D_263.dat
 perf: 39.79700560587876, R: 0.04050715500488877, m: 264, path: samples/Airfoils1D_264.dat
+files: 328
+perf: 38.49385205584865, R: 0.04064703732728958, m: 265, path: samples/Airfoils1D_265.dat
+perf: 37.39577650284011, R: 0.04072743561118841, m: 266, path: samples/Airfoils1D_266.dat
+files: 329
+perf: 41.2485912119198, R: 0.04067091131582856, m: 267, path: samples/Airfoils1D_267.dat
+perf: 33.764018900786354, R: 0.039455258287489414, m: 268, path: samples/Airfoils1D_268.dat
+files: 330
+perf: 38.576114841971794, R: 0.04084825748577714, m: 269, path: samples/Airfoils1D_269.dat
+files: 330
+perf: 39.493216895866524, R: 0.04060136992484331, m: 270, path: samples/Airfoils1D_270.dat
+perf: 39.91159726406294, R: 0.04011920606717467, m: 271, path: samples/Airfoils1D_271.dat
+files: 331
+perf: 40.16500475581448, R: 0.039943707175552845, m: 272, path: samples/Airfoils1D_272.dat
+perf: 40.89764794579516, R: 0.04006785852834582, m: 273, path: samples/Airfoils1D_273.dat
+files: 332
+perf: 40.274397178533206, R: 0.04055602103471756, m: 274, path: samples/Airfoils1D_274.dat
+perf: 38.913324335936466, R: 0.040758410934358835, m: 275, path: samples/Airfoils1D_275.dat
+perf: 40.270307271527756, R: 0.040562656708061695, m: 276, path: samples/Airfoils1D_276.dat
+perf: 40.61573061588858, R: 0.04030842101201415, m: 277, path: samples/Airfoils1D_277.dat
+files: 333
+perf: 40.1796600009925, R: 0.04047948960214853, m: 278, path: samples/Airfoils1D_278.dat
+files: 334
+perf: 39.07000466646424, R: 0.040190575644373894, m: 279, path: samples/Airfoils1D_279.dat
+perf: 40.158787947556505, R: 0.04067459050565958, m: 280, path: samples/Airfoils1D_280.dat
+perf: 41.83246803835751, R: 0.040058568585664034, m: 281, path: samples/Airfoils1D_281.dat
+perf: 40.102029107019156, R: 0.04034434398636222, m: 282, path: samples/Airfoils1D_282.dat
+files: 335
+perf: 38.542745274410144, R: 0.04081360902637243, m: 283, path: samples/Airfoils1D_283.dat
+perf: 38.609537969310516, R: 0.04069962119683623, m: 284, path: samples/Airfoils1D_284.dat
+files: 336
+perf: 40.269205927187585, R: 0.040382875595241785, m: 285, path: samples/Airfoils1D_285.dat
+perf: 38.6484971694147, R: 0.0406610113568604, m: 286, path: samples/Airfoils1D_286.dat
+perf: 40.60340105723379, R: 0.03994252812117338, m: 287, path: samples/Airfoils1D_287.dat
+perf: 39.57897632697725, R: 0.04037030693143606, m: 288, path: samples/Airfoils1D_288.dat
+perf: 38.51908671533053, R: 0.04059585835784674, m: 289, path: samples/Airfoils1D_289.dat
+files: 337
+perf: 38.25848152352402, R: 0.040847787633538246, m: 290, path: samples/Airfoils1D_290.dat
+perf: 38.76834582502668, R: 0.040770971681922674, m: 291, path: samples/Airfoils1D_291.dat
+files: 338
+perf: 39.015599236651035, R: 0.040752989705652, m: 292, path: samples/Airfoils1D_292.dat
+files: 339
+perf: 39.74144514162597, R: 0.04079781658947468, m: 293, path: samples/Airfoils1D_293.dat
+perf: 39.161618961721246, R: 0.040881465654820204, m: 294, path: samples/Airfoils1D_294.dat
+perf: 40.075999378933915, R: 0.040210574865341187, m: 295, path: samples/Airfoils1D_295.dat
+perf: 38.52746450409066, R: 0.040645032189786434, m: 296, path: samples/Airfoils1D_296.dat
+perf: 40.16973451671747, R: 0.04077870212495327, m: 297, path: samples/Airfoils1D_297.dat
+files: 340
+perf: 39.54341981152387, R: 0.040861517656594515, m: 298, path: samples/Airfoils1D_298.dat
+perf: 38.98000229881488, R: 0.0407254584133625, m: 299, path: samples/Airfoils1D_299.dat
+perf: 38.44017024591542, R: 0.0407506306655705, m: 300, path: samples/Airfoils1D_300.dat
+perf: 39.425650606214155, R: 0.04071667557582259, m: 301, path: samples/Airfoils1D_301.dat
+files: 341
+files: 342
+perf: 40.29093723747731, R: 0.040650914423167706, m: 302, path: samples/Airfoils1D_302.dat
+files: 343
+perf: 39.07004403476251, R: 0.040730486158281565, m: 303, path: samples/Airfoils1D_303.dat
+perf: 40.40666401894319, R: 0.039943831507116556, m: 304, path: samples/Airfoils1D_304.dat
+perf: 38.72096259235958, R: 0.04076625453308225, m: 305, path: samples/Airfoils1D_305.dat
+files: 344
+perf: 38.968145281107674, R: 0.04050564346835017, m: 306, path: samples/Airfoils1D_306.dat
+perf: 39.0871329904831, R: 0.04041533824056387, m: 307, path: samples/Airfoils1D_307.dat
+perf: 39.93097938125455, R: 0.04050166253000498, m: 308, path: samples/Airfoils1D_308.dat
+perf: 40.30272863280093, R: 0.040889013558626175, m: 309, path: samples/Airfoils1D_309.dat
+files: 345
+perf: 39.14972148829618, R: 0.04052035789936781, m: 310, path: samples/Airfoils1D_310.dat
+perf: 39.0046927316355, R: 0.040896210353821516, m: 311, path: samples/Airfoils1D_311.dat
+perf: 38.95609542960413, R: 0.040627420879900455, m: 312, path: samples/Airfoils1D_312.dat
+files: 346
+perf: 39.893474393903226, R: 0.04043422266840935, m: 313, path: samples/Airfoils1D_313.dat
+files: 347
+files: 348
+perf: 38.21608519094513, R: 0.04066594736650586, m: 314, path: samples/Airfoils1D_314.dat
+perf: 39.350006968672545, R: 0.04092696821317077, m: 315, path: samples/Airfoils1D_315.dat
+files: 349
+perf: 39.16305171540172, R: 0.04058765713125467, m: 316, path: samples/Airfoils1D_316.dat
+perf: 39.017919999677986, R: 0.04092412116006017, m: 317, path: samples/Airfoils1D_317.dat
+files: 350
+perf: 39.45615015507548, R: 0.04088070569559932, m: 318, path: samples/Airfoils1D_318.dat
+perf: 37.962808367641884, R: 0.04081360995769501, m: 319, path: samples/Airfoils1D_319.dat
+files: 351
+perf: 40.16226357636549, R: 0.04038013517856598, m: 320, path: samples/Airfoils1D_320.dat
+perf: 40.23545595409438, R: 0.04091780446469784, m: 321, path: samples/Airfoils1D_321.dat
+files: 352
+perf: 38.701350675293284, R: 0.04079671250656247, m: 322, path: samples/Airfoils1D_322.dat
+perf: 40.34087219891254, R: 0.04066557390615344, m: 323, path: samples/Airfoils1D_323.dat
+perf: 39.38869274398813, R: 0.040122249629348516, m: 324, path: samples/Airfoils1D_324.dat
+files: 353
+files: 353
+perf: 39.19038639411166, R: 0.04070854280143976, m: 325, path: samples/Airfoils1D_325.dat
+files: 354
+perf: 38.55353975217498, R: 0.04071566881611943, m: 326, path: samples/Airfoils1D_326.dat
+perf: 38.994219333067015, R: 0.04083054605871439, m: 327, path: samples/Airfoils1D_327.dat
+files: 355
+perf: 38.697226414521054, R: 0.040882267989218235, m: 328, path: samples/Airfoils1D_328.dat
+perf: 39.3589942969028, R: 0.04048480186611414, m: 329, path: samples/Airfoils1D_329.dat
+perf: 38.10268336650809, R: 0.04081863211467862, m: 330, path: samples/Airfoils1D_330.dat
