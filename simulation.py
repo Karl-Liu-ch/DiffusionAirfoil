@@ -9,6 +9,7 @@ from scipy.signal import savgol_filter
 import argparse
 parser = argparse.ArgumentParser(description="DiffusionAirfoil")
 parser.add_argument('--method', type=str, default='1d')
+parser.add_argument('--path', type=str, default='/work3/s212645/DiffusionAirfoil1DTransform/Airfoils1D/')
 opt = parser.parse_args()
 from utils import *
 import gc
@@ -76,6 +77,9 @@ if __name__ == "__main__":
     elif opt.method == 'bezier':
         name = 'Airfoilsbezier'
         airfoilpath = '/work3/s212645/BezierGANPytorch/Airfoils/'
+    else:
+        airfoilpath = opt.path
+        name = opt.path.split('/')[3]
 
     try:
         log = np.loadtxt(f'results/{name}_simlog.txt')
