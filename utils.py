@@ -106,7 +106,7 @@ def lowestD(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 3, check_thickne
                     perfBL = perf
                     cdbl = cd
                     CD_BL = CD
-        print('perf: ', perfBL, 'R: ', R_BL)
+        # print('perf: ', perfBL, 'R: ', R_BL)
     return af_BL, R_BL, a_BL, b_BL, perfBL, cdbl, CD_BL
 
 def cal_baseline(lamda = 3):

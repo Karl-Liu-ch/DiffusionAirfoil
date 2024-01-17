@@ -5,6 +5,7 @@ import torch
 import math
 from inspect import isfunction
 from functools import partial
+import re
 
 import numpy as np
 from sklearn.decomposition import PCA
@@ -425,10 +426,56 @@ def rewrite_polar(root):
                     fout.write(line)
             fout.close()
 
-if __name__ == '__main__':
-    afs = ['F3K_airfoils/Airfoils2D_049_0.6F_100_-3.dat', 'F3K_airfoils/Airfoils1D_004F_-3.dat']
+def get_dat(root = 'F3K_airfoils/'):
+    tail = re.compile('.dat')
+    airfoils = []
+    for path, dir, files in os.walk(root):
+        if path == root:
+            airfoils = files
+            airfoils.sort()
+        else:
+            pass
+    for file in airfoils:
+        if tail.search(file) is None:
+            airfoils.remove(file)
+    return airfoils
+
+def cal_afs_polar(re_min = 500, re_max = 400000, re_step = 500, path = 'F3K_airfoils/'):
+    afs = get_dat(path)
+    for af in afs:
+        print(af)
+    len = (re_max - re_min) // re_step + 1
     for af in afs:
         root = af.split('/')[1].split('.dat')[0]
+        for re in range(len):
+            cal_polar(af, reynolds=re*re_step+re_min, tmp_dir = path + root)
+        rewrite_polar(root)
+
+def cal_afs_polar_re_list(reynolds: list, path = 'F3K_airfoils/'):
+    afs = get_dat(path)
+    for af in afs:
+        print(af)
+    for af in afs:
+        root = af.split('/')[1].split('.dat')[0]
+        for re in reynolds:
+            cal_polar(af, reynolds=re, tmp_dir = path + root)
+        rewrite_polar(root)
+
+
+if __name__ == '__main__':
+    afs = ['F3K_airfoils/Airfoils2D_049_0.6F_80_-3.dat', 
+           'F3K_airfoils/Airfoils2D_049_0.6F_20_0.dat', 
+           'F3K_airfoils/Airfoils1D_004F_0.dat', 
+           'F3K_airfoils/Airfoils2D_049_0.6F_100_0.dat', 
+           'F3K_airfoils/Airfoils2D_049_0.6F_80_0.dat', 
+           'F3K_airfoils/Airfoils2D_049_0.6F_50_0.dat', 
+           'F3K_airfoils/Airfoils2D_049_0.6F_50_-3.dat']
+    # afs = get_dat()
+    for af in afs:
+        print(af)
+    for af in afs:
+        root = af.split('/')[1].split('.dat')[0]+'/'
+        print(root)
         for re in range(400000//500):
-            cal_polar(af, reynolds=re*500, tmp_dir = root)
+            cal_polar(af, reynolds=re*500+500, tmp_dir = root)
         rewrite_polar(root)
