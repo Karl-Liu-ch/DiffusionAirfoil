@@ -3,6 +3,7 @@ sys.path.append('./')
 import math
 from inspect import isfunction
 from functools import partial
+import re
 
 # %matplotlib inline
 from matplotlib import pyplot as plt
@@ -144,8 +145,20 @@ if __name__ == '__main__':
     except:
         pass
     
+    num = 0
+    fileformat = re.compile('.npy')
+    for path, dir, files in os.walk(airfoilpath):
+        files.sort()
+        for file in files:
+            if fileformat.search(file) is not None:
+                n = file.split('.')[0]
+                n = int(n)
+                if n > num:
+                    num = n
+    print(num)
+    start_n = num
     for i in range(1000):
-        num = str(i).zfill(3)
+        num = str(i + start_n).zfill(3)
         samples = Diff.sample(batch_size=B, channels=1)
         samples = samples.reshape(B, 256, 2)
         airfoils = samples.cpu().numpy()
