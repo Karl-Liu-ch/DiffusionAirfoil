@@ -1,1 +1,13 @@
 files: 0
+files: 0
+perf: 38.907280716659244, R: 0.04084521811455488, m: 000, path: samples/DiffusionAirfoil1DTransform_000.dat
+files: 0
+files: 0
+files: 0
+files: 0
+files: 1
+perf: 42.1734555870061, R: 0.03840228263288736, m: 001, path: samples/DiffusionAirfoil1DTransform_001.dat
+perf: 33.20536064620675, R: 0.039777178317308426, m: 002, path: samples/DiffusionAirfoil1DTransform_002.dat
+perf: 39.34369388398661, R: 0.040707253850996494, m: 003, path: samples/DiffusionAirfoil1DTransform_003.dat
+files: 2
+perf: 39.554230696339985, R: 0.04057050123810768, m: 004, path: samples/DiffusionAirfoil1DTransform_004.dat

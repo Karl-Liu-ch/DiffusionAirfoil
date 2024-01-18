@@ -1,0 +1,9 @@
+Loaded module: cuda/11.8
+Loaded module: cudnn/v8.9.1.23-prod-cuda-11.X
+Loaded module: matlab/R2022b
+/zhome/02/b/164706/Master_Courses/2023_Fall/DiffusionAirfoil/simulation.py:112: RuntimeWarning: divide by zero encountered in divide
+  airfoil[:,1] = airfoil[:,1] * 0.06 / cal_thickness(airfoil)
+/zhome/02/b/164706/Master_Courses/2023_Fall/DiffusionAirfoil/simulation.py:112: RuntimeWarning: invalid value encountered in divide
+  airfoil[:,1] = airfoil[:,1] * 0.06 / cal_thickness(airfoil)
+/zhome/02/b/164706/miniconda3/envs/pytorch/lib/python3.11/site-packages/scipy/interpolate/_interpolate.py:698: RuntimeWarning: invalid value encountered in subtract
+  slope = (y_hi - y_lo) / (x_hi - x_lo)[:, None]

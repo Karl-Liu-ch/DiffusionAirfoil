@@ -908,3 +908,47 @@ perf: 40.42628654387466, R: 0.04052617680281401, m: 055, path: samples/Airfoils2
 files: 38
 perf: 38.33284189296958, R: 0.04084171261638403, m: 056, path: samples/Airfoils2D_056.dat
 files: 39
+files: 39
+files: 40
+perf: 38.818491989765604, R: 0.040880564134567976, m: 057, path: samples/Airfoils2D_057.dat
+files: 41
+files: 42
+files: 43
+files: 44
+files: 45
+perf: 38.7829433157215, R: 0.04078545980155468, m: 058, path: samples/Airfoils2D_058.dat
+files: 46
+perf: 40.4109173810579, R: 0.040393457282334566, m: 059, path: samples/Airfoils2D_059.dat
+files: 47
+files: 48
+files: 49
+perf: 41.128827627303146, R: 0.04027864057570696, m: 060, path: samples/Airfoils2D_060.dat
+files: 50
+files: 51
+perf: 38.82513870488114, R: 0.040669623762369156, m: 061, path: samples/Airfoils2D_061.dat
+perf: 39.56372422651923, R: 0.04038542741909623, m: 062, path: samples/Airfoils2D_062.dat
+perf: 38.647996371829855, R: 0.0407287641428411, m: 063, path: samples/Airfoils2D_063.dat
+files: 52
+perf: 39.30088673217301, R: 0.040848926175385714, m: 064, path: samples/Airfoils2D_064.dat
+files: 53
+files: 54
+perf: 39.39536717396799, R: 0.04089292883872986, m: 065, path: samples/Airfoils2D_065.dat
+perf: 38.075697783135325, R: 0.0407944917678833, m: 066, path: samples/Airfoils2D_066.dat
+files: 55
+perf: 38.55324159863679, R: 0.04062146553769708, m: 067, path: samples/Airfoils2D_067.dat
+perf: 37.55708158072345, R: 0.040871722623705864, m: 068, path: samples/Airfoils2D_068.dat
+files: 56
+perf: 38.88198558508088, R: 0.04081091284751892, m: 069, path: samples/Airfoils2D_069.dat
+files: 57
+perf: 40.21622676134801, R: 0.03989150933921337, m: 070, path: samples/Airfoils2D_070.dat
+files: 58
+perf: 39.15239207895954, R: 0.040614362340420485, m: 071, path: samples/Airfoils2D_071.dat
+perf: 39.61121985012337, R: 0.040214956272393465, m: 072, path: samples/Airfoils2D_072.dat
+files: 59
+perf: 38.55400402900869, R: 0.040847538970410824, m: 073, path: samples/Airfoils2D_073.dat
+files: 60
+perf: 38.592168302090364, R: 0.04054770478978753, m: 074, path: samples/Airfoils2D_074.dat
+perf: 40.375313176265436, R: 0.04086709534749389, m: 075, path: samples/Airfoils2D_075.dat
+files: 61
+files: 62
+perf: 40.562463405964635, R: 0.04061514139175415, m: 076, path: samples/Airfoils2D_076.dat
