@@ -51,6 +51,9 @@ def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 3, return_CL_CD
         airfoil = setflap(airfoil, theta=2)
         perf, _, cd = evalperf(airfoil, cl = cl, Re = Re1)
         R = cd + CD * lamda
+        if R < 0.04 and perf < 38:
+            R = np.nan
+            CD = np.nan
         if perf < -100 or perf > 300 or cd < 1e-3:
             perf = np.nan
         elif not np.isnan(perf):

@@ -105,7 +105,7 @@ dataset = GetDataset(data)
 train_loader = DataLoader(dataset=dataset, batch_size=BATCHSIZE, shuffle=True)
 Diff = DiffusionAirfoilTransform(betas)
 Diff.load_checkpoint()
-Diff.optim = Adam(Diff.model.parameters(), lr=5e-4)
+Diff.optim = Adam(Diff.model.parameters(), lr=1e-4)
 Diff.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(Diff.optim, Diff.epochs, eta_min=1e-6)
 Diff.epoch = 0
 

@@ -6,14 +6,18 @@ total_test_episodes = 10    # total num of testing episodes
 from Environment import OptimEnv
 from pathlib import Path
 import argparse
+import os
 parser = argparse.ArgumentParser(description="Matlab Simscape")
 parser.add_argument('--version', type=str, default='Dronesimscape.slx')
+parser.add_argument("--gpu_id", type=str, default='0,1', help='path log files')
+
 opt = parser.parse_args()
 
+os.environ["CUDA_VISIBLE_DEVICES"] = opt.gpu_id
 model_path=opt.version
 K_epochs = 80               # update policy for K epochs
 eps_clip = 0.2              # clip parameter for PPO
-gamma = 0.97                # discount factor
+gamma = 0.95                # discount factor
 
 lr_actor = 0.0003           # learning rate for actor
 lr_critic = 0.001           # learning rate for critic
@@ -27,16 +31,16 @@ print("=========================================================================
 env_name = "Dronesimscape"
 has_continuous_action_space = True
 
-max_ep_len = 100            # max timesteps in one episode
+max_ep_len = 20            # max timesteps in one episode
 max_training_timesteps = int(1e8)   # break training loop if timeteps > max_training_timesteps
 
 print_freq = max_ep_len * 4     # print avg reward in the interval (in num timesteps)
 log_freq = max_ep_len * 2       # log avg reward in the interval (in num timesteps)
-save_model_freq = int(2e2)      # save model frequency (in num timesteps)
+save_model_freq = int(1e2)      # save model frequency (in num timesteps)
 
 action_std = None
 
-update_timestep = max_ep_len * 4      # update policy every n timesteps
+update_timestep = max_ep_len * 2      # update policy every n timesteps
 K_epochs = 40               # update policy for K epochs
 eps_clip = 0.2              # clip parameter for PPO
 
@@ -110,7 +114,7 @@ action_std_decay_freq = int(1e2)
 action_std_decay_rate = 1e-3
 min_action_std = 1e-3
 
-env = env=OptimEnv(mode = '2d')
+env = env=OptimEnv(mode = '1d_t')
 
 state = env.reset()
 
@@ -123,7 +127,7 @@ while time_step <= max_training_timesteps:
     for t in range(1, max_ep_len+1):
         
         # select action with policy
-        action = ppo_agent.select_action(state) * 0.01
+        action = ppo_agent.select_action(state)
         state, reward, done, _ = env.step(action)
         
         if done and time_step != max_training_timesteps:
