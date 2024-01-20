@@ -1,161 +1,181 @@
-import torch
+from stable_baselines3.common.env_checker import check_env
+import gymnasium as gym
 import numpy as np
-from torch.utils.tensorboard import SummaryWriter
-import argparse
-from normalization import Normalization, RewardScaling
-from replaybuffer import ReplayBuffer
-from ppo_continuous import PPO_continuous
-from Environment import OptimEnv
+from gymnasium import spaces
+import torch
+import torch.nn as nn
+from AgentNet import AttnBlock
+import numpy as np
+import platform
+if platform.system().lower() == 'windows':
+    from simulation_win import evaluate
+elif platform.system().lower() == 'linux':
+    from simulation import evaluate
+from utils import derotate, Normalize
+# from scipy.signal import savgol_filter
+# from DiffusionAirfoil import Diff
+# from DiffusionAirfoil1D import Diff as Diff1D
+from DiffusionAirfoil1D_transform import Diff as Diff1D_transform
+from utils import *
+from stable_baselines3 import PPO, SAC, TD3
+from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
+from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
+if platform.system().lower() == 'linux':
+    path = '/work3/s212645/DiffusionAirfoil/checkpoint/'
+elif platform.system().lower() == 'windows':
+    path = 'H:/深度学习/checkpoint/'
+base_airfoil = np.loadtxt('BETTER/20150114-50 +2 d.dat', skiprows=1)
+base_airfoil = interpolate(base_airfoil, 256, 3)
 
-def evaluate_policy(args, env, agent, state_norm):
-    times = 3
-    evaluate_reward = 0
-    for _ in range(times):
-        s = env.reset()
-        if args.use_state_norm:
-            s = state_norm(s, update=False)  # During the evaluating,update=False
+def normalize_af(af):
+    af[:,0] -= af[:,0].min()
+    af /= (af[:,0].max() - af[:,0].min())
+    return af
+
+class OptimEnv(gym.Env):
+    def __init__(self, base_airfoil = base_airfoil, cl = 0.65, thickness = 0.065, maxsteps = 50, Re1 = 58000, Re2 = 400000, alpha=0.2, mode = '2d'):
+        self.cl = cl
+        self.base_airfoil = torch.from_numpy(base_airfoil).to(device)
+        self.alpha = alpha
+        self.thickness = thickness
+        self.Re1 = Re1
+        self.Re2 = Re2
+        self.mode = mode
+        self.thickness = thickness
+        self.action_space = spaces.Box(high=1., low=-1., shape=(1,512), dtype=np.float32)
+        self.observation_space = spaces.Box(high=1., low=-1., shape=(1,512), dtype=np.float32)
+        self.steps = 0
+        self.maxsteps = maxsteps
+    
+    def reset(self, seed=None, options=None):
+        self.steps = 0
+        successful = False
+        while not successful:
+            try:
+                # self.airfoil = Diff1D_transform.sample(batch_size=1, channels=1).reshape(256, 2).cpu().numpy()
+                # self.airfoil[:,1] = self.airfoil[:,1] * self.thickness / cal_thickness(self.airfoil)
+                # self.airfoil[:,0] -= self.airfoil[:,0].min()
+                # self.airfoil /= (self.airfoil[:,0].max() - self.airfoil[:,0].min())
+                # self.airfoil = self.airfoil.reshape(1, 1, 512)
+                # self.airfoil = torch.from_numpy(self.airfoil).to(device)
+
+                self.airfoil = self.base_airfoil.reshape(1, 1, 512)
+                self.state = self.airfoil.reshape(512)
+
+                airfoil = self.airfoil.reshape(1, 256, 2)
+                airfoil = airfoil.cpu().numpy()
+                airfoil = airfoil[0]
+                airfoil = derotate(airfoil)
+                airfoil = normalize_af(airfoil)
+                perf, CD, af, R = evaluate(airfoil, self.cl, Re1 = self.Re1, Re2 = self.Re2, lamda=5, check_thickness=False)
+                if R is not np.nan:
+                    successful = True
+            except Exception as e:
+                print(e)
+        self.R_prev = R
+        self.Rbl = R
+        self.R = R
+        info = {}
+        return self.state.reshape(1,512).cpu().numpy(), info
+    
+    def step(self, action):
+        self.steps += 1
+        self.noise = torch.from_numpy(action).reshape([1,1,512]).to(device)
+        af = Diff1D_transform.sample(batch_size=1, channels=1, noise = self.noise)
+        af = af.reshape(256, 2).cpu().numpy()
+        af[:,0] -= af[:,0].min()
+        af /= (af[:,0].max() - af[:,0].min())
+        af[:,1] = af[:,1] * self.thickness / cal_thickness(af)
+        af = torch.from_numpy(af).to(device)
+        af = af.reshape([1,1,512]).detach()
+        
+        self.airfoil = af  * self.alpha + (1-self.alpha) * self.airfoil
+        airfoil = self.airfoil.reshape(1, 256, 2)
+        airfoil = airfoil.cpu().numpy()
+        airfoil = airfoil[0]
+        airfoil = derotate(airfoil)
+        airfoil = Normalize(airfoil)
+        perf, CD, af, R = evaluate(airfoil, self.cl, Re1 = self.Re1, Re2 = self.Re2, lamda=5, check_thickness=False)
+        if np.isnan(R):
+            reward = -1
+            reward_final = -1
+        else:
+            reward_final = 1.0 / R
+            reward = (self.R_prev - R) * 10
+            self.R_prev = R
+        # print(reward)
+        if R < self.R:
+            self.R = R
+            np.savetxt('results/airfoilPPO.dat', airfoil, header='airfoilPPO', comments="")
+        self.state = self.airfoil.reshape(512)
+        
+        truncated = False
         done = False
-        episode_reward = 0
-        while not done:
-            a = agent.evaluate(s)  # We use the deterministic policy during the evaluating
-            if args.policy_dist == "Beta":
-                action = 2 * (a - 0.5) * args.max_action  # [0,1]->[-max,max]
-            else:
-                action = a
-            s_, r, done, _ = env.step(action)
-            if args.use_state_norm:
-                s_ = state_norm(s_, update=False)
-            episode_reward += r
-            s = s_
-        evaluate_reward += episode_reward
-
-    return evaluate_reward / times
+        if R < 0.04 and perf > 40:
+            done = True
+            reward += 100
+            truncated = False
+        if self.steps > self.maxsteps:
+            done = True
+            truncated = True
+            reward += reward_final
+        reward_final = {'reward_final': reward_final}
+        return self.state.reshape(1,512).detach().cpu().numpy(), reward, done, truncated, reward_final
 
 
-def main(args, env, number, seed):
-    # When evaluating the policy, we need to rebuild an environment
-    env_evaluate = env
-    # Set random seed
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    env_name = 'Airfoil'
+class Net(BaseFeaturesExtractor):
+    """
+    :param observation_space: (gym.Space)
+    :param features_dim: (int) Number of features extracted.
+        This corresponds to the number of unit for the last layer.
+    """
 
-    args.state_dim = 512
-    args.action_dim = 512
-    args.hidden_width = 256
-    args.max_action = float(0.01)
-    args.max_episode_steps = 20  # Maximum number of steps per episode
-    print("state_dim={}".format(args.state_dim))
-    print("action_dim={}".format(args.action_dim))
-    print("max_action={}".format(args.max_action))
-    print("max_episode_steps={}".format(args.max_episode_steps))
+    def __init__(self, observation_space: gym.spaces.Box, features_dim: int = 512):
+        super(Net, self).__init__(observation_space, features_dim)
+        n_input_channels = 1
+        self.cnn = nn.Sequential(
+            nn.Linear(n_input_channels, features_dim), 
+            AttnBlock(features_dim, 16, 4),
+        )
 
-    evaluate_num = 0  # Record the number of evaluations
-    evaluate_rewards = []  # Record the rewards during the evaluating
-    total_steps = 0  # Record the total steps during the training
+        self.linear = nn.Sequential(nn.Linear(features_dim, features_dim), nn.ReLU())
 
-    replay_buffer = ReplayBuffer(args)
-    agent = PPO_continuous(args)
-    try:
-        agent.load_checkpoint()
-        print('load success')
-    except:
-        pass
+    def forward(self, observations: torch.Tensor) -> torch.Tensor:
+        return self.linear(self.cnn(observations.permute(0,2,1))).mean(dim=1)
 
-    # Build a tensorboard
-    writer = SummaryWriter(log_dir='runs/PPO_continuous/env_{}_{}_number_{}_seed_{}'.format(env_name, args.policy_dist, number, seed))
+policy_kwargs = dict(
+    features_extractor_class=Net,
+    features_extractor_kwargs=dict(features_dim=512),
+)
 
-    state_norm = Normalization(shape=args.state_dim)  # Trick 2:state normalization
-    if args.use_reward_norm:  # Trick 3:reward normalization
-        reward_norm = Normalization(shape=1)
-    elif args.use_reward_scaling:  # Trick 4:reward scaling
-        reward_scaling = RewardScaling(shape=1, gamma=args.gamma)
+env = OptimEnv()
+# It will check your custom environment and output additional warnings if needed
+# check_env(env)
+# model = PPO("MlpPolicy", env, verbose=1)
+model = PPO("MlpPolicy", env, policy_kwargs=policy_kwargs, verbose=1)
 
-    while total_steps < args.max_train_steps:
-        s = env.reset()
-        if args.use_state_norm:
-            s = state_norm(s)
-        if args.use_reward_scaling:
-            reward_scaling.reset()
-        episode_steps = 0
-        done = False
-        while not done:
-            episode_steps += 1
-            a, a_logprob = agent.choose_action(s)  # Action and the corresponding log probability
-            if args.policy_dist == "Beta":
-                action = 2 * (a - 0.5) * args.max_action  # [0,1]->[-max,max]
-            else:
-                action = a
-            s_, r, done, _ = env.step(action)
+path = '/work3/s212645/DiffusionAirfoil/PPO/stablebaseline_ppo'
+try:
+    model.load(path)
+except Exception as e:
+    print(e)
+model.learn(total_timesteps=100_000)
+model.save(path)
+# model = PPO("MlpPolicy", env, verbose=1)
+# model.learn(total_timesteps=100_000)
 
-            if args.use_state_norm:
-                s_ = state_norm(s_)
-            if args.use_reward_norm:
-                r = reward_norm(r)
-            elif args.use_reward_scaling:
-                r = reward_scaling(r)
+path = '/work3/s212645/DiffusionAirfoil/PPO/sac'
+# model = SAC("MlpPolicy", env, verbose=1)
+model = SAC("MlpPolicy", env, policy_kwargs=policy_kwargs, verbose=1)
+model.learn(total_timesteps=10000, log_interval=4)
+model.save(path)
 
-            # When dead or win or reaching the max_episode_steps, done will be Ture, we need to distinguish them;
-            # dw means dead or win,there is no next state s';
-            # but when reaching the max_episode_steps,there is a next state s' actually.
-            if done and episode_steps != args.max_episode_steps:
-                dw = True
-            else:
-                dw = False
-
-            # Take the 'action'，but store the original 'a'（especially for Beta）
-            replay_buffer.store(s, a, a_logprob, r, s_, dw, done)
-            s = s_
-            total_steps += 1
-
-            # When the number of transitions in buffer reaches batch_size,then update
-            if replay_buffer.count == args.batch_size:
-                agent.update(replay_buffer, total_steps)
-                replay_buffer.count = 0
-
-            # Evaluate the policy every 'evaluate_freq' steps
-            if total_steps % args.evaluate_freq == 0:
-                evaluate_num += 1
-                evaluate_reward = evaluate_policy(args, env_evaluate, agent, state_norm)
-                evaluate_rewards.append(evaluate_reward)
-                print("evaluate_num:{} \t evaluate_reward:{} \t".format(evaluate_num, evaluate_reward))
-                writer.add_scalar('step_rewards_{}'.format(env_name), evaluate_rewards[-1], global_step=total_steps)
-                # Save the rewards
-                if evaluate_num % args.save_freq == 0:
-                    np.save('./data_train/PPO_continuous_{}_env_{}_number_{}_seed_{}.npy'.format(args.policy_dist, env_name, number, seed), np.array(evaluate_rewards))
-                    agent.save_checkpoint()
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser("Hyperparameters Setting for PPO-continuous")
-    parser.add_argument("--max_train_steps", type=int, default=int(100), help=" Maximum number of training steps")
-    parser.add_argument("--evaluate_freq", type=float, default=200, help="Evaluate the policy every 'evaluate_freq' steps")
-    parser.add_argument("--save_freq", type=int, default=20, help="Save frequency")
-    parser.add_argument("--policy_dist", type=str, default="Gaussian", help="Beta or Gaussian")
-    parser.add_argument("--batch_size", type=int, default=2048, help="Batch size")
-    parser.add_argument("--mini_batch_size", type=int, default=64, help="Minibatch size")
-    parser.add_argument("--hidden_width", type=int, default=64, help="The number of neurons in hidden layers of the neural network")
-    parser.add_argument("--lr_a", type=float, default=3e-4, help="Learning rate of actor")
-    parser.add_argument("--lr_c", type=float, default=3e-4, help="Learning rate of critic")
-    parser.add_argument("--gamma", type=float, default=0.97, help="Discount factor")
-    parser.add_argument("--lamda", type=float, default=0.95, help="GAE parameter")
-    parser.add_argument("--epsilon", type=float, default=0.2, help="PPO clip parameter")
-    parser.add_argument("--K_epochs", type=int, default=10, help="PPO parameter")
-    parser.add_argument("--use_adv_norm", type=bool, default=True, help="Trick 1:advantage normalization")
-    parser.add_argument("--use_state_norm", type=bool, default=True, help="Trick 2:state normalization")
-    parser.add_argument("--use_reward_norm", type=bool, default=False, help="Trick 3:reward normalization")
-    parser.add_argument("--use_reward_scaling", type=bool, default=True, help="Trick 4:reward scaling")
-    parser.add_argument("--entropy_coef", type=float, default=0.01, help="Trick 5: policy entropy")
-    parser.add_argument("--use_lr_decay", type=bool, default=True, help="Trick 6:learning rate Decay")
-    parser.add_argument("--use_grad_clip", type=bool, default=True, help="Trick 7: Gradient clip")
-    parser.add_argument("--use_orthogonal_init", type=bool, default=True, help="Trick 8: orthogonal initialization")
-    parser.add_argument("--set_adam_eps", type=float, default=True, help="Trick 9: set Adam epsilon=1e-5")
-    parser.add_argument("--use_tanh", type=float, default=True, help="Trick 10: tanh activation function")
-
-    args = parser.parse_args()
-
-    # env_name = ['BipedalWalker-v3', 'HalfCheetah-v2', 'Hopper-v2', 'Walker2d-v2']
-    # env_index = 1
-    # main(args, env_name=env_name[env_index], number=1, seed=10)
-    main(args, env=OptimEnv(), number=1, seed=10)
+n_actions = env.action_space.shape[-1]
+action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.1 * np.ones(n_actions))
+path = '/work3/s212645/DiffusionAirfoil/PPO/td3'
+# model = TD3("MlpPolicy", env, action_noise=action_noise, verbose=1)
+model = TD3("MlpPolicy", env, policy_kwargs=policy_kwargs, action_noise=action_noise, verbose=1)
+model.learn(total_timesteps=10000, log_interval=10)
+model.save(path)

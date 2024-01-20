@@ -122,13 +122,13 @@ if __name__ == '__main__':
     elif platform.system().lower() == 'windows':
         path = 'H:/深度学习/checkpoint/'
     
-    Diff.train(train_loader)
+    # Diff.train(train_loader)
     
     if platform.system().lower() == 'linux':
         airfoilpath = '/work3/s212645/DiffusionAirfoilTransform/Airfoils/'
     elif platform.system().lower() == 'windows':
         airfoilpath = 'H:/深度学习/Airfoils/'
-    
+    '''
     samples = Diff.sample(batch_size=B, channels=1)
     fig, axs = plt.subplots(1, 1)
     airfoil = samples[0,0,:,:].cpu().numpy()
@@ -139,7 +139,7 @@ if __name__ == '__main__':
     plt.show()
     plt.savefig('sample.png')
     plt.close()
-
+    '''
     try:
         os.makedirs('/work3/s212645/DiffusionAirfoilTransform/Airfoils/')
     except:

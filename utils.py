@@ -338,6 +338,7 @@ def derotate(airfoil):
     return airfoil_R
 
 def Normalize(airfoil):
+    airfoil[:,0] -= airfoil[:,0].min()
     r = np.maximum(airfoil[0,0], airfoil[-1,0])
     r = float(1.0/r)
     return airfoil * r

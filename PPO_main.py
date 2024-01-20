@@ -17,7 +17,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = opt.gpu_id
 model_path=opt.version
 K_epochs = 80               # update policy for K epochs
 eps_clip = 0.2              # clip parameter for PPO
-gamma = 0.95                # discount factor
+gamma = 0.99                # discount factor
 
 lr_actor = 0.0003           # learning rate for actor
 lr_critic = 0.001           # learning rate for critic
@@ -31,7 +31,7 @@ print("=========================================================================
 env_name = "Dronesimscape"
 has_continuous_action_space = True
 
-max_ep_len = 20            # max timesteps in one episode
+max_ep_len = 50            # max timesteps in one episode
 max_training_timesteps = int(1e8)   # break training loop if timeteps > max_training_timesteps
 
 print_freq = max_ep_len * 4     # print avg reward in the interval (in num timesteps)
@@ -126,12 +126,21 @@ while time_step <= max_training_timesteps:
 
     for t in range(1, max_ep_len+1):
         
-        # select action with policy
-        action = ppo_agent.select_action(state)
-        state, reward, done, _ = env.step(action)
+        successful = False
+        while not successful:
+            # select action with policy
+            try:
+                action = ppo_agent.select_action(state)
+                state, reward, done, reward_final = env.step(action)
+                successful = True
+            except Exception as e:
+                print(e)
         
         if done and time_step != max_training_timesteps:
             done = True
+            reward += reward_final
+        elif time_step == max_training_timesteps:
+            reward += reward_final
         else:
             done = False
         ppo_agent.buffer.rewards.append(reward)

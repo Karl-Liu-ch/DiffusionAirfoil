@@ -61,3 +61,69 @@ files: 19
 perf: 39.691045455667336, R: 0.040368602611124516, m: 035, path: samples/DiffusionAirfoil1DTransform_035.dat
 files: 20
 files: 21
+files: 22
+perf: 39.48901598521315, R: 0.040810209698975086, m: 036, path: samples/DiffusionAirfoil1DTransform_036.dat
+perf: 34.06883870596126, R: 0.03924719290807843, m: 037, path: samples/DiffusionAirfoil1DTransform_037.dat
+perf: 38.5995702753545, R: 0.04064341867342591, m: 038, path: samples/DiffusionAirfoil1DTransform_038.dat
+perf: 39.756345433044494, R: 0.04086774308234453, m: 039, path: samples/DiffusionAirfoil1DTransform_039.dat
+files: 23
+perf: 39.27206739696552, R: 0.04062514519318938, m: 040, path: samples/DiffusionAirfoil1DTransform_040.dat
+perf: 39.217565332529276, R: 0.04067277582362294, m: 041, path: samples/DiffusionAirfoil1DTransform_041.dat
+files: 24
+perf: 38.99913934282412, R: 0.04085610108450055, m: 042, path: samples/DiffusionAirfoil1DTransform_042.dat
+perf: 39.63649606135099, R: 0.04067729413509369, m: 043, path: samples/DiffusionAirfoil1DTransform_043.dat
+perf: 39.074620046376786, R: 0.0406832848675549, m: 044, path: samples/DiffusionAirfoil1DTransform_044.dat
+files: 24
+files: 25
+perf: 39.64470944477586, R: 0.04082829365506768, m: 045, path: samples/DiffusionAirfoil1DTransform_045.dat
+files: 26
+perf: 40.64196468137971, R: 0.04037764202803373, m: 046, path: samples/DiffusionAirfoil1DTransform_046.dat
+perf: 38.316056800234705, R: 0.0408343723975122, m: 047, path: samples/DiffusionAirfoil1DTransform_047.dat
+perf: 40.40318806339124, R: 0.03691598400473595, m: 048, path: samples/DiffusionAirfoil1DTransform_048.dat
+files: 27
+perf: 38.32880000527209, R: 0.04080654354766011, m: 049, path: samples/DiffusionAirfoil1DTransform_049.dat
+files: 28
+perf: 40.360337500721414, R: 0.040798062458634377, m: 050, path: samples/DiffusionAirfoil1DTransform_050.dat
+files: 29
+perf: 39.454044607753076, R: 0.04036286845803261, m: 051, path: samples/DiffusionAirfoil1DTransform_051.dat
+files: 30
+perf: 39.98570604717099, R: 0.040784505661576986, m: 052, path: samples/DiffusionAirfoil1DTransform_052.dat
+files: 31
+perf: 37.51597462856652, R: 0.039633046835660934, m: 053, path: samples/DiffusionAirfoil1DTransform_053.dat
+files: 32
+perf: 39.515644314227686, R: 0.04058764223009348, m: 054, path: samples/DiffusionAirfoil1DTransform_054.dat
+files: 33
+perf: 39.1026770007865, R: 0.04060130659490824, m: 055, path: samples/DiffusionAirfoil1DTransform_055.dat
+perf: 39.75277667659102, R: 0.040889243595302105, m: 056, path: samples/DiffusionAirfoil1DTransform_056.dat
+perf: 40.383943126476865, R: 0.04017071612179279, m: 057, path: samples/DiffusionAirfoil1DTransform_057.dat
+perf: 40.3118491270828, R: 0.04092172812670469, m: 058, path: samples/DiffusionAirfoil1DTransform_058.dat
+files: 34
+perf: 38.30917949682316, R: 0.040755382273346186, m: 059, path: samples/DiffusionAirfoil1DTransform_059.dat
+files: 35
+perf: 40.10301532727585, R: 0.04090168187394738, m: 060, path: samples/DiffusionAirfoil1DTransform_060.dat
+perf: 40.69485256886436, R: 0.04050571471452713, m: 061, path: samples/DiffusionAirfoil1DTransform_061.dat
+files: 36
+perf: 39.51061102247093, R: 0.04068608535453677, m: 062, path: samples/DiffusionAirfoil1DTransform_062.dat
+files: 37
+perf: 45.04174417546561, R: 0.040094880387187004, m: 063, path: samples/DiffusionAirfoil1DTransform_063.dat
+files: 38
+files: 39
+perf: 39.549685101784036, R: 0.040519705042243004, m: 064, path: samples/DiffusionAirfoil1DTransform_064.dat
+perf: 39.484766824323124, R: 0.04070855304598808, m: 065, path: samples/DiffusionAirfoil1DTransform_065.dat
+files: 40
+perf: 38.920637325461904, R: 0.04082135437056422, m: 066, path: samples/DiffusionAirfoil1DTransform_066.dat
+perf: 39.16484060717911, R: 0.04082818143069744, m: 067, path: samples/DiffusionAirfoil1DTransform_067.dat
+perf: 38.92107575814525, R: 0.040677924174815416, m: 068, path: samples/DiffusionAirfoil1DTransform_068.dat
+files: 41
+perf: 39.960014666406806, R: 0.040221902541816235, m: 069, path: samples/DiffusionAirfoil1DTransform_069.dat
+files: 42
+perf: 40.038759081735996, R: 0.04018706642091274, m: 070, path: samples/DiffusionAirfoil1DTransform_070.dat
+perf: 38.99508209709333, R: 0.04080412117764354, m: 071, path: samples/DiffusionAirfoil1DTransform_071.dat
+files: 43
+files: 44
+perf: 40.130169250771694, R: 0.040916179306805134, m: 072, path: samples/DiffusionAirfoil1DTransform_072.dat
+perf: 39.800936382343274, R: 0.04063581069931388, m: 073, path: samples/DiffusionAirfoil1DTransform_073.dat
+files: 45
+perf: 39.648128187922666, R: 0.04062971193343401, m: 074, path: samples/DiffusionAirfoil1DTransform_074.dat
+files: 46
+perf: 39.035491721042945, R: 0.040754406712949276, m: 075, path: samples/DiffusionAirfoil1DTransform_075.dat

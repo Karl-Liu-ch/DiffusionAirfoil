@@ -6,13 +6,18 @@ import numpy as np
 from einops import rearrange, repeat
 from einops.layers.torch import Rearrange
 import torch.nn.functional as F
+import numpy as np
+import torch
+import torch.nn.functional as F
+from torch import nn
+from torch.distributions import Normal
 
 class FFN(nn.Module):
     def __init__(self, inchannels, hiddensize):
         super().__init__()
         self.linear1 = nn.Linear(inchannels,hiddensize)
         self.linear2 = nn.Linear(hiddensize,inchannels)
-        self.act = nn.ReLU()
+        self.act = nn.Tanh()
     def forward(self, x):
         return self.linear2(self.act(self.linear1(x)))
     
@@ -66,21 +71,23 @@ class AttnBlock(nn.Module):
             self.blocks.append(nn.ModuleList([
                 MultiHeadAttention(dim=dim, n_heads=heads),
                 FFN(dim, dim), 
-                nn.LayerNorm(dim)
+                # nn.LayerNorm(dim)
                 ]))
 
     def forward(self, x):
-        for (attn, ff, ln) in self.blocks:
-            x = ln(attn(x) + x)
-            x = ln(ff(x) + x)
+        for (attn, ff) in self.blocks:
+            x = (attn(x) + x)
+            # x = (ff(x) + x)
         out = x
         return out
 
 class Network(nn.Module):
     def __init__(self, inchannels, outchannels, hiddensize = 256):
         super().__init__()
+        self.inlayer = nn.Linear(1, inchannels)
         self.net = nn.Sequential(
             nn.Linear(inchannels, hiddensize), 
+            nn.Tanh(), 
             AttnBlock(hiddensize, 16, 6),
             nn.Linear(hiddensize, outchannels), 
             nn.Tanh()
@@ -88,10 +95,12 @@ class Network(nn.Module):
         
     def forward(self, x):
         B, C = x.shape
-        x = x.unsqueeze(dim=1).expand(B, C, C)
+        x = x.unsqueeze(dim=1)
+        x = F.tanh(self.inlayer(x))
+        # x = x.unsqueeze(dim=1).expand(B, C, C)
         x = self.net(x)
         x = x.mean(dim=1)
-        return (x + 1.0) / 2.0
+        return x
 
 BATCH = 2 ** 10
 max_prop = 1000

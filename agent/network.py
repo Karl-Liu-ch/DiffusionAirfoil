@@ -17,7 +17,7 @@ class DenseLayer(nn.Module):
     def __init__(self, in_channels, growth_rate) -> None:
         super().__init__()
         layer = [nn.Linear(in_channels, growth_rate),
-                nn.ReLU()]
+                nn.Tanh()]
         self.Net = nn.Sequential(*layer)
         
     def forward(self, input):
@@ -48,7 +48,7 @@ class DenseNet(nn.Module):
         in_channels = startch  # 初始输入通道数
         self.embed = nn.Sequential(
             nn.Linear(inchannels, in_channels), 
-            nn.ReLU())
+            nn.Tanh())
         for i in range(num_blocks):
             block = DenseBlock(num_layers_per_block, in_channels, growth_rate)
             self.blocks.append(block)
@@ -68,9 +68,9 @@ class ResBlock(nn.Module):
         super().__init__()
         self.net = nn.Sequential(
             nn.Linear(in_channels, hiddensize),
-            nn.ReLU(), 
+            nn.Tanh(), 
             nn.Linear(hiddensize, in_channels))
-        self.act = nn.ReLU()
+        self.act = nn.Tanh()
     def forward(self, x):
         return self.act(self.net(x) + x)
 
@@ -80,7 +80,7 @@ class ResNet(nn.Module):
         hiddensize = 256
         blocks = []
         blocks.append(nn.Linear(in_channels, hiddensize))
-        blocks.append(nn.ReLU())
+        blocks.append(nn.Tanh())
         for i in range(n_blocks):
             blocks.append(ResBlock(hiddensize, hiddensize))
         blocks.append(nn.Linear(hiddensize, outchannels))

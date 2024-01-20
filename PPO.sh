@@ -38,4 +38,4 @@ conda activate pytorch
 
 cd /zhome/02/b/164706/Master_Courses/2023_Fall/DiffusionAirfoil
 export PYTHONUNBUFFERED=1
-python -u PPO_main.py
+python -u PPO_continuous_main.py
