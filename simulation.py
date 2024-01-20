@@ -6,14 +6,11 @@ from xfoil.model import Airfoil
 import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
 from scipy.signal import savgol_filter
-import argparse
-parser = argparse.ArgumentParser(description="DiffusionAirfoil")
-parser.add_argument('--method', type=str, default='1d')
-parser.add_argument('--path', type=str, default='/work3/s212645/DiffusionAirfoil1DTransform/Airfoils1D/')
-opt = parser.parse_args()
+from option import opt
 from utils import *
 import gc
 
+os.environ["CUDA_VISIBLE_DEVICES"]=opt.gpu_id
 def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 5, return_CL_CD=False, check_thickness = True):
         
     if detect_intersect(airfoil):

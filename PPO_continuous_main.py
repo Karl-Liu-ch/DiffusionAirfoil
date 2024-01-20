@@ -35,7 +35,7 @@ def normalize_af(af):
     return af
 
 class OptimEnv(gym.Env):
-    def __init__(self, base_airfoil = base_airfoil, cl = 0.65, thickness = 0.065, maxsteps = 50, Re1 = 58000, Re2 = 400000, alpha=0.2, mode = '2d'):
+    def __init__(self, base_airfoil = base_airfoil, cl = 0.65, thickness = 0.065, maxsteps = 50, Re1 = 58000, Re2 = 400000, lamda = 5, alpha=0.2, mode = '2d'):
         self.cl = cl
         self.base_airfoil = torch.from_numpy(base_airfoil).to(device)
         self.alpha = alpha
@@ -48,6 +48,7 @@ class OptimEnv(gym.Env):
         self.observation_space = spaces.Box(high=1., low=-1., shape=(1,512), dtype=np.float32)
         self.steps = 0
         self.maxsteps = maxsteps
+        self.lamda = lamda
     
     def reset(self, seed=None, options=None):
         self.steps = 0
@@ -69,7 +70,7 @@ class OptimEnv(gym.Env):
                 airfoil = airfoil[0]
                 airfoil = derotate(airfoil)
                 airfoil = normalize_af(airfoil)
-                perf, CD, af, R = evaluate(airfoil, self.cl, Re1 = self.Re1, Re2 = self.Re2, lamda=5, check_thickness=False)
+                perf, CD, af, R = evaluate(airfoil, self.cl, Re1 = self.Re1, Re2 = self.Re2, lamda=self.lamda, check_thickness=False)
                 if R is not np.nan:
                     successful = True
             except Exception as e:
@@ -97,7 +98,7 @@ class OptimEnv(gym.Env):
         airfoil = airfoil[0]
         airfoil = derotate(airfoil)
         airfoil = Normalize(airfoil)
-        perf, CD, af, R = evaluate(airfoil, self.cl, Re1 = self.Re1, Re2 = self.Re2, lamda=5, check_thickness=False)
+        perf, CD, af, R = evaluate(airfoil, self.cl, Re1 = self.Re1, Re2 = self.Re2, lamda=self.lamda, check_thickness=False)
         if np.isnan(R):
             reward = -1
             reward_final = -1
@@ -113,7 +114,7 @@ class OptimEnv(gym.Env):
         
         truncated = False
         done = False
-        if R < 0.04 and perf > 40:
+        if R < 0.015 + 0.004852138459682465 * self.lamda and perf > 40:
             done = True
             reward += 100
             truncated = False
@@ -147,7 +148,8 @@ class Net(BaseFeaturesExtractor):
 
 policy_kwargs = dict(
     features_extractor_class=Net,
-    features_extractor_kwargs=dict(features_dim=512),
+    features_extractor_kwargs=dict(features_dim=256),
+    net_arch=[dict(pi=[256, 256], vf=[256, 256])]
 )
 
 env = OptimEnv()
