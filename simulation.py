@@ -11,7 +11,7 @@ from utils import *
 import gc
 
 os.environ["CUDA_VISIBLE_DEVICES"]=opt.gpu_id
-def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 5, return_CL_CD=False, check_thickness = True):
+def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 5, thickness = 0.06, return_CL_CD=False, check_thickness = True, modify_thickness = False):
         
     if detect_intersect(airfoil):
         # print('Unsuccessful: Self-intersecting!')
@@ -34,6 +34,8 @@ def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 5, return_CL_CD
     else:
         af = np.copy(airfoil)
         airfoil = setupflap(airfoil, theta=-2)
+        if modify_thickness:
+            airfoil[:,1] = airfoil[:,1] * thickness / cal_thickness(airfoil)
         airfoil = interpolate(airfoil, 300, 3)
         CD, _ = evalpreset(airfoil, Re=Re2)
         i = 0
@@ -115,7 +117,7 @@ if __name__ == "__main__":
             successful = False
             while not successful:
                 try:
-                    perf, CD, af, R = evaluate(airfoil, cl, lamda=LAMBDA)
+                    perf, CD, af, R = evaluate(airfoil, cl, lamda=LAMBDA, modify_thickness=True)
                     successful = True
                 except Exception as e:
                     print(e)

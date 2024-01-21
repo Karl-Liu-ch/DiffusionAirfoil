@@ -271,7 +271,7 @@ def bo_c(func, n_eval, n_init_eval, n_candidates, bounds, alpha=1e-4, save_dir=N
         opt_x = xs[vs][opt_idx]
         opt_y = ys[vs][opt_idx]
         opt_ys.append(opt_y) # Best performance so far
-        print('{}: x {} y {} v {} Best-so-far {}'.format(i+1, x, y, v, opt_y))
+        print('{}: y {} v {} Best-so-far {}'.format(i+1, y, v, opt_y))
         
     return opt_x, opt_ys
 
@@ -282,7 +282,7 @@ def optimize(n_eval, n_init_eval, func):
     bounds = func.bounds
     
     opt_x, opt_ys = bo_c(func, n_eval, n_init_eval, n_candidates, bounds)
-    print('Optimal: x {} CL/CD {}'.format(opt_x, opt_ys[-1]))
+    print('Optimal: CL/CD {}'.format(opt_ys[-1]))
         
     opt_airfoil = func.synthesize(opt_x)
     opt_ys = np.hstack((np.nan*np.ones(n_init_eval), opt_ys))

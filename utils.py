@@ -27,6 +27,42 @@ from xfoil import XFoil
 from xfoil.model import Airfoil
 import gc
 
+def hicks_henne(x_coord, y_coord , n, a, w, xM):
+    y_deformed = np.array(y_coord)
+    for i in range(n):
+        ai = a[i]
+        xMi = xM[i]
+        wi = w[i]
+        m = np.log(0.5)/np.log(xMi)
+        f = np.sin(np.pi * np.array(x_coord) ** m ) ** wi
+        y_deformed += ai * f
+        x_1 = []
+        for j in range(0,1001):
+            x_1.append(j/1000)
+        f_b = np.sin(np.pi * np.array(x_1) ** m ) ** wi
+    return y_deformed
+
+def split(af):
+    half = af[:,0].argmin()
+    return af[:half,0], af[half:,0],af[:half,1], af[half:,1]
+
+def mute_airfoil(airfoil, a_up, a_low):
+    n = 15
+    w = np.full(n,2) 
+    xM = np.array([])
+    for i in range(1,n+1):
+        x_m =  0.5 * (1 - math.sin(math.pi * 2 * i / n))
+        xM = np.append(xM,x_m)
+    xM = np.sort(xM)
+    x_up, x_low, y_up, y_low = split(airfoil)
+    y_mod_up = hicks_henne(x_up, y_up, n, a_up, w, xM)
+    y_mod_low = hicks_henne(x_low, y_low, n, a_low, w, xM)
+    y_mod = np.concatenate((y_mod_up, y_mod_low))
+    new_af = np.zeros_like(airfoil)
+    new_af[:,0] = airfoil[:,0]
+    new_af[:,1] = y_mod
+    return new_af
+
 def evalpreset(airfoil, Re = 4e5):
     alfas = np.linspace(-1,1,5)
     CD = []
