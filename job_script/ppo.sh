@@ -2,6 +2,8 @@
 ### General options
 ### –- specify queue --
 #BSUB -q gpua100
+###BSUB -q gpuv100
+###BSUB -q gpua10
 ### -- set the job Name --
 #BSUB -J ppo
 ### -- ask for number of cores (default: 1) --
@@ -34,4 +36,4 @@ source ./miniconda3/bin/activate
 conda activate pytorch
 cd /zhome/02/b/164706/Master_Courses/2023_Fall/DiffusionAirfoil/
 export PYTHONUNBUFFERED=1
-python -u PPO_continuous_main.py
+python -u RL_algorithm.py --agent ppo

@@ -7,7 +7,7 @@ from AgentNet import AttnBlock
 import numpy as np
 import platform
 from option import opt
-from SB3_env import OptimEnv
+from SB3_env import *
 from utils import *
 from stable_baselines3 import PPO, SAC, TD3
 from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
@@ -36,7 +36,7 @@ class Net(BaseFeaturesExtractor):
         n_input_channels = 1
         self.cnn = nn.Sequential(
             nn.Linear(n_input_channels, features_dim), 
-            AttnBlock(features_dim, 16, 4),
+            AttnBlock(features_dim, 1, 1),
         )
 
         self.linear = nn.Sequential(nn.Linear(features_dim, features_dim), nn.ReLU())
@@ -49,11 +49,12 @@ policy_kwargs = dict(
     features_extractor_kwargs=dict(features_dim=256),
     net_arch=[dict(pi=[256, 256], vf=[256, 256])]
 )
-env = OptimEnv()
+# env = OptimEnv()
+env = AirfoilEnv()
 
 if opt.agent == 'ppo':
     # model = PPO("MlpPolicy", env, verbose=1)
-    model = PPO("MlpPolicy", env, policy_kwargs=policy_kwargs, verbose=1)
+    model = PPO("MlpPolicy", env, batch_size=256, policy_kwargs=policy_kwargs, verbose=1)
     path = '/work3/s212645/DiffusionAirfoil/PPO/stablebaseline_ppo'
     try:
         model.load(path)
@@ -63,9 +64,13 @@ if opt.agent == 'ppo':
     model.save(path)
 
 elif opt.agent == 'sac':
-    # model = SAC("MlpPolicy", env, verbose=1)
+    policy_kwargs = dict(
+        features_extractor_class=Net,
+        features_extractor_kwargs=dict(features_dim=256)
+    )
+    model = SAC("MlpPolicy", env, learning_rate=1e-4, verbose=1)
     path = '/work3/s212645/DiffusionAirfoil/PPO/sac'
-    model = SAC("MlpPolicy", env, policy_kwargs=policy_kwargs, verbose=1)
+    # model = SAC("MlpPolicy", env, learning_rate=1e-4, policy_kwargs=policy_kwargs, verbose=1)
     model.learn(total_timesteps=10000, log_interval=4)
     model.save(path)
 

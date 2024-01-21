@@ -112,7 +112,14 @@ if __name__ == "__main__":
                 airfoil[:,1] = yhat
             if cal_thickness(airfoil) > 0.07 or cal_thickness(airfoil) < 0.06:
                 airfoil[:,1] = airfoil[:,1] * 0.06 / cal_thickness(airfoil)
-            perf, CD, af, R = evaluate(airfoil, cl, lamda=LAMBDA)
+            successful = False
+            while not successful:
+                try:
+                    perf, CD, af, R = evaluate(airfoil, cl, lamda=LAMBDA)
+                    successful = True
+                except Exception as e:
+                    print(e)
+                    break
             if perf == np.nan:
                 pass
             elif R < R_BL:

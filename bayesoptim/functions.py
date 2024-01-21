@@ -51,6 +51,7 @@ class AirfoilDiffusion(Airfoil):
         super().__init__()
         self.thickness = thickness
         self.dim = 512
+        self.alpha0 = np.random.normal(size=[self.dim])
         self.model = Diff
         self.bounds = np.array([[-1., 1.]])
         self.bounds = np.tile(self.bounds, [self.dim, 1])
