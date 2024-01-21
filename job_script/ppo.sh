@@ -1,8 +1,8 @@
 #!/bin/sh
 ### General options
 ### –- specify queue --
-#BSUB -q gpua100
-###BSUB -q gpuv100
+###BSUB -q gpua100
+#BSUB -q gpuv100
 ###BSUB -q gpua10
 ### -- set the job Name --
 #BSUB -J ppo
