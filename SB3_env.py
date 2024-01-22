@@ -189,7 +189,7 @@ class AirfoilEnv(gym.Env):
         info = {}
         af = np.copy(airfoil)
         af[:,0] = af[:,0] * 2.0 - 1.0
-        af[:,1] = af[:,1] / self.thickness
+        af[:,1] = af[:,1] * 10.0
         self.state = torch.from_numpy(af).to(device) 
         return self.state.reshape(1,512).cpu().numpy(), info
     
@@ -201,6 +201,9 @@ class AirfoilEnv(gym.Env):
         af[:,0] -= af[:,0].min()
         af /= (af[:,0].max() - af[:,0].min())
         af[:,1] = af[:,1] * self.thickness / cal_thickness(af)
+        xhat, yhat = savgol_filter((af[:,0], af[:,1]), 10, 3)
+        af[:,0] = xhat
+        af[:,1] = yhat
         af = torch.from_numpy(af).to(device)
         af = af.reshape([1,1,512]).detach()
         
@@ -238,7 +241,7 @@ class AirfoilEnv(gym.Env):
         # self.state = self.airfoil.reshape(512)
         af = np.copy(airfoil)
         af[:,0] = af[:,0] * 2.0 - 1.0
-        af[:,1] = af[:,1] / self.thickness
+        af[:,1] = af[:,1] * 10.0
         self.state = torch.from_numpy(af).to(device) 
         
         truncated = False

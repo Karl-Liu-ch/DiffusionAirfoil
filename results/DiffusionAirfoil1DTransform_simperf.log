@@ -159,3 +159,17 @@ files: 14
 files: 15
 files: 16
 files: 17
+files: 17
+files: 18
+files: 19
+files: 20
+perf: 34.25530879302404, R: 0.039809959940612316, m: 008, path: samples/DiffusionAirfoil1DTransform_008.dat
+files: 21
+files: 22
+files: 23
+perf: 37.21707928669363, R: 0.04065114352852106, m: 009, path: samples/DiffusionAirfoil1DTransform_009.dat
+files: 24
+perf: 39.10534117682655, R: 0.04078939789906144, m: 010, path: samples/DiffusionAirfoil1DTransform_010.dat
+files: 25
+perf: 34.85153230811269, R: 0.03931224858388305, m: 011, path: samples/DiffusionAirfoil1DTransform_011.dat
+files: 25

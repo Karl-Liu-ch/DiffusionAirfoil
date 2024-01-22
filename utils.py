@@ -64,15 +64,26 @@ def mute_airfoil(airfoil, a_up, a_low):
     return new_af
 
 def evalpreset(airfoil, Re = 4e5):
+    Relist = np.linspace(Re - 1000,Re + 1000,3)
     alfas = np.linspace(-1,1,5)
     CD = []
     for alfa in alfas:
         xf = XFoil()
         xf.print = 0
         xf.airfoil = Airfoil(airfoil[:,0], airfoil[:,1])
-        xf.Re = Re
-        xf.max_iter = 500
-        _, cd, _, _ = xf.a(alfa)
+        cds = []
+        for re in Relist:
+            xf.Re = re
+            xf.max_iter = 1000
+            _, cd, _, _ = xf.a(alfa)
+            cds.append(cd)
+        cds = np.array(cds)
+        i_nan = np.argwhere(np.isnan(cds))
+        cds = np.delete(cds, i_nan)
+        try:
+            cd = cds.max()
+        except:
+            cd = np.nan
         CD.append(cd)
         del xf
         gc.collect()
@@ -92,7 +103,7 @@ def evalperf(airfoil, cl = 0.65, Re = 5.8e4):
     xf.print = 0
     xf.airfoil = Airfoil(airfoil[:,0], airfoil[:,1])
     xf.Re = Re
-    xf.max_iter = 200
+    xf.max_iter = 1000
     a, cd, cm, cp = xf.cl(cl)
     del xf
     gc.collect()
