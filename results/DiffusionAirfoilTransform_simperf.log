@@ -11,3 +11,41 @@ files: 7
 perf: 38.24452338364749, R: 0.0407888563349843, m: 002, path: samples/DiffusionAirfoilTransform_002.dat
 perf: 39.902716278299664, R: 0.04079462168738246, m: 003, path: samples/DiffusionAirfoilTransform_003.dat
 files: 8
+files: 7
+files: 8
+files: 9
+files: 10
+files: 11
+files: 12
+files: 13
+files: 14
+files: 15
+perf: 33.797674513428426, R: 0.03969701658934355, m: 004, path: samples/DiffusionAirfoilTransform_004.dat
+files: 16
+files: 17
+files: 18
+files: 19
+files: 20
+perf: 38.91379297924735, R: 0.040837849490344524, m: 005, path: samples/DiffusionAirfoilTransform_005.dat
+files: 21
+files: 22
+files: 23
+files: 24
+files: 25
+files: 26
+files: 27
+files: 28
+perf: 36.33983492197579, R: 0.03489096416160464, m: 006, path: samples/DiffusionAirfoilTransform_006.dat
+files: 29
+files: 30
+files: 31
+files: 32
+files: 33
+files: 34
+files: 35
+files: 36
+files: 37
+files: 38
+files: 39
+files: 40
+files: 41

@@ -225,8 +225,8 @@ class AirfoilEnv(gym.Env):
         reward = 0
         reward_final = 0
         if np.isnan(perf):
-            reward = -0.1
-            reward_final = -0.1
+            reward = -1
+            reward_final = -1
         else:
             reward_final = (perf / self.perfbl) * 10 
             reward = (perf / 39.0) ** 10 / 2.0
