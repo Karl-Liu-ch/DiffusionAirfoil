@@ -173,3 +173,12 @@ perf: 39.10534117682655, R: 0.04078939789906144, m: 010, path: samples/Diffusion
 files: 25
 perf: 34.85153230811269, R: 0.03931224858388305, m: 011, path: samples/DiffusionAirfoil1DTransform_011.dat
 files: 25
+files: 26
+files: 27
+files: 27
+files: 28
+perf: 39.153340929146324, R: 0.04059336381033063, m: 012, path: samples/DiffusionAirfoil1DTransform_012.dat
+files: 29
+files: 29
+files: 30
+files: 30

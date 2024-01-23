@@ -29,7 +29,7 @@ def normalize_af(af):
     return af
 
 class OptimEnv(gym.Env):
-    def __init__(self, base_airfoil = base_airfoil, cl = 0.65, thickness = 0.06, maxsteps = 50, Re1 = 58000, Re2 = 400000, lamda = 5, alpha=0.2, mode = '2d'):
+    def __init__(self, base_airfoil = base_airfoil, cl = 0.65, thickness = 0.058, maxsteps = 50, Re1 = 58000, Re2 = 400000, lamda = 5, alpha=0.2, mode = '2d'):
         self.cl = cl
         self.base_airfoil = torch.from_numpy(base_airfoil).to(device)
         self.alpha = alpha
@@ -139,7 +139,7 @@ class OptimEnv(gym.Env):
         return self.state.reshape(1,512).detach().cpu().numpy(), reward, done, truncated, reward_final
 
 class AirfoilEnv(gym.Env):
-    def __init__(self, base_airfoil = base_airfoil, cl = 0.65, thickness = 0.06, maxsteps = 50, Re1 = 58000, Re2 = 400000, lamda = 5, alpha=0.2, mode = '2d'):
+    def __init__(self, base_airfoil = base_airfoil, cl = 0.65, thickness = 0.058, maxsteps = 50, Re1 = 58000, Re2 = 400000, lamda = 5, alpha=0.2, mode = '2d'):
         self.cl = cl
         self.base_airfoil = torch.from_numpy(base_airfoil).to(device)
         self.alpha = alpha
@@ -194,6 +194,8 @@ class AirfoilEnv(gym.Env):
         return self.state.reshape(1,512).cpu().numpy(), info
     
     def step(self, action):
+        if np.isnan(action.all()):
+            print('action nan error!')
         self.steps += 1
         self.noise = torch.from_numpy(action).reshape([1,1,512]).to(device)
         af = Diff1D_transform.sample(batch_size=1, channels=1, noise = self.noise)
@@ -243,6 +245,9 @@ class AirfoilEnv(gym.Env):
         af[:,0] = af[:,0] * 2.0 - 1.0
         af[:,1] = af[:,1] * 10.0
         self.state = torch.from_numpy(af).to(device) 
+        if np.isnan(self.state.detach().cpu().numpy().all()):
+            print('state nan error!')
+            self.state = torch.zeros_like(self.state).to(device)
         
         truncated = False
         done = False

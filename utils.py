@@ -110,7 +110,7 @@ def evalperf(airfoil, cl = 0.65, Re = 5.8e4):
     perf = cl/cd
     return perf, a, cd
 
-def lowestD(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 3, thickness = 0.06,  check_thickness = True, modify_thickness = False):
+def lowestD(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 3, thickness = 0.058,  check_thickness = True, modify_thickness = False):
     if detect_intersect(airfoil):
         # print('Unsuccessful: Self-intersecting!')
         af_BL, R_BL, a_BL, b_BL, perfBL, cdbl, CD_BL = airfoil, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan

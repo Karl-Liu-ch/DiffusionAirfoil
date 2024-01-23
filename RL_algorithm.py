@@ -53,8 +53,8 @@ policy_kwargs = dict(
 env = AirfoilEnv()
 
 if opt.agent == 'ppo':
-    model = PPO("MlpPolicy", env, batch_size=256, verbose=1)
-    # model = PPO("MlpPolicy", env, batch_size=256, policy_kwargs=policy_kwargs, verbose=1)
+    # model = PPO("MlpPolicy", env, batch_size=256, verbose=1)
+    model = PPO("MlpPolicy", env, batch_size=256, policy_kwargs=policy_kwargs, verbose=1)
     path = '/work3/s212645/DiffusionAirfoil/PPO/stablebaseline_ppo'
     try:
         model.load(path)

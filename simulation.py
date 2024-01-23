@@ -11,7 +11,7 @@ from utils import *
 import gc
 
 os.environ["CUDA_VISIBLE_DEVICES"]=opt.gpu_id
-def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 5, thickness = 0.06, return_CL_CD=False, check_thickness = True, modify_thickness = False):
+def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 5, thickness = 0.058, return_CL_CD=False, check_thickness = True, modify_thickness = False):
         
     if detect_intersect(airfoil):
         # print('Unsuccessful: Self-intersecting!')
@@ -58,7 +58,7 @@ def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 5, thickness = 
         if perf < -100 or perf > 300 or cd < 1e-3:
             perf = np.nan
         elif not np.isnan(perf):
-            print('Successful: CL/CD={:.4f}, R={}'.format(perf, R))
+            print('Successful: CL/CD={:.4f}, R={}, launch cd: {}'.format(perf, R, CD))
             
     if return_CL_CD:
         return perf, cl.max(), cd.min()
@@ -129,7 +129,7 @@ if __name__ == "__main__":
                 np.savetxt(f'samples/{name}_{mm}.dat', airfoil, header=f'{name}_{mm}', comments="")
                 np.savetxt(f'samples/{name}_{mm}F.dat', af, header=f'{name}_{mm}F', comments="")
                 f = open(f'results/{name}_simperf.log', 'a')
-                f.write(f'perf: {perf}, R: {R}, m: {mm}, path: samples/{name}_{mm}.dat\n')
+                f.write(f'perf: {perf}, R: {R}, launch cd: {CD}, m: {mm}, path: samples/{name}_{mm}.dat\n')
                 f.close()
                 m += 1
                 del f

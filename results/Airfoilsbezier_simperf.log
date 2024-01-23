@@ -532,3 +532,10 @@ files: 612
 files: 613
 files: 614
 perf: 38.579155569475375, R: 0.04091409873217344, m: 035, path: samples/Airfoilsbezier_035.dat
+files: 614
+files: 615
+perf: 41.11322490011697, R: 0.04054928291589022, m: 036, path: samples/Airfoilsbezier_036.dat
+files: 616
+files: 617
+files: 618
+files: 618

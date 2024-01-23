@@ -49,7 +49,7 @@ class Airfoil(object):
         return airfoils
     
 class AirfoilDiffusion(Airfoil):
-    def __init__(self, thickness = 0.065):
+    def __init__(self, thickness = 0.058):
         super().__init__()
         self.thickness = thickness
         self.dim = 512
@@ -72,7 +72,7 @@ class AirfoilDiffusion(Airfoil):
         return af    
     
 class AirfoilDiffusionT(Airfoil):
-    def __init__(self, thickness = 0.065):
+    def __init__(self, thickness = 0.058):
         super().__init__()
         self.thickness = thickness
         self.dim = 512
@@ -95,7 +95,7 @@ class AirfoilDiffusionT(Airfoil):
         return af    
     
 class AirfoilDiffusion2D(Airfoil):
-    def __init__(self, thickness = 0.065):
+    def __init__(self, thickness = 0.058):
         super().__init__()
         self.thickness = thickness
         self.dim = 512
@@ -117,7 +117,7 @@ class AirfoilDiffusion2D(Airfoil):
         return af
     
 class AirfoilDiffusion2DT(Airfoil):
-    def __init__(self, thickness = 0.065):
+    def __init__(self, thickness = 0.058):
         super().__init__()
         self.thickness = thickness
         self.dim = 512

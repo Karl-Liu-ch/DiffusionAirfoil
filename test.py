@@ -13,7 +13,7 @@ for path, dir, files in os.walk(root):
 
 Rbl = 1
 files.sort()
-for file in files:
+for file in airfoils:
     points = '{}{}'.format(root, file)
     airfoil = np.loadtxt(points, skiprows=1)
     af, R, a, b, perf, cd, CD_BL = lowestD(airfoil, Re2= 400000, lamda = LAMBDA, check_thickness=False, modify_thickness = True)
