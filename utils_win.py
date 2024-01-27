@@ -122,7 +122,7 @@ def cal_polar(path, reynolds=58000, mach=0, alpha_min=-1, alpha_max = 10, alpha_
         child.close()
             
     except Exception as ex:
-        # print(ex)
+        print(ex)
         print('XFoil error!')
         
     safe_remove(':00.bl')
@@ -412,32 +412,30 @@ def suppress_stdout():
             sys.stdout = old_stdout
 
 def rewrite_polar(root):
+    log = re.compile('.log')
     for path, dir, files in os.walk(root):
         for file in files:
-            lines=[]
-            infile = root+file
-            with open(infile, 'r') as fin:
-                for line in fin:
-                    line = line.replace('9.000  9.000', '9.000')
-                    lines.append(line)
-            fin.close()
-            with open(infile, "w") as fout:
-                for line in lines:
-                    fout.write(line)
-            fout.close()
+            if log.search(file) is not None:
+                lines=[]
+                infile = '{}/{}'.format(path,file)
+                with open(infile, 'r') as fin:
+                    for line in fin:
+                        line = line.replace('9.000  9.000', '9.000')
+                        lines.append(line)
+                fin.close()
+                with open(infile, "w") as fout:
+                    for line in lines:
+                        fout.write(line)
+                fout.close()
 
 def get_dat(root = 'F3K_airfoils/'):
     tail = re.compile('.dat')
     airfoils = []
     for path, dir, files in os.walk(root):
-        if path == root:
-            airfoils = files
-            airfoils.sort()
-        else:
-            pass
-    for file in airfoils:
-        if tail.search(file) is None:
-            airfoils.remove(file)
+        files.sort()
+        for file in files:
+            if tail.search(file) is not None:
+                airfoils.append('{}{}'.format(path, file))
     return airfoils
 
 def cal_afs_polar(re_min = 500, re_max = 400000, re_step = 500, path = 'F3K_airfoils/'):
@@ -446,7 +444,7 @@ def cal_afs_polar(re_min = 500, re_max = 400000, re_step = 500, path = 'F3K_airf
         print(af)
     len = (re_max - re_min) // re_step + 1
     for af in afs:
-        root = af.split('/')[1].split('.dat')[0]
+        root = af.split('/')[-1].split('.dat')[0]
         for re in range(len):
             cal_polar(af, reynolds=re*re_step+re_min, tmp_dir = path + root)
         rewrite_polar(root)
@@ -456,26 +454,28 @@ def cal_afs_polar_re_list(reynolds: list, path = 'F3K_airfoils/'):
     for af in afs:
         print(af)
     for af in afs:
-        root = af.split('/')[1].split('.dat')[0]
+        root = af.split('/')[-1].split('.dat')[0]
         for re in reynolds:
             cal_polar(af, reynolds=re, tmp_dir = path + root)
         rewrite_polar(root)
 
 
 if __name__ == '__main__':
-    afs = ['F3K_airfoils/Airfoils2D_049_0.6F_80_-3.dat', 
-           'F3K_airfoils/Airfoils2D_049_0.6F_20_0.dat', 
-           'F3K_airfoils/Airfoils1D_004F_0.dat', 
-           'F3K_airfoils/Airfoils2D_049_0.6F_100_0.dat', 
-           'F3K_airfoils/Airfoils2D_049_0.6F_80_0.dat', 
-           'F3K_airfoils/Airfoils2D_049_0.6F_50_0.dat', 
-           'F3K_airfoils/Airfoils2D_049_0.6F_50_-3.dat']
-    # afs = get_dat()
-    for af in afs:
-        print(af)
-    for af in afs:
-        root = af.split('/')[1].split('.dat')[0]+'/'
-        print(root)
-        for re in range(400000//500):
-            cal_polar(af, reynolds=re*500+500, tmp_dir = root)
-        rewrite_polar(root)
+    # afs = ['F3K_airfoils/Airfoils2D_049_0.6F_80_-3.dat', 
+    #        'F3K_airfoils/Airfoils2D_049_0.6F_20_0.dat', 
+    #        'F3K_airfoils/Airfoils1D_004F_0.dat', 
+    #        'F3K_airfoils/Airfoils2D_049_0.6F_100_0.dat', 
+    #        'F3K_airfoils/Airfoils2D_049_0.6F_80_0.dat', 
+    #        'F3K_airfoils/Airfoils2D_049_0.6F_50_0.dat', 
+    #        'F3K_airfoils/Airfoils2D_049_0.6F_50_-3.dat']
+    # # afs = get_dat()
+    # for af in afs:
+    #     print(af)
+    # for af in afs:
+    #     root = af.split('/')[1].split('.dat')[0]+'/'
+    #     print(root)
+    #     for re in range(400000//500):
+    #         cal_polar(af, reynolds=re*500+500, tmp_dir = root)
+    #     rewrite_polar(root)
+    root = 'airfoilP5B'
+    rewrite_polar(root)

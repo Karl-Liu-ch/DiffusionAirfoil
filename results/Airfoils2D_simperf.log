@@ -955,3 +955,50 @@ perf: 40.562463405964635, R: 0.04061514139175415, m: 076, path: samples/Airfoils
 files: 62
 files: 63
 files: 63
+files: 64
+perf: 38.51884436654076, R: 0.040635287296026945, launch cd: 0.0047520860098302364, m: 077, path: samples/Airfoils2D_077.dat
+perf: 39.170854591292674, R: 0.04088729387149215, launch cd: 0.0048586647026240826, m: 078, path: samples/Airfoils2D_078.dat
+perf: 39.3459917365389, R: 0.04087862093001604, launch cd: 0.004871702753007412, m: 079, path: samples/Airfoils2D_079.dat
+perf: 39.55282297451168, R: 0.040527560748159885, launch cd: 0.004818768240511417, m: 080, path: samples/Airfoils2D_080.dat
+files: 65
+perf: 38.96436856906815, R: 0.040579807944595814, launch cd: 0.004779580049216747, m: 081, path: samples/Airfoils2D_081.dat
+files: 66
+perf: 39.25088677943301, R: 0.04080832004547119, launch cd: 0.004849636927247047, m: 082, path: samples/Airfoils2D_082.dat
+files: 67
+perf: 39.40935924319451, R: 0.040925099048763514, launch cd: 0.004886311013251543, m: 083, path: samples/Airfoils2D_083.dat
+files: 67
+files: 68
+files: 69
+files: 70
+files: 71
+files: 72
+files: 73
+files: 74
+files: 74
+files: 75
+files: 76
+files: 77
+files: 78
+files: 79
+files: 80
+files: 81
+files: 82
+files: 82
+files: 83
+files: 84
+files: 84
+perf: 40.3930145338637, R: 0.040591453889801454, launch cd: 0.004899912513792515, m: 084, path: samples/Airfoils2D_084.dat
+files: 84
+perf: 39.05128032385645, R: 0.041009872006394735, launch cd: 0.004873018246144056, m: 085, path: samples/Airfoils2D_085.dat
+files: 85
+files: 85
+files: 85
+perf: 58.45424495406867, R: 0.03558379204891975, launch cd: 0.004892796743661165, m: 086, path: samples/Airfoils2D_086.dat
+perf: 49.47946558323623, R: 0.03778658955241208, launch cd: 0.004929965361952782, m: 087, path: samples/Airfoils2D_087.dat
+perf: 56.64582110870504, R: 0.03553445475658691, launch cd: 0.004811929073184729, m: 088, path: samples/Airfoils2D_088.dat
+perf: 50.08159501119743, R: 0.03704870977520672, launch cd: 0.004813977982848883, m: 089, path: samples/Airfoils2D_089.dat
+perf: 55.39710776664759, R: 0.037347848177701884, launch cd: 0.005122876726090908, m: 090, path: samples/Airfoils2D_090.dat
+perf: 55.36531871173162, R: 0.04047159842741416, launch cd: 0.005746279377490282, m: 091, path: samples/Airfoils2D_091.dat
+perf: 49.93507582548926, R: 0.037807703340526286, launch cd: 0.004958160221576691, m: 092, path: samples/Airfoils2D_092.dat
+files: 85
+perf: 60.33418026756285, R: 0.03591576534723564, launch cd: 0.005028487183153629, m: 093, path: samples/Airfoils2D_093.dat

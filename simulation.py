@@ -11,8 +11,7 @@ from utils import *
 import gc
 
 os.environ["CUDA_VISIBLE_DEVICES"]=opt.gpu_id
-def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 5, thickness = 0.058, return_CL_CD=False, check_thickness = True, modify_thickness = False):
-        
+def evaluate(airfoil, mass = 0.22, diameter = 0.135, area = 0.194, Re2 = 4e5, lamda = 5, thickness = 0.058, return_CL_CD=False, check_thickness = True, modify_thickness = False):
     if detect_intersect(airfoil):
         # print('Unsuccessful: Self-intersecting!')
         perf = np.nan
@@ -36,25 +35,26 @@ def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 5, thickness = 
         airfoil = setupflap(airfoil, theta=-2)
         if modify_thickness:
             airfoil[:,1] = airfoil[:,1] * thickness / cal_thickness(airfoil)
-        airfoil = interpolate(airfoil, 300, 3)
+        airfoil = interpolate(airfoil, 400, 3)
         CD, _ = evalpreset(airfoil, Re=Re2)
         i = 0
         while CD < 0.004 and (not np.isnan(CD)) and i < 2:
             i += 1
             print(not np.isnan(CD), CD)
-            airfoil = interpolate(airfoil, 200 + i * 100, 3)
+            airfoil = interpolate(airfoil, 400 + i * 10, 3)
             CD, _ = evalpreset(airfoil, Re=Re2 + i * 100)
             print(CD)
         if i >= 2:
             CD = np.nan
             
         airfoil = setflap(airfoil, theta=2)
-        perf, _, cd = evalperf(airfoil, cl = cl, Re = Re1)
+        perf = type2_simu(airfoil, mass, diameter, area)
+        cd = 0.65 / perf
         R = cd + CD * lamda
         if R < 0.015 + 0.004852138459682465 * lamda and perf < 37:
             print(f'R: {R}, perf: {perf}, change reynolds')
             re2 = Re2 + 1000
-            perf, CD, airfoil, R = evaluate(af, cl = 0.65, Re1 = 5.8e4, Re2 = re2, lamda = 3, return_CL_CD=False, check_thickness = True)
+            perf, CD, airfoil, R = evaluate(af, mass = mass, diameter = diameter, area = area, Re2 = re2, lamda = lamda, return_CL_CD=return_CL_CD, check_thickness = check_thickness)
         if perf < -100 or perf > 300 or cd < 1e-3:
             perf = np.nan
         elif not np.isnan(perf):
@@ -66,10 +66,14 @@ def evaluate(airfoil, cl = 0.65, Re1 = 5.8e4, Re2 = 4e5, lamda = 5, thickness = 
         return perf, CD, airfoil, R
 
 if __name__ == "__main__":
+    mass = 0.22
+    diameter = 0.135
+    area = 0.194
     LAMBDA = 5
-    perf_BL, R_BL = cal_baseline(lamda=LAMBDA)
+    perf_BL, R_BL = cal_baseline(lamda=LAMBDA, mass=mass, diameter = diameter, area = area)
     CD_BL = 0.004852138459682465
     cl = 0.65
+    print(perf_BL, R_BL)
     best_perf=perf_BL
     best_airfoil = None
     if opt.method == '2d':
@@ -117,12 +121,12 @@ if __name__ == "__main__":
             successful = False
             while not successful:
                 try:
-                    perf, CD, af, R = evaluate(airfoil, cl, lamda=LAMBDA, modify_thickness=True)
+                    perf, CD, af, R = evaluate(airfoil, mass=mass, diameter=diameter, area=area, lamda=LAMBDA, check_thickness=False, modify_thickness=True)
                     successful = True
                 except Exception as e:
                     print(e)
                     break
-            if perf == np.nan:
+            if np.isnan(perf):
                 pass
             elif R < R_BL:
                 mm = str(m).zfill(3)

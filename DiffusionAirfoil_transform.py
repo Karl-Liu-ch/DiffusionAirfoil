@@ -157,8 +157,10 @@ if __name__ == '__main__':
                     num = n
     print(num)
     start_n = num
-    for i in range(1000):
-        num = str(i + start_n).zfill(3)
+    B = 2 ** 10
+    while 1:
+        start_n += 1
+        num = str(start_n).zfill(3)
         samples = Diff.sample(batch_size=B, channels=1)
         samples = samples.reshape(B, 256, 2)
         airfoils = samples.cpu().numpy()

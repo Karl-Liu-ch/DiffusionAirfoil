@@ -4,7 +4,7 @@ parser = argparse.ArgumentParser(description="DiffusionAirfoil")
 parser.add_argument('--min', type=int, default=500)
 parser.add_argument('--max', type=int, default=400000)
 parser.add_argument('--step', type=int, default=500)
-parser.add_argument('--path', type=str, default='F3K_airfoils/')
+parser.add_argument('--path', type=str, default='synergy2_65/')
 args = parser.parse_args()
 
 if __name__ == '__main__':

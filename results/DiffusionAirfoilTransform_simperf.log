@@ -1,88 +1,26 @@
-files: 0
-files: 1
-perf: 39.84630083066486, R: 0.04030730854719877, m: 000, path: samples/DiffusionAirfoilTransform_000.dat
-files: 2
-files: 3
-files: 4
-files: 5
-perf: 38.43235944641893, R: 0.04056931845843792, m: 001, path: samples/DiffusionAirfoilTransform_001.dat
-files: 6
-files: 7
-perf: 38.24452338364749, R: 0.0407888563349843, m: 002, path: samples/DiffusionAirfoilTransform_002.dat
-perf: 39.902716278299664, R: 0.04079462168738246, m: 003, path: samples/DiffusionAirfoilTransform_003.dat
-files: 8
-files: 7
-files: 8
-files: 9
-files: 10
-files: 11
-files: 12
-files: 13
-files: 14
-files: 15
-perf: 33.797674513428426, R: 0.03969701658934355, m: 004, path: samples/DiffusionAirfoilTransform_004.dat
-files: 16
-files: 17
-files: 18
-files: 19
-files: 20
-perf: 38.91379297924735, R: 0.040837849490344524, m: 005, path: samples/DiffusionAirfoilTransform_005.dat
-files: 21
-files: 22
-files: 23
-files: 24
-files: 25
-files: 26
-files: 27
-files: 28
-perf: 36.33983492197579, R: 0.03489096416160464, m: 006, path: samples/DiffusionAirfoilTransform_006.dat
-files: 29
-files: 30
-files: 31
-files: 32
-files: 33
-files: 34
-files: 35
-files: 36
-files: 37
-files: 38
-files: 39
-files: 40
-files: 41
-files: 41
-files: 42
-files: 43
-files: 44
-files: 45
-files: 46
-files: 47
-files: 48
-files: 49
-files: 50
-files: 51
-files: 52
-files: 53
-files: 54
-files: 55
-files: 56
-files: 57
-files: 58
-files: 59
-files: 60
-files: 61
-files: 62
-files: 63
-files: 64
-files: 65
-perf: 39.172349581522326, R: 0.040776520036160946, m: 007, path: samples/DiffusionAirfoilTransform_007.dat
-files: 66
-files: 67
-files: 68
-files: 69
-files: 70
-files: 71
-files: 72
-files: 73
-files: 73
-files: 74
-perf: 39.07033273804066, R: 0.040690837893635035, m: 008, path: samples/DiffusionAirfoilTransform_008.dat
+files: 145
+files: 146
+perf: 38.47906887070624, R: 0.04096911960170402, launch cd: 0.0048153637908399105, m: 017, path: samples/DiffusionAirfoilTransform_017.dat
+files: 147
+files: 147
+files: 147
+files: 147
+perf: 70.54513793498475, R: 0.03388121073347819, launch cd: 0.004933450371026993, m: 018, path: samples/DiffusionAirfoilTransform_018.dat
+files: 148
+perf: 50.377484575064024, R: 0.03803461781623087, launch cd: 0.005026405677199364, m: 019, path: samples/DiffusionAirfoilTransform_019.dat
+perf: 94.95643802039534, R: 0.03217343699025856, launch cd: 0.005065638571977615, m: 020, path: samples/DiffusionAirfoilTransform_020.dat
+perf: 39.544978783143485, R: 0.040582928059338205, launch cd: 0.004829189740121365, m: 021, path: samples/DiffusionAirfoilTransform_021.dat
+perf: 39.137050055298545, R: 0.040887731541996014, launch cd: 0.00485588563606143, m: 022, path: samples/DiffusionAirfoilTransform_022.dat
+perf: 39.702073616661494, R: 0.0407084357990445, launch cd: 0.004867298994213343, m: 023, path: samples/DiffusionAirfoilTransform_023.dat
+perf: 39.80578658334613, R: 0.04060803712310572, launch cd: 0.004855750594288111, m: 024, path: samples/DiffusionAirfoilTransform_024.dat
+perf: 76.87526017676376, R: 0.03314045437791364, launch cd: 0.004937039688229561, m: 025, path: samples/DiffusionAirfoilTransform_025.dat
+files: 149
+perf: 47.40920396616378, R: 0.038644526296843576, launch cd: 0.004986821673810482, m: 026, path: samples/DiffusionAirfoilTransform_026.dat
+perf: 53.82580985102158, R: 0.03558756941569396, launch cd: 0.004702315665781498, m: 027, path: samples/DiffusionAirfoilTransform_027.dat
+perf: 54.93192763218443, R: 0.03877053159799752, launch cd: 0.005387540906667709, m: 028, path: samples/DiffusionAirfoilTransform_028.dat
+perf: 68.89625391856289, R: 0.035496238270607654, launch cd: 0.0052123526111245155, m: 029, path: samples/DiffusionAirfoilTransform_029.dat
+perf: 54.05643177621992, R: 0.03660812741008669, launch cd: 0.004916731268167496, m: 030, path: samples/DiffusionAirfoilTransform_030.dat
+perf: 42.25003226718567, R: 0.03961603843481097, launch cd: 0.0048462869599461555, m: 031, path: samples/DiffusionAirfoilTransform_031.dat
+files: 149
+perf: 39.30137919338594, R: 0.040803009622630074, launch cd: 0.004852829966694117, m: 032, path: samples/DiffusionAirfoilTransform_032.dat
+perf: 56.29724650817593, R: 0.03606439368988873, launch cd: 0.004903707187622786, m: 033, path: samples/DiffusionAirfoilTransform_033.dat

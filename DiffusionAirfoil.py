@@ -3,6 +3,7 @@ sys.path.append('./')
 import math
 from inspect import isfunction
 from functools import partial
+import re
 
 # %matplotlib inline
 from matplotlib import pyplot as plt
@@ -71,9 +72,22 @@ if __name__ == '__main__':
     elif platform.system().lower() == 'windows':
         airfoilpath = 'H:/深度学习/Airfoils/'
     
-    B = 2 ** 8
-    for i in range(1000):
-        num = str(i+749).zfill(3)
+    num = 0
+    fileformat = re.compile('.npy')
+    for path, dir, files in os.walk(airfoilpath):
+        files.sort()
+        for file in files:
+            if fileformat.search(file) is not None:
+                n = file.split('.')[0]
+                n = int(n)
+                if n > num:
+                    num = n
+    print(num)
+    start_n = num
+    B = 2 ** 10
+    while 1:
+        start_n += 1
+        num = str(start_n).zfill(3)
         samples = Diff.sample(batch_size=B, channels=1)
         samples = samples.reshape(B, 256, 2)
         airfoils = samples.cpu().numpy()
