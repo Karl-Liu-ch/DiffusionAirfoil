@@ -49,7 +49,7 @@ def evalperfrange(airfoil, reynolds = 50000, clmin = 0.6, clmax = 0.7, step = 0.
     return perf
 
 def reynolds_pipe(velocity, diameter, density = 1.225, viscosity = 1.5*10**(-5)):
-    return density * velocity * diameter / viscosity
+    return velocity * diameter / viscosity
 
 def mode_cl(velocity, area, mass):
     g = 9.81
@@ -57,12 +57,16 @@ def mode_cl(velocity, area, mass):
     cl = mass * g / (0.5 * area * density * (velocity ** 2))
     return cl
 
+def type2_resqrtcl(mass, diameter, area):
+    g = 9.806
+    density = 1.225
+    viscosity = 1.5e-5
+    re_sqrtcl = np.sqrt(2 * mass * g / density / area) * diameter / viscosity
+    return re_sqrtcl
+
 def type2_simu(af, mass, diameter, area):
     if check_af(af):
-        g = 9.806
-        density = 1.225
-        viscosity = 1.5*10**(-5)
-        re_sqrtcl = np.sqrt(2 * mass * g / density / area) * diameter * density / viscosity
+        re_sqrtcl = type2_resqrtcl(mass, diameter, area)
         cl_list = np.linspace(0.6, 0.7, 6)
         perfs = []
         for cl in cl_list:
