@@ -260,92 +260,50 @@ def set_camber(airfoil, angle=8):
 
 def setdownflap(airfoil, theta=2, pose=0.65):
     lh_idx = np.argmin(airfoil[:,0])
-    lh_x = airfoil[lh_idx, 0]
-    # Get trailing head
-    th_x = np.minimum(airfoil[0,0], airfoil[-1,0])
-    # Interpolate
-    f_up = interp1d(airfoil[:lh_idx+1,0], airfoil[:lh_idx+1,1])
-    f_low = interp1d(airfoil[lh_idx:,0], airfoil[lh_idx:,1])
-    xx = np.linspace(lh_x, th_x, num=1000)
-    yy_up = f_up(xx)
-    yy_low = f_low(xx)
     theta = theta * np.pi / 180
     c = np.cos(theta)
     s = np.sin(theta)
     R = np.array([[c, -s], [s, c]])
-    af_down = np.zeros([1000, 2])
-    af_down[:,0] = xx
-    af_down[:,1] = yy_low
-    _i = int(pose * 1000)
+    af_down = airfoil[lh_idx:,:]
+    _i = np.abs(af_down[:,0] - pose).argmin()
     flap = af_down[_i:,:]
-    flap = smooth_line(flap, flap.shape[0],3)
+    flap = smooth_line(flap, flap.shape[0], 3)
     flap_new = flap - flap[0,:]
     flap_new = np.matmul(flap_new, R) + flap[0,:]
     af_down_new = np.copy(af_down)
     af_down_new[_i:,:] = np.copy(flap_new)
-    xhat, yhat = savgol_filter((af_down_new[_i-200:_i,0], af_down_new[_i-200:_i,1]), 50, 3)
-    af_down_new[_i-200:_i,0] = xhat
-    af_down_new[_i-200:_i,1] = yhat
-    xhat, yhat = savgol_filter((af_down_new[_i:,0], af_down_new[_i:,1]), 50, 3)
-    af_down_new[_i:,0] = xhat
-    af_down_new[_i:,1] = yhat
     theta = np.arctan2(af_down_new[-1,1] - af_down[-1,1], 1)
     c = np.cos(theta)
     s = np.sin(theta)
     R = np.array([[c, -s], [s, c]])
     af_down_new = np.matmul(af_down_new, R)
-    af_up = np.zeros([1000, 2])
-    af_up[:,0] = np.flip(xx)
-    af_up[:,1] = np.flip(yy_up)
-    af = np.zeros([1999,2])
-    af[:1000,:] = af_up
-    af[1000:,:] = af_down_new[1:,:]
-    af = interpolate(af, 256, 3)
+    af = np.zeros_like(airfoil)
+    af[:lh_idx,:] = airfoil[:lh_idx,:]
+    af[lh_idx:,:] = af_down_new
     return af
 
 def setupflap(airfoil, theta=-2, pose=0.65):
     lh_idx = np.argmin(airfoil[:,0])
-    lh_x = airfoil[lh_idx, 0]
-    # Get trailing head
-    th_x = np.minimum(airfoil[0,0], airfoil[-1,0])
-    # Interpolate
-    f_up = interp1d(airfoil[:lh_idx+1,0], airfoil[:lh_idx+1,1])
-    f_low = interp1d(airfoil[lh_idx:,0], airfoil[lh_idx:,1])
-    xx = np.linspace(lh_x, th_x, num=1000)
-    yy_up = f_up(xx)
-    yy_low = f_low(xx)
     theta = theta * np.pi / 180
     c = np.cos(theta)
     s = np.sin(theta)
     R = np.array([[c, -s], [s, c]])
-    af_down = np.zeros([1000, 2])
-    af_down[:,0] = xx
-    af_down[:,1] = yy_up
-    _i = int(pose * 1000)
-    flap = af_down[_i:,:]
-    flap = smooth_line(flap, flap.shape[0],3)
-    flap_new = flap - flap[0,:]
-    flap_new = np.matmul(flap_new, R) + flap[0,:]
-    af_down_new = np.copy(af_down)
-    af_down_new[_i:,:] = np.copy(flap_new)
-    xhat, yhat = savgol_filter((af_down_new[_i-200:_i,0], af_down_new[_i-200:_i,1]), 50, 3)
-    af_down_new[_i-200:_i,0] = xhat
-    af_down_new[_i-200:_i,1] = yhat
-    xhat, yhat = savgol_filter((af_down_new[_i:,0], af_down_new[_i:,1]), 50, 3)
-    af_down_new[_i:,0] = xhat
-    af_down_new[_i:,1] = yhat
-    theta = np.arctan2(af_down_new[-1,1] - af_down[-1,1], 1)
+    af_up = airfoil[:lh_idx,:]
+    _i = np.abs(af_up[:,0] - pose).argmin()
+    flap = af_up[:_i,:]
+    flap = smooth_line(flap, flap.shape[0], 3)
+    flap_new = flap - flap[-1,:]
+    flap_new = np.matmul(flap_new, R) + flap[-1,:]
+    af_up_new = np.copy(af_up)
+    af_up_new[:_i,:] = np.copy(flap_new)
+    theta = np.arctan2(af_up_new[0,1] - af_up[0,1], 1)
     c = np.cos(theta)
     s = np.sin(theta)
     R = np.array([[c, -s], [s, c]])
-    af_down_new = np.matmul(af_down_new, R)
-    af_up = np.zeros([1000, 2])
-    af_up[:,0] = xx
-    af_up[:,1] = yy_low
-    af = np.zeros([1999,2])
-    af[:1000,:] = np.flip(af_down_new[:,:], axis=0)
-    af[1000:,:] = af_up[1:,:]
-    af = interpolate(af, 256, 3)
+    af_up_new = np.matmul(af_up_new, R)
+    af = np.zeros_like(airfoil)
+    af[lh_idx:,:] = airfoil[lh_idx:,:]
+    af[:lh_idx,:] = af_up_new
     return af
 
 def smooth_line(Q, N, k, D=20, resolution=1000):
@@ -371,33 +329,6 @@ def show_airfoil(af):
     axs.set_aspect('equal', 'box')
     fig.tight_layout()
     plt.show()
-
-def delete_intersect(samples):
-    indexs = []
-    for i in range(samples.shape[0]):
-        xhat, yhat = savgol_filter((samples[i,:,0], samples[i,:,1]), 10, 3)
-        samples[i,:,0] = xhat
-        samples[i,:,1] = yhat
-        af = samples[i,:,:]
-        if detect_intersect(af):
-            indexs.append(i)
-    for i in indexs:
-        xhat, yhat = savgol_filter((samples[i,:,0], samples[i,:,1]), 10, 3)
-        samples[i,:,0] = xhat
-        samples[i,:,1] = yhat
-        af = samples[i,:,:]
-        point = 1.0
-        while detect_intersect(af) and af.shape[0] > 200:
-            indexs = []
-            for index in range(af.shape[0]):
-                if af[index,0] > point:
-                    indexs.append(index)
-            af = np.delete(af, indexs, axis=0)
-            point -= 0.01
-        af = interpolate(af, 256, 3)
-        af = Normalize(af)
-        samples[i,:,:] = af
-    return samples
 
 def derotate(airfoil):
     airfoil = Normalize(airfoil)
@@ -428,15 +359,15 @@ def interpolate(airfoil, points = 256, N = 3):
     lh_idx = np.argmin(af[:,0])
     lh_x = af[lh_idx, 0]
     th_x = np.minimum(af[0,0], af[-1,0])
-    f_up = interp1d(airfoil[:lh_idx+1,0], airfoil[:lh_idx+1,1])
-    f_low = interp1d(airfoil[lh_idx:,0], airfoil[lh_idx:,1])
+    f_up = interp1d(airfoil[:lh_idx+1,0], airfoil[:lh_idx+1,1], kind='linear')
+    f_low = interp1d(airfoil[lh_idx:,0], airfoil[lh_idx:,1], kind='linear')
     x = np.linspace(0,1,points//2)
-    # y = ((np.cos(np.pi + x * np.pi) + 1) / 2) ** 2
-    y = np.where(x > a, (x-a) * (1-a ** b) / (1 - a) + a ** b, x ** b)
+    y = ((np.cos(np.pi + x * np.pi) + 1) / 2)
+    # y = np.where(x > a, (x-a) * (1-a ** b) / (1 - a) + a ** b, x ** b)
     xx_down = y * (af[-1,0] - lh_x) + lh_x
     x = np.linspace(0,1,points//2+1)
-    # y = ((np.cos(np.pi + x * np.pi) + 1) / 2) ** 2
-    y = np.where(x > a, (x-a) * (1-a ** b) / (1 - a) + a ** b, x ** b)
+    y = ((np.cos(np.pi + x * np.pi) + 1) / 2)
+    # y = np.where(x > a, (x-a) * (1-a ** b) / (1 - a) + a ** b, x ** b)
     xx_up = y * (af[0,0] - lh_x) + lh_x
     yy_low = f_low(xx_down)
     yy_up = f_up(xx_up)
