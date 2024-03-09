@@ -9,6 +9,7 @@ from scipy.signal import savgol_filter
 from option import opt
 from utils import *
 import gc
+from tqdm import tqdm
 
 os.environ["CUDA_VISIBLE_DEVICES"]=opt.gpu_id
 def evaluate(airfoil, mass = 0.22, diameter = 0.135, area = 0.194, Re2 = 4e5, lamda = 5, thickness = 0.058, return_CL_CD=False, check_thickness = True, modify_thickness = False):
@@ -48,6 +49,7 @@ def evaluate(airfoil, mass = 0.22, diameter = 0.135, area = 0.194, Re2 = 4e5, la
             CD = np.nan
             
         airfoil = setflap(airfoil, theta=2)
+        airfoil = interpolate(airfoil, 400, 3)
         perf = type2_simu(airfoil, mass, diameter, area)
         cd = 0.65 / perf
         R = cd + CD * lamda

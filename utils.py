@@ -9,7 +9,7 @@ import torch
 import math
 from inspect import isfunction
 from functools import partial
-
+from tqdm import tqdm
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.metrics import mean_squared_error
@@ -69,9 +69,11 @@ def type2_simu(af, mass, diameter, area):
         re_sqrtcl = type2_resqrtcl(mass, diameter, area)
         cl_list = np.linspace(0.6, 0.7, 6)
         perfs = []
-        for cl in cl_list:
+        for cl in tqdm(cl_list):
             re = re_sqrtcl / np.sqrt(cl)
-            perf,_,_ = evalperf(af, cl, re)
+            perf,a,cd = evalperf(af, cl, re)
+            if perf < -100 or perf > 300 or cd < 1e-2:
+                perf = np.nan
             if not np.isnan(perf):
                 perfs.append(perf)
         try:

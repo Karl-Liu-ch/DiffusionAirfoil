@@ -35,3 +35,26 @@ perf: 40.03120158012002, R: 0.040419627801952226, launch cd: 0.00483645871281623
 perf: 49.59828476594155, R: 0.03810662546892013, launch cd: 0.005000266712158918, m: 044, path: samples/DiffusionAirfoil1DTransform_044.dat
 perf: 39.96127085446641, R: 0.04044404249759418, launch cd: 0.004835658706724644, m: 045, path: samples/DiffusionAirfoil1DTransform_045.dat
 files: 49
+files: 49
+perf: 38.51057316078339, R: 0.040998264779896404, launch cd: 0.0048239566385746, m: 046, path: samples/DiffusionAirfoil1DTransform_046.dat
+perf: 49.38090884697394, R: 0.03835959731703455, launch cd: 0.00503932312130928, m: 047, path: samples/DiffusionAirfoil1DTransform_047.dat
+perf: 88.04432263492198, R: 0.032943128583152896, launch cd: 0.005112096667289734, m: 048, path: samples/DiffusionAirfoil1DTransform_048.dat
+perf: 39.774423488413525, R: 0.0407838247599754, launch cd: 0.004888332914561033, m: 049, path: samples/DiffusionAirfoil1DTransform_049.dat
+perf: 39.068009717303084, R: 0.04070762002794319, launch cd: 0.004813993349671364, m: 050, path: samples/DiffusionAirfoil1DTransform_050.dat
+perf: 50.7415422583343, R: 0.03746372472341851, launch cd: 0.004930741619318724, m: 051, path: samples/DiffusionAirfoil1DTransform_051.dat
+files: 50
+perf: 61.27884752161492, R: 0.04090608748826607, launch cd: 0.0060597676783800125, m: 052, path: samples/DiffusionAirfoil1DTransform_052.dat
+perf: 53.837067233404994, R: 0.03683170805614533, launch cd: 0.004951648414134979, m: 053, path: samples/DiffusionAirfoil1DTransform_053.dat
+perf: 39.960360849499864, R: 0.040584372068989225, launch cd: 0.0048636505380272865, m: 054, path: samples/DiffusionAirfoil1DTransform_054.dat
+perf: 49.70661414053421, R: 0.037871040422350725, launch cd: 0.0049588619731366634, m: 055, path: samples/DiffusionAirfoil1DTransform_055.dat
+perf: 78.38417016460318, R: 0.03210712602428982, launch cd: 0.004762927070260048, m: 056, path: samples/DiffusionAirfoil1DTransform_056.dat
+perf: 39.44388231784769, R: 0.04075830110615849, launch cd: 0.004855838604271412, m: 057, path: samples/DiffusionAirfoil1DTransform_057.dat
+perf: 40.09418199297006, R: 0.04047934500676846, launch cd: 0.004853503312915564, m: 058, path: samples/DiffusionAirfoil1DTransform_058.dat
+perf: 46.135993773106996, R: 0.038026329544941014, launch cd: 0.0047875093296170235, m: 059, path: samples/DiffusionAirfoil1DTransform_059.dat
+files: 50
+files: 50
+perf: 34.133280789744894, R: 0.043259343109801104, launch cd: 0.004843269009143114, m: 060, path: samples/DiffusionAirfoil1DTransform_060.dat
+perf: 75.69832724781881, R: 0.034663482163582116, launch cd: 0.005215353332459927, m: 061, path: samples/DiffusionAirfoil1DTransform_061.dat
+files: 50
+files: 50
+perf: 44.64337418992595, R: 0.04003805564019959, launch cd: 0.0050956448540091515, m: 062, path: samples/DiffusionAirfoil1DTransform_062.dat
